@@ -1,0 +1,431 @@
+
+
+╭──────────────────────────────────────────────────────────────────────────────╮
+│                                                                              │
+│                                                                              │
+│                         ▄▀▀ ▄▀█ █▀▀ ▀█▀ █▀▄▀█ █▀▀ █▀█                        │
+│                         █▀  █▀█ ▄▄█  █  █ ▀ █ █▄▄ █▀▀                        │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                FastMCP 4.0.3                                 │
+│                            https://gofastmcp.com                             │
+│                                                                              │
+│                  🖥  Server:      bulk_enrichment, 4.0.3                      │
+│                  🚀 Deploy free: https://horizon.prefect.io                  │
+│                                                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+╭──────────────────────────────────────────────────────────────────────────────╮
+│                          🎉 Update available: 4.1.4                          │
+│                      Run: pip install --upgrade fastmcp                      │
+╰──────────────────────────────────────────────────────────────────────────────╯
+
+
+[10/27/26 18:01:56] INFO     Starting MCP server                transport.py:242
+                             'bulk_enrichment' with transport                   
+                             'stdio'                                            
+[10/27/26 18:01:58] Error calling tool 'decoupler_filter_genes_by_expression'   
+                    ╭─────────── Traceback (most recent call last) ────────────╮
+                    │ /home/asu/Science/paper2agent-runs/decoupler/decoupler-e │
+                    │ nv/lib/python3.13/site-packages/fastmcp/server/server.py │
+                    │ :1492 in call_tool                                       │
+                    │                                                          │
+                    │ /home/asu/Science/paper2agent-runs/decoupler/decoupler-e │
+                    │ nv/lib/python3.13/site-packages/fastmcp/tools/base.py:44 │
+                    │ 0 in _run                                                │
+                    │                                                          │
+                    │                 ... 9 frames hidden ...                  │
+                    │                                                          │
+                    │ /home/asu/Science/paper2agent-runs/decoupler/src/tools/b │
+                    │ ulk_enrichment.py:163 in                                 │
+                    │ decoupler_filter_genes_by_expression                     │
+                    │                                                          │
+                    │   160 │   Input is a raw-count .h5ad with a group column │
+                    │       threshold diagnostic plot.                         │
+                    │   161 │   """                                            │
+                    │   162 │   adata = _read_h5ad(data_path)                  │
+                    │ ❱ 163 │   _require_obs_columns(adata, [group_key], "grou │
+                    │   164 │   n_before = int(adata.n_vars)                   │
+                    │   165 │   out = _new_output_dir(output_dir, "filter_by_e │
+                    │   166 │   plot_path = out / "filter_by_expr_thresholds.p │
+                    │                                                          │
+                    │ /home/asu/Science/paper2agent-runs/decoupler/src/tools/b │
+                    │ ulk_enrichment.py:90 in _require_obs_columns             │
+                    │                                                          │
+                    │    87 def _require_obs_columns(adata: ad.AnnData, keys:  │
+                    │    88 │   missing = [k for k in keys if k not in adata.o │
+                    │    89 │   if missing:                                    │
+                    │ ❱  90 │   │   raise ValueError(f"{param} {missing} not f │
+                    │       {list(adata.obs.columns)}")                        │
+                    │    91                                                    │
+                    │    92                                                    │
+                    │    93 def _read_de_results(path: str, columns: list[str] │
+                    ╰──────────────────────────────────────────────────────────╯
+                    ValueError: group_key ['treatment_status'] not found in     
+                    adata.obs columns ['condition', 'sample_id']                
+                    Error calling tool 'decoupler_filter_genes_by_expression'   
+                    ╭─────────── Traceback (most recent call last) ────────────╮
+                    │ /home/asu/Science/paper2agent-runs/decoupler/decoupler-e │
+                    │ nv/lib/python3.13/site-packages/fastmcp/server/server.py │
+                    │ :1492 in call_tool                                       │
+                    │                                                          │
+                    │ /home/asu/Science/paper2agent-runs/decoupler/decoupler-e │
+                    │ nv/lib/python3.13/site-packages/fastmcp/tools/base.py:44 │
+                    │ 0 in _run                                                │
+                    │                                                          │
+                    │                 ... 9 frames hidden ...                  │
+                    │                                                          │
+                    │ /home/asu/Science/paper2agent-runs/decoupler/src/tools/b │
+                    │ ulk_enrichment.py:162 in                                 │
+                    │ decoupler_filter_genes_by_expression                     │
+                    │                                                          │
+                    │   159 │   """Remove lowly expressed genes from a bulk RN │
+                    │       filterByExpr logic.                                │
+                    │   160 │   Input is a raw-count .h5ad with a group column │
+                    │       threshold diagnostic plot.                         │
+                    │   161 │   """                                            │
+                    │ ❱ 162 │   adata = _read_h5ad(data_path)                  │
+                    │   163 │   _require_obs_columns(adata, [group_key], "grou │
+                    │   164 │   n_before = int(adata.n_vars)                   │
+                    │   165 │   out = _new_output_dir(output_dir, "filter_by_e │
+                    │                                                          │
+                    │ /home/asu/Science/paper2agent-runs/decoupler/src/tools/b │
+                    │ ulk_enrichment.py:83 in _read_h5ad                       │
+                    │                                                          │
+                    │    80 def _read_h5ad(path: str) -> ad.AnnData:           │
+                    │    81 │   p = Path(path).expanduser()                    │
+                    │    82 │   if not p.is_file():                            │
+                    │ ❱  83 │   │   raise FileNotFoundError(f"data_path does n │
+                    │    84 │   return ad.read_h5ad(p)                         │
+                    │    85                                                    │
+                    │    86                                                    │
+                    ╰──────────────────────────────────────────────────────────╯
+                    FileNotFoundError: data_path does not exist:                
+                    /home/asu/Science/paper2agent-runs/decoupler/tests/data/bulk
+                    _enrichment/missing.h5ad                                    
+[10/27/26 18:02:00] Error calling tool 'decoupler_rank_pcs_by_metadata'         
+                    ╭─────────── Traceback (most recent call last) ────────────╮
+                    │ /home/asu/Science/paper2agent-runs/decoupler/decoupler-e │
+                    │ nv/lib/python3.13/site-packages/fastmcp/server/server.py │
+                    │ :1492 in call_tool                                       │
+                    │                                                          │
+                    │ /home/asu/Science/paper2agent-runs/decoupler/decoupler-e │
+                    │ nv/lib/python3.13/site-packages/fastmcp/tools/base.py:44 │
+                    │ 0 in _run                                                │
+                    │                                                          │
+                    │                 ... 9 frames hidden ...                  │
+                    │                                                          │
+                    │ /home/asu/Science/paper2agent-runs/decoupler/src/tools/b │
+                    │ ulk_enrichment.py:234 in decoupler_rank_pcs_by_metadata  │
+                    │                                                          │
+                    │   231 │   if adata.obs.shape[1] == 0:                    │
+                    │   232 │   │   raise ValueError("adata.obs has no metadat │
+                    │   233 │   if obs_keys is not None:                       │
+                    │ ❱ 234 │   │   _require_obs_columns(adata, obs_keys, "obs │
+                    │   235 │   tested = list(obs_keys) if obs_keys is not Non │
+                    │       adata.obs.columns]                                 │
+                    │   236 │   color_keys = list(color_keys) if color_keys is │
+                    │   237 │   _require_obs_columns(adata, color_keys, "color │
+                    │                                                          │
+                    │ /home/asu/Science/paper2agent-runs/decoupler/src/tools/b │
+                    │ ulk_enrichment.py:90 in _require_obs_columns             │
+                    │                                                          │
+                    │    87 def _require_obs_columns(adata: ad.AnnData, keys:  │
+                    │    88 │   missing = [k for k in keys if k not in adata.o │
+                    │    89 │   if missing:                                    │
+                    │ ❱  90 │   │   raise ValueError(f"{param} {missing} not f │
+                    │       {list(adata.obs.columns)}")                        │
+                    │    91                                                    │
+                    │    92                                                    │
+                    │    93 def _read_de_results(path: str, columns: list[str] │
+                    ╰──────────────────────────────────────────────────────────╯
+                    ValueError: obs_keys ['batch'] not found in adata.obs       
+                    columns ['condition', 'sample_id']                          
+[10/27/26 18:02:29] Error calling tool 'pydeseq2_test_differential_expression'  
+                    ╭─────────── Traceback (most recent call last) ────────────╮
+                    │ /home/asu/Science/paper2agent-runs/decoupler/decoupler-e │
+                    │ nv/lib/python3.13/site-packages/fastmcp/server/server.py │
+                    │ :1492 in call_tool                                       │
+                    │                                                          │
+                    │ /home/asu/Science/paper2agent-runs/decoupler/decoupler-e │
+                    │ nv/lib/python3.13/site-packages/fastmcp/tools/base.py:44 │
+                    │ 0 in _run                                                │
+                    │                                                          │
+                    │                 ... 8 frames hidden ...                  │
+                    │                                                          │
+                    │ /home/asu/Science/paper2agent-runs/decoupler/decoupler-e │
+                    │ nv/lib/python3.13/site-packages/fastmcp/tools/function_t │
+                    │ ool.py:89 in wrapper                                     │
+                    │                                                          │
+                    │ /home/asu/Science/paper2agent-runs/decoupler/src/tools/b │
+                    │ ulk_enrichment.py:353 in                                 │
+                    │ pydeseq2_test_differential_expression                    │
+                    │                                                          │
+                    │   350 │   │   raise ValueError("group and reference must │
+                    │   351 │   missing = [g for g in (group, reference) if g  │
+                    │   352 │   if missing:                                    │
+                    │ ❱ 353 │   │   raise ValueError(f"level(s) {missing} not  │
+                    │       available levels: {levels}")                       │
+                    │   354 │   if n_cpus < 1:                                 │
+                    │   355 │   │   raise ValueError("n_cpus must be >= 1")    │
+                    │   356                                                    │
+                    ╰──────────────────────────────────────────────────────────╯
+                    ValueError: level(s) ['TGFb'] not found in                  
+                    adata.obs['condition']; available levels: ['control',       
+                    'treatment']                                                
+                    Error calling tool 'pydeseq2_test_differential_expression'  
+                    ╭─────────── Traceback (most recent call last) ────────────╮
+                    │ /home/asu/Science/paper2agent-runs/decoupler/decoupler-e │
+                    │ nv/lib/python3.13/site-packages/fastmcp/server/server.py │
+                    │ :1492 in call_tool                                       │
+                    │                                                          │
+                    │ /home/asu/Science/paper2agent-runs/decoupler/decoupler-e │
+                    │ nv/lib/python3.13/site-packages/fastmcp/tools/base.py:44 │
+                    │ 0 in _run                                                │
+                    │                                                          │
+                    │                 ... 9 frames hidden ...                  │
+                    │                                                          │
+                    │ /home/asu/Science/paper2agent-runs/decoupler/src/tools/b │
+                    │ ulk_enrichment.py:341 in                                 │
+                    │ pydeseq2_test_differential_expression                    │
+                    │                                                          │
+                    │   338 │   Input is a raw-count .h5ad with a condition co │
+                    │       results CSV and a volcano plot.                    │
+                    │   339 │   """                                            │
+                    │   340 │   adata = _read_h5ad(data_path)                  │
+                    │ ❱ 341 │   _require_obs_columns(adata, [condition_key], " │
+                    │   342 │   labels = adata.obs[condition_key]              │
+                    │   343 │   if pd.api.types.is_numeric_dtype(labels) or pd │
+                    │   344 │   │   raise ValueError(                          │
+                    │                                                          │
+                    │ /home/asu/Science/paper2agent-runs/decoupler/src/tools/b │
+                    │ ulk_enrichment.py:90 in _require_obs_columns             │
+                    │                                                          │
+                    │    87 def _require_obs_columns(adata: ad.AnnData, keys:  │
+                    │    88 │   missing = [k for k in keys if k not in adata.o │
+                    │    89 │   if missing:                                    │
+                    │ ❱  90 │   │   raise ValueError(f"{param} {missing} not f │
+                    │       {list(adata.obs.columns)}")                        │
+                    │    91                                                    │
+                    │    92                                                    │
+                    │    93 def _read_de_results(path: str, columns: list[str] │
+                    ╰──────────────────────────────────────────────────────────╯
+                    ValueError: condition_key ['treatment_status'] not found in 
+                    adata.obs columns ['condition', 'sample_id']                
+                    Error calling tool 'pydeseq2_test_differential_expression'  
+                    ╭─────────── Traceback (most recent call last) ────────────╮
+                    │ /home/asu/Science/paper2agent-runs/decoupler/decoupler-e │
+                    │ nv/lib/python3.13/site-packages/fastmcp/server/server.py │
+                    │ :1492 in call_tool                                       │
+                    │                                                          │
+                    │ /home/asu/Science/paper2agent-runs/decoupler/decoupler-e │
+                    │ nv/lib/python3.13/site-packages/fastmcp/tools/base.py:44 │
+                    │ 0 in _run                                                │
+                    │                                                          │
+                    │                 ... 8 frames hidden ...                  │
+                    │                                                          │
+                    │ /home/asu/Science/paper2agent-runs/decoupler/decoupler-e │
+                    │ nv/lib/python3.13/site-packages/fastmcp/tools/function_t │
+                    │ ool.py:89 in wrapper                                     │
+                    │                                                          │
+                    │ /home/asu/Science/paper2agent-runs/decoupler/src/tools/b │
+                    │ ulk_enrichment.py:364 in                                 │
+                    │ pydeseq2_test_differential_expression                    │
+                    │                                                          │
+                    │   361 │   if not np.issubdtype(counts.dtype, np.number)  │
+                    │   362 │   │   raise ValueError("counts must be finite nu │
+                    │   363 │   if (counts < 0).any() or (counts % 1 != 0).any │
+                    │ ❱ 364 │   │   raise ValueError("counts must be non-negat │
+                    │       or log values are not valid input")                │
+                    │   365 │                                                  │
+                    │   366 │   design = design if design is not None else f"~ │
+                    │   367 │   # DE cells 23-24. PyDESeq2 shares and mutates  │
+                    │       copy;                                              │
+                    ╰──────────────────────────────────────────────────────────╯
+                    ValueError: counts must be non-negative integers (raw       
+                    counts); normalised or log values are not valid input       
+[10/27/26 18:02:33] Error calling tool 'decoupler_score_activities_ulm'         
+                    ╭─────────── Traceback (most recent call last) ────────────╮
+                    │ /home/asu/Science/paper2agent-runs/decoupler/decoupler-e │
+                    │ nv/lib/python3.13/site-packages/fastmcp/server/server.py │
+                    │ :1492 in call_tool                                       │
+                    │                                                          │
+                    │ /home/asu/Science/paper2agent-runs/decoupler/decoupler-e │
+                    │ nv/lib/python3.13/site-packages/fastmcp/tools/base.py:44 │
+                    │ 0 in _run                                                │
+                    │                                                          │
+                    │                 ... 9 frames hidden ...                  │
+                    │                                                          │
+                    │ /home/asu/Science/paper2agent-runs/decoupler/src/tools/b │
+                    │ ulk_enrichment.py:451 in decoupler_score_activities_ulm  │
+                    │                                                          │
+                    │   448 │   """                                            │
+                    │   449 │   if not 0 < padj_threshold <= 1:                │
+                    │   450 │   │   raise ValueError("padj_threshold must be i │
+                    │ ❱ 451 │   de = _read_de_results(de_results_path, [stat_c │
+                    │   452 │   n_nonfinite = int((~np.isfinite(de[stat_column │
+                    │   453 │   if n_nonfinite:                                │
+                    │   454 │   │   raise ValueError(                          │
+                    │                                                          │
+                    │ /home/asu/Science/paper2agent-runs/decoupler/src/tools/b │
+                    │ ulk_enrichment.py:102 in _read_de_results                │
+                    │                                                          │
+                    │    99 │   │   raise ValueError("DE results must have uni │
+                    │       first (index) column")                             │
+                    │   100 │   missing = [c for c in columns if c not in de.c │
+                    │   101 │   if missing:                                    │
+                    │ ❱ 102 │   │   raise ValueError(f"DE results lack column( │
+                    │       {list(de.columns)}")                               │
+                    │   103 │   for c in columns:                              │
+                    │   104 │   │   if not pd.api.types.is_numeric_dtype(de[c] │
+                    │   105 │   │   │   raise ValueError(f"DE results column { │
+                    ╰──────────────────────────────────────────────────────────╯
+                    ValueError: DE results lack column(s) ['stat']; available   
+                    columns: ['baseMean', 'log2FoldChange', 'lfcSE', 'pvalue',  
+                    'padj']                                                     
+                    Error calling tool 'decoupler_score_activities_ulm'         
+                    ╭─────────── Traceback (most recent call last) ────────────╮
+                    │ /home/asu/Science/paper2agent-runs/decoupler/decoupler-e │
+                    │ nv/lib/python3.13/site-packages/fastmcp/server/server.py │
+                    │ :1492 in call_tool                                       │
+                    │                                                          │
+                    │ /home/asu/Science/paper2agent-runs/decoupler/decoupler-e │
+                    │ nv/lib/python3.13/site-packages/fastmcp/tools/base.py:44 │
+                    │ 0 in _run                                                │
+                    │                                                          │
+                    │                 ... 9 frames hidden ...                  │
+                    │                                                          │
+                    │ /home/asu/Science/paper2agent-runs/decoupler/src/tools/b │
+                    │ ulk_enrichment.py:463 in decoupler_score_activities_ulm  │
+                    │                                                          │
+                    │   460 │   if contrast_name is not None:                  │
+                    │   461 │   │   data = data.rename(index={stat_column: con │
+                    │   462 │   row = str(data.index[0])                       │
+                    │ ❱ 463 │   net, origin = _load_network(network, network_p │
+                    │   464 │                                                  │
+                    │   465 │   # Scoring and significance filter (cells 32 /  │
+                    │   466 │   acts, padj = dc.mt.ulm(data=data, net=net)     │
+                    │                                                          │
+                    │ /home/asu/Science/paper2agent-runs/decoupler/src/tools/b │
+                    │ ulk_enrichment.py:126 in _load_network                   │
+                    │                                                          │
+                    │   123 │   │   │   net = pd.read_csv(p)                   │
+                    │   124 │   │   origin = str(p.resolve())                  │
+                    │   125 │   if not {"source", "target"}.issubset(net.colum │
+                    │ ❱ 126 │   │   raise ValueError(f"network table needs 'so │
+                    │       {list(net.columns)}")                              │
+                    │   127 │   return net, origin                             │
+                    │   128                                                    │
+                    │   129                                                    │
+                    ╰──────────────────────────────────────────────────────────╯
+                    ValueError: network table needs 'source' and 'target'       
+                    columns; found ['geneset', 'genesymbol']                    
+                    Error calling tool 'decoupler_score_activities_ulm'         
+                    ╭─────────── Traceback (most recent call last) ────────────╮
+                    │ /home/asu/Science/paper2agent-runs/decoupler/decoupler-e │
+                    │ nv/lib/python3.13/site-packages/fastmcp/server/server.py │
+                    │ :1492 in call_tool                                       │
+                    │                                                          │
+                    │ /home/asu/Science/paper2agent-runs/decoupler/decoupler-e │
+                    │ nv/lib/python3.13/site-packages/fastmcp/tools/base.py:44 │
+                    │ 0 in _run                                                │
+                    │                                                          │
+                    │                 ... 9 frames hidden ...                  │
+                    │                                                          │
+                    │ /home/asu/Science/paper2agent-runs/decoupler/src/tools/b │
+                    │ ulk_enrichment.py:463 in decoupler_score_activities_ulm  │
+                    │                                                          │
+                    │   460 │   if contrast_name is not None:                  │
+                    │   461 │   │   data = data.rename(index={stat_column: con │
+                    │   462 │   row = str(data.index[0])                       │
+                    │ ❱ 463 │   net, origin = _load_network(network, network_p │
+                    │   464 │                                                  │
+                    │   465 │   # Scoring and significance filter (cells 32 /  │
+                    │   466 │   acts, padj = dc.mt.ulm(data=data, net=net)     │
+                    │                                                          │
+                    │ /home/asu/Science/paper2agent-runs/decoupler/src/tools/b │
+                    │ ulk_enrichment.py:116 in _load_network                   │
+                    │                                                          │
+                    │   113 │   else:                                          │
+                    │   114 │   │   p = Path(network_path).expanduser()        │
+                    │   115 │   │   if not p.is_file():                        │
+                    │ ❱ 116 │   │   │   raise FileNotFoundError(f"network_path │
+                    │   117 │   │   name = p.name.lower()                      │
+                    │   118 │   │   if name.endswith(".parquet"):              │
+                    │   119 │   │   │   net = pd.read_parquet(p)               │
+                    ╰──────────────────────────────────────────────────────────╯
+                    FileNotFoundError: network_path does not exist:             
+                    /home/asu/Science/paper2agent-runs/decoupler/tests/data/bulk
+                    _enrichment/missing.parquet                                 
+[10/27/26 18:02:49] Error calling tool 'decoupler_inspect_source_targets'       
+                    ╭─────────── Traceback (most recent call last) ────────────╮
+                    │ /home/asu/Science/paper2agent-runs/decoupler/decoupler-e │
+                    │ nv/lib/python3.13/site-packages/fastmcp/server/server.py │
+                    │ :1492 in call_tool                                       │
+                    │                                                          │
+                    │ /home/asu/Science/paper2agent-runs/decoupler/decoupler-e │
+                    │ nv/lib/python3.13/site-packages/fastmcp/tools/base.py:44 │
+                    │ 0 in _run                                                │
+                    │                                                          │
+                    │                 ... 8 frames hidden ...                  │
+                    │                                                          │
+                    │ /home/asu/Science/paper2agent-runs/decoupler/decoupler-e │
+                    │ nv/lib/python3.13/site-packages/fastmcp/tools/function_t │
+                    │ ool.py:89 in wrapper                                     │
+                    │                                                          │
+                    │ /home/asu/Science/paper2agent-runs/decoupler/src/tools/b │
+                    │ ulk_enrichment.py:570 in                                 │
+                    │ decoupler_inspect_source_targets                         │
+                    │                                                          │
+                    │   567 │   net, origin = _load_network(network, network_p │
+                    │   568 │   src_net = net[net["source"].astype(str) == sou │
+                    │   569 │   if src_net.empty:                              │
+                    │ ❱ 570 │   │   raise ValueError(f"source {source!r} not f │
+                    │   571 │   n_measured = int(src_net["target"].astype(str) │
+                    │   572 │   if n_measured == 0:                            │
+                    │   573 │   │   raise ValueError(f"none of the {len(src_ne │
+                    │       in the DE results")                                │
+                    ╰──────────────────────────────────────────────────────────╯
+                    ValueError: source 'NOT_A_PATHWAY' not found in the progeny 
+                    network                                                     
+                    Error calling tool 'decoupler_inspect_source_targets'       
+                    ╭─────────── Traceback (most recent call last) ────────────╮
+                    │ /home/asu/Science/paper2agent-runs/decoupler/decoupler-e │
+                    │ nv/lib/python3.13/site-packages/fastmcp/server/server.py │
+                    │ :1492 in call_tool                                       │
+                    │                                                          │
+                    │ /home/asu/Science/paper2agent-runs/decoupler/decoupler-e │
+                    │ nv/lib/python3.13/site-packages/fastmcp/tools/base.py:44 │
+                    │ 0 in _run                                                │
+                    │                                                          │
+                    │                 ... 9 frames hidden ...                  │
+                    │                                                          │
+                    │ /home/asu/Science/paper2agent-runs/decoupler/src/tools/b │
+                    │ ulk_enrichment.py:566 in                                 │
+                    │ decoupler_inspect_source_targets                         │
+                    │                                                          │
+                    │   563 │   """Explain one source's activity through its t │
+                    │       weight-vs-statistic scatter, leading edge and netw │
+                    │   564 │   Input is the DE results CSV (plus optional ulm │
+                    │       leading-edge gene lists, the network used and the  │
+                    │   565 │   """                                            │
+                    │ ❱ 566 │   de = _read_de_results(de_results_path, ["log2F │
+                    │   567 │   net, origin = _load_network(network, network_p │
+                    │   568 │   src_net = net[net["source"].astype(str) == sou │
+                    │   569 │   if src_net.empty:                              │
+                    │                                                          │
+                    │ /home/asu/Science/paper2agent-runs/decoupler/src/tools/b │
+                    │ ulk_enrichment.py:96 in _read_de_results                 │
+                    │                                                          │
+                    │    93 def _read_de_results(path: str, columns: list[str] │
+                    │    94 │   p = Path(path).expanduser()                    │
+                    │    95 │   if not p.is_file():                            │
+                    │ ❱  96 │   │   raise FileNotFoundError(f"de_results_path  │
+                    │    97 │   de = pd.read_csv(p, index_col=0)               │
+                    │    98 │   if de.index.hasnans or not de.index.is_unique: │
+                    │    99 │   │   raise ValueError("DE results must have uni │
+                    │       first (index) column")                             │
+                    ╰──────────────────────────────────────────────────────────╯
+                    FileNotFoundError: de_results_path does not exist:          
+                    /home/asu/Science/paper2agent-runs/decoupler/tests/data/bulk
+                    _enrichment/missing.csv                                     

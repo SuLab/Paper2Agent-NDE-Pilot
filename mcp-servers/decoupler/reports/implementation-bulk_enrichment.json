@@ -1,0 +1,653 @@
+{
+  "module": "bulk_enrichment",
+  "status": "implemented; development smoke check passed (attempt 1 of 3)",
+  "written_utc": "2026-10-27T23:34:08.221746+00:00",
+  "production_files": [
+    {
+      "path": "src/tools/bulk_enrichment.py",
+      "sha256": "9a29baf1f90634a490a818f2e8f835061205fbd42838e3f0d565f1a93833a039",
+      "lines": 680
+    },
+    {
+      "path": "src/tools/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "note": "empty"
+    }
+  ],
+  "fastmcp_instance": "bulk_enrichment_mcp = FastMCP(name='bulk_enrichment')",
+  "reference_url": "https://github.com/scverse/decoupler-tutorials/blob/306be6673a5df5baf780e44ea929391616dbe5d8/bulk/rna.ipynb",
+  "upstream": {
+    "decoupler": "2.3.1, repo/decoupler @ 27a1be7c75d88306bf3c2e4d0e7fb4b42d48f78a (installed non-editable; byte-identical per stage 1)",
+    "tutorial": "docs/notebooks @ 306be6673a5df5baf780e44ea929391616dbe5d8, bulk/rna.ipynb sha256 17b5e32e241626da72800125b6ae979c179ddf6e35be83892e5c75013e12fe2b",
+    "pydeseq2": "0.5.4",
+    "scanpy": "1.12.4",
+    "anndata": "0.13.4",
+    "pandas": "3.1.0",
+    "igraph": "1.0.0",
+    "fastmcp": "4.0.3",
+    "interpreter": "/home/asu/Science/paper2agent-runs/decoupler/decoupler-env/bin/python"
+  },
+  "module_level_setup": [
+    "matplotlib.use('Agg') before any pyplot/scanpy/decoupler import (headless server).",
+    "sc.set_figure_params(figsize=(3, 3), frameon=False): tutorial cell 2, kept so figures use the tutorial's style. It sets matplotlib rcParams process-wide (incl. savefig.dpi=150).",
+    "_PLOT_LOCK (threading.Lock) serialises figure creation/saving/closing: FastMCP 4.0.3 runs sync tools in an anyio worker thread (fastmcp/tools/function_tool.py:477 call_sync_fn_in_threadpool) and pyplot state is process-global; dc.pl.obsm calls plt.close() on the current figure. Computation (incl. DESeq2) is not locked.",
+    "Network loaders: dc.op.collectri / dc.op.progeny / dc.op.hallmark with organism='human' (cells 30/40/52).",
+    "_PLOT_PRESETS: barplot top/figsize from cells 34/44/56, dotplot scale/figsize from cells 46/58."
+  ],
+  "tools": {
+    "decoupler_filter_genes_by_expression": {
+      "wrapper_location": "src/tools/bulk_enrichment.py::decoupler_filter_genes_by_expression::150",
+      "signature": "(data_path: str, group_key: str, min_count: int = 10, min_total_count: int = 15, large_n: int = 10, min_prop: float = 0.7, output_dir: str | None = None) -> dict",
+      "upstream_calls": [
+        {
+          "call": "dc.pl.filter_by_expr(adata, group=group_key, min_count, min_total_count, large_n, min_prop, return_fig=True, save=<png>)",
+          "source": "repo/decoupler/src/decoupler/pl/_filter_by_expr.py::filter_by_expr::13",
+          "tutorial_cell": 11
+        },
+        {
+          "call": "dc.pp.filter_by_expr(adata, group=group_key, min_count, min_total_count, large_n, min_prop) (inplace)",
+          "source": "repo/decoupler/src/decoupler/pp/anndata.py::filter_by_expr::546",
+          "tutorial_cell": 13
+        }
+      ],
+      "parameters": {
+        "data_path": "required; .h5ad samples x genes raw counts (tutorial: dc.ds.hsctgfb() object, here its saved copy)",
+        "group_key": "required (brief); tutorial 'condition'; must exist in obs, else ValueError",
+        "min_count/min_total_count/large_n/min_prop": "10/15/10/0.7 = tutorial cells 11/13 values = upstream API defaults",
+        "not_exposed": "lib_size (API param, not used by tutorial; scalar library size rarely meaningful), inplace (tool always writes the filtered object)"
+      },
+      "io_adaptations": [
+        "reads user .h5ad instead of dc.ds.hsctgfb() download",
+        "plot saved via upstream Plotter save= (bbox_inches='tight')",
+        "filtered AnnData written with write_h5ad"
+      ],
+      "outputs": "filtered_counts.h5ad (obs kept, X subset), filter_by_expr_thresholds.png; summary n_samples, n_genes_before/after/removed, group_sizes, parameters",
+      "deviations": "none in computation; no separate kept-gene list file (var_names of the h5ad hold it)."
+    },
+    "decoupler_rank_pcs_by_metadata": {
+      "wrapper_location": "src/tools/bulk_enrichment.py::decoupler_rank_pcs_by_metadata::220",
+      "signature": "(data_path: str, color_keys: list[str] | None = None, obs_keys: list[str] | None = None, nvar: int = 5, output_dir: str | None = None) -> dict",
+      "upstream_calls": [
+        {
+          "call": "sc.pp.normalize_total(adata, target_sum=1e4)",
+          "source": "decoupler-env/lib/python3.13/site-packages/scanpy/preprocessing/_normalization.py::normalize_total::127",
+          "tutorial_cell": 15
+        },
+        {
+          "call": "sc.pp.log1p(adata)",
+          "source": "decoupler-env/lib/python3.13/site-packages/scanpy/preprocessing/_simple.py::log1p::311",
+          "tutorial_cell": 15
+        },
+        {
+          "call": "sc.pp.scale(adata, max_value=10)",
+          "source": "decoupler-env/lib/python3.13/site-packages/scanpy/preprocessing/_scale.py::scale::71",
+          "tutorial_cell": 15
+        },
+        {
+          "call": "sc.tl.pca(adata)",
+          "source": "decoupler-env/lib/python3.13/site-packages/scanpy/preprocessing/_pca/__init__.py::pca::54",
+          "tutorial_cell": 15
+        },
+        {
+          "call": "dc.tl.rankby_obsm(adata, key='X_pca', obs_keys=obs_keys)",
+          "source": "repo/decoupler/src/decoupler/tl/_rankby_obsm.py::rankby_obsm::33",
+          "tutorial_cell": 17
+        },
+        {
+          "call": "sc.pl.pca_variance_ratio(adata, show=False)",
+          "source": "decoupler-env/lib/python3.13/site-packages/scanpy/plotting/_tools/__init__.py::pca_variance_ratio::179",
+          "tutorial_cell": 19
+        },
+        {
+          "call": "dc.pl.obsm(adata, return_fig=True, nvar=nvar, titles=['PC scores','Adjusted p-values'], figsize=(6,3), save=<png>)",
+          "source": "repo/decoupler/src/decoupler/pl/_obsm.py::obsm::74",
+          "tutorial_cell": 19
+        },
+        {
+          "call": "sc.pl.pca(adata, color=color_keys, ncols=1, size=300, frameon=True, show=False, return_fig=True)",
+          "source": "decoupler-env/lib/python3.13/site-packages/scanpy/plotting/_tools/scatterplots.py::pca::864",
+          "tutorial_cell": 21
+        }
+      ],
+      "parameters": {
+        "color_keys": "user obs columns (tutorial ['condition','sample_id']); default = tested obs columns (obs_keys or all obs columns); validated",
+        "obs_keys": "rankby_obsm API param (tutorial: not passed -> all obs columns); validated",
+        "nvar": "5 (tutorial cell 19)",
+        "fixed": "target_sum=1e4, max_value=10, sc.tl.pca defaults (tutorial cell 15)"
+      },
+      "io_adaptations": [
+        "operates on the loaded copy; the tutorial's layers['counts'] + dc.pp.swap_layer bookkeeping (restoring raw counts in X for later DE) is omitted because nothing is written back",
+        "X copied (writeable); integer-dtype X cast to float64 before in-place scanpy ops (tutorial counts are float64 from dc.ds.hsctgfb)",
+        "scanpy variance-ratio figure taken from plt.gcf() and saved with bbox_inches='tight'"
+      ],
+      "outputs": "pc_metadata_associations.csv (adata.uns['rank_obsm']: obsm, obs, stat, pval, padj), pca_variance_ratio.csv, pca_scores.csv (X_pca), 3 PNGs; summary n_pcs, variance_ratio (first 10), significant_associations (padj<0.05, up to 20)",
+      "deviations": "none in computation"
+    },
+    "pydeseq2_test_differential_expression": {
+      "wrapper_location": "src/tools/bulk_enrichment.py::pydeseq2_test_differential_expression::328",
+      "signature": "(data_path: str, condition_key: str, group: str, reference: str, design: str | None = None, n_cpus: int = 8, output_dir: str | None = None) -> dict",
+      "upstream_calls": [
+        {
+          "call": "DefaultInference(n_cpus=n_cpus)",
+          "source": "decoupler-env/lib/python3.13/site-packages/pydeseq2/default_inference.py::DefaultInference::14",
+          "tutorial_cell": 23
+        },
+        {
+          "call": "DeseqDataSet(adata=adata.copy(), design=design, refit_cooks=True, inference=inference, quiet=True)",
+          "source": "decoupler-env/lib/python3.13/site-packages/pydeseq2/dds.py::DeseqDataSet.__init__::206",
+          "tutorial_cell": 23
+        },
+        {
+          "call": "dds.deseq2()",
+          "source": "decoupler-env/lib/python3.13/site-packages/pydeseq2/dds.py::DeseqDataSet.deseq2::516",
+          "tutorial_cell": 23
+        },
+        {
+          "call": "DeseqStats(dds, contrast=[condition_key, group, reference], inference=inference, quiet=True)",
+          "source": "decoupler-env/lib/python3.13/site-packages/pydeseq2/ds.py::DeseqStats.__init__::131",
+          "tutorial_cell": 23
+        },
+        {
+          "call": "stat_res.summary(); stat_res.results_df",
+          "source": "decoupler-env/lib/python3.13/site-packages/pydeseq2/ds.py::DeseqStats.summary::223",
+          "tutorial_cell": "23-24"
+        },
+        {
+          "call": "dc.pl.volcano(data=results_df, x='log2FoldChange', y='padj', top=10, return_fig=True, save=<png>)",
+          "source": "repo/decoupler/src/decoupler/pl/_volcano.py::volcano::12",
+          "tutorial_cell": 26
+        }
+      ],
+      "parameters": {
+        "condition_key/group/reference": "required; tutorial 'condition'/'treatment'/'control' -> user metadata (runtime.md metadata-input rule)",
+        "design": "default f'~{condition_key}' (tutorial '~condition'). pydeseq2 0.5.4 accepts formulaic strings: dds.py L295-299 builds FormulaicContrasts(self.obs, self.design) for str designs; dev check: '~batch + condition' -> variables {batch, condition}, design columns [Intercept, batch[T.b2], batch[T.b3], condition[T.treatment]]",
+        "n_cpus": "8 (tutorial DefaultInference(n_cpus=8)); executor showed n_cpus=1 and 8 give bitwise-identical results",
+        "fixed": "refit_cooks=True (tutorial); all other PyDESeq2 defaults (alpha 0.05, cooks_filter, independent_filter)"
+      },
+      "input_validation": [
+        "condition_key must exist in obs",
+        "condition column must not be numeric/boolean (PyDESeq2 would treat it as continuous)",
+        "group != reference; both must be levels of obs[condition_key] (error lists available levels)",
+        "counts finite, non-negative, integer-valued (PyDESeq2's own precondition, utils.py::test_valid_counts::110); reported, never repaired",
+        "design must include condition_key (checked via dds.variables before the expensive fit)"
+      ],
+      "io_adaptations": [
+        "adata.copy() passed to DeseqDataSet (executor: PyDESeq2 shares/mutates .uns and breaks later h5ad writes)",
+        "quiet=True on DeseqDataSet and DeseqStats: in the installed source it only gates print() calls (summary() prints results_df to stdout, which would corrupt MCP stdio); computation unchanged",
+        "sparse X densified (PyDESeq2 expects dense counts)",
+        "results_df.to_csv(path) keeps the gene index as first column (index name as produced by PyDESeq2, i.e. unnamed)"
+      ],
+      "outputs": "deseq2_results.csv (baseMean, log2FoldChange, lfcSE, stat, pvalue, padj), deseq2_volcano.png; summary design, contrast, samples_per_level, n_genes, n_missing per column, n_padj_lt_0.05 (+up/down), top_up/top_down (5 each), pydeseq2_version",
+      "deviations": "none in computation"
+    },
+    "decoupler_score_activities_ulm": {
+      "wrapper_location": "src/tools/bulk_enrichment.py::decoupler_score_activities_ulm::435",
+      "signature": "(de_results_path: str, network: Literal['collectri','progeny','hallmark'], stat_column: str = 'stat', contrast_name: str | None = None, padj_threshold: float = 0.05, barplot_top: int | None = None, dotplot_top: int = 10, network_path: str | None = None, output_dir: str | None = None) -> dict",
+      "upstream_calls": [
+        {
+          "call": "data = results_df[[stat_column]].T (.rename(index={stat_column: contrast_name}) when given)",
+          "source": "tutorial cell 28 (format transform)",
+          "tutorial_cell": 28
+        },
+        {
+          "call": "dc.op.collectri|progeny|hallmark(organism='human') when network_path is None",
+          "source": [
+            "repo/decoupler/src/decoupler/op/_collectri.py::collectri::10",
+            "repo/decoupler/src/decoupler/op/_progeny.py::progeny::10",
+            "repo/decoupler/src/decoupler/op/_hallmark.py::hallmark::10"
+          ],
+          "tutorial_cell": "30/40/52"
+        },
+        {
+          "call": "acts, padj = dc.mt.ulm(data=data, net=net)",
+          "source": "repo/decoupler/src/decoupler/mt/_ulm.py::ulm::125 (Method -> _Method.py::__call__::69 -> mt/_run.py::_run::41, tmin=5, BH FDR)",
+          "tutorial_cell": "32/42/54"
+        },
+        {
+          "call": "msk = (padj.T < padj_threshold).iloc[:, 0]; acts.loc[:, msk]",
+          "source": "tutorial cells 32/42/54",
+          "tutorial_cell": "32/42/54"
+        },
+        {
+          "call": "dc.pl.barplot(data=sig_acts, name=row, top=preset_or_user, figsize=preset, return_fig=True, save=<png>)",
+          "source": "repo/decoupler/src/decoupler/pl/_barplot.py::barplot::33",
+          "tutorial_cell": "34/44/56"
+        },
+        {
+          "call": "df = sig_acts.melt(value_name='score').merge(padj.melt(value_name='padj').assign(clip(2.22e-16,1)).assign(-log10)); dc.pl.dotplot(df, x='score', y='variable', s='padj', c='score', top=dotplot_top, scale=preset, figsize=preset)",
+          "source": "repo/decoupler/src/decoupler/pl/_dotplot.py::dotplot::12",
+          "tutorial_cell": "46/58"
+        }
+      ],
+      "parameters": {
+        "network": "required Literal; organism fixed 'human' (non-human deferred by scanner)",
+        "stat_column": "'stat' (tutorial recommends t-like Wald stat)",
+        "contrast_name": "None -> row label stays the stat column name (untransformed results_df[[stat]].T); tutorial used 'treatment.vs.control', pass it to reproduce reference tables exactly",
+        "padj_threshold": "0.05 (tutorial)",
+        "barplot_top": "None -> tutorial value: 25 CollecTRI (cell 34) / 25 PROGENy (cell 44) / 10 Hallmark (cell 56)",
+        "dotplot_top": "10 (cell 58 top=10; cell 46 uses the dotplot default, also 10)",
+        "network_path": "see network_provenance"
+      },
+      "input_validation": [
+        "de_results_path exists; gene index unique/non-missing; stat_column present and numeric",
+        "stat_column must be finite for all genes (ulm asserts finite input); error suggests filtering genes, nothing dropped silently",
+        "padj_threshold in (0, 1]",
+        "network table must have source/target columns"
+      ],
+      "io_adaptations": [
+        "DE results read from the CSV written by tool 3 (composition contract)",
+        "network_path (CSV/TSV/Parquet) replaces the download when given",
+        "network table actually used is written as <network>_network_used.csv"
+      ],
+      "outputs": "<net>_ulm_scores.csv (wide, all sources, = native ulm scores), <net>_ulm_padj.csv (wide, all sources), <net>_ulm_scores_significant.csv (tutorial's filtered acts), <net>_network_used.csv, barplot and dotplot PNGs (only when >=1 significant source); summary network_origin/rows/n_sources, n_sources_scored, n_significant (+pos/neg), top_significant_sources and top_sources_all (5 each sign)",
+      "deviations": [
+        "CollecTRI dotplot is not in the tutorial; it uses the cell-46 (PROGENy) dotplot settings (scale 0.15, figsize (4,4)), as the brief requested a dotplot for the tool.",
+        "When no source passes padj_threshold, bar/dot plots are skipped (upstream barplot cannot plot an empty frame) and the message says so."
+      ]
+    },
+    "decoupler_inspect_source_targets": {
+      "wrapper_location": "src/tools/bulk_enrichment.py::decoupler_inspect_source_targets::553",
+      "signature": "(de_results_path: str, network: Literal['collectri','progeny','hallmark'], source: str, stat_column: str = 'stat', scores_path: str | None = None, network_sources: list[str] | None = None, network_path: str | None = None, output_dir: str | None = None) -> dict",
+      "upstream_calls": [
+        {
+          "call": "dc.pl.volcano(data=de, x='log2FoldChange', y='pvalue', net=net, name=source, top=10)",
+          "source": "repo/decoupler/src/decoupler/pl/_volcano.py::volcano::12",
+          "tutorial_cell": 38
+        },
+        {
+          "call": "dc.pl.source_targets(data=de, x='weight', y=stat_column, net=net, name=source, top=15, figsize=(4,4)) [weighted networks only]",
+          "source": "repo/decoupler/src/decoupler/pl/_source_targets.py::source_targets::12",
+          "tutorial_cell": 48
+        },
+        {
+          "call": "dc.pl.leading_edge(de, stat=stat_column, net=net[net['weight'] > 0] and net[net['weight'] < 0], name=source) for weighted networks; net unsplit for unweighted",
+          "source": "repo/decoupler/src/decoupler/pl/_leading_edge.py::leading_edge::14",
+          "tutorial_cell": "50 (PROGENy split) / 60 (Hallmark)"
+        },
+        {
+          "call": "dc.pl.network(net=net, data=de[[stat]].T (row label = scores row), score=<scores CSV>, sources=network_sources or [source], targets=10, figsize=(5,5), vcenter=True, by_abs=True, size_node=10, t_label='Gene-level\\nstatistic')",
+          "source": "repo/decoupler/src/decoupler/pl/_network.py::network::176 (requires igraph; 1.0.0 installed)",
+          "tutorial_cell": 36
+        }
+      ],
+      "parameters": {
+        "source": "required (tutorial picks SRF / TGFb / TGF_BETA_SIGNALING)",
+        "network_sources": "optional list for the network plot; default [source]; tutorial cell 36 used ['SRF','MYOCD','IRF1','SKIL']",
+        "scores_path": "optional wide scores CSV from tool 4 (full or significant; the tutorial passed the significant subset tf_acts). Network plot is skipped (listed in 'skipped') without it. All network_sources must be columns of it, else ValueError.",
+        "stat_column": "'stat' (cells 48/50/60)",
+        "fixed": "volcano top=10/y='pvalue', source_targets top=15, network targets=10 (tutorial values)"
+      },
+      "input_validation": [
+        "DE CSV has log2FoldChange, pvalue, stat_column (numeric), unique gene index",
+        "source present in network (clear error instead of upstream assert)",
+        "at least one target of source measured in DE results",
+        "scores table has exactly one row"
+      ],
+      "io_adaptations": [
+        "data row label for dc.pl.network is set to the scores table's row label so upstream's same-index assertion holds",
+        "leading-edge gene arrays written as text (one gene per line, rank order)",
+        "network table used saved as <network>_network_used.csv",
+        "a sign component with no measured targets is skipped and listed in 'skipped' instead of failing on upstream assert"
+      ],
+      "outputs": "<source>_targets_volcano.png, <source>_source_targets.png (weighted), <source>_leading_edge_<component>.png/.txt, <source>_network.png (with scores_path), <network>_network_used.csv; summary leading_edges {component: n_genes, first_genes (10), path}, n_targets_in_network, n_targets_measured, weighted_network, skipped, source_score (when in scores)",
+      "deviations": [
+        "Leading-edge sign split applied to every network with a weight column (tutorial demonstrates it for PROGENy; CollecTRI weights are +/-1 so the same rule applies). Hallmark (no weights) gets one unsplit leading edge as in cell 60."
+      ]
+    }
+  },
+  "network_provenance": {
+    "adaptation": "Tools 4 and 5 accept network_path (CSV, TSV[.gz]/TXT[.gz] tab-separated, or Parquet) with source/target(/weight) columns; when given it is used instead of calling dc.op.<network>(organism='human'). The same dc.mt.ulm / dc.pl calls run on it; no method is added. Each call saves the table actually used as <network>_network_used.csv and returns network_origin (download call or absolute path) and network_rows.",
+    "why": "CollecTRI (Zenodo), PROGENy (OmniPath) and Hallmark (static.omnipathdb.org) are live resources that drift; exact reference comparisons need the stage-2 snapshot.",
+    "snapshots_for_verifier": {
+      "collectri": "notebooks/bulk_rna/data/networks/collectri.csv (42990 rows) or .parquet",
+      "progeny": "notebooks/bulk_rna/data/networks/progeny.csv (62421 rows) or .parquet",
+      "hallmark": "notebooks/bulk_rna/data/networks/hallmark.csv (7318 rows) or .parquet"
+    },
+    "csv_round_trip": "Checked: read_csv of each snapshot CSV equals the parquet (sources/targets identical, weights bitwise equal).",
+    "note": "The `network` Literal still selects plot presets and file names when network_path is given; the wrapper cannot verify that the file is that resource."
+  },
+  "smoke_checks": {
+    "commands": [
+      "cd tmp/impl_bulk_enrichment && ../../decoupler-env/bin/python -I import_check.py",
+      "cd tmp/impl_bulk_enrichment && /usr/bin/time -v ../../decoupler-env/bin/python -I smoke_chain.py",
+      "cd tmp/impl_bulk_enrichment && ../../decoupler-env/bin/python -I smoke_extra.py"
+    ],
+    "scripts_sha256": {
+      "tmp/impl_bulk_enrichment/import_check.py": "fb5510bfcd777abd633a142181ec173599afdd1d8f26dc229c23e7c18eb75423",
+      "tmp/impl_bulk_enrichment/smoke_chain.py": "7254cbd789efe276bf18d3ff67629810b49f43faee23aaba44a6e9afc07affdd",
+      "tmp/impl_bulk_enrichment/smoke_extra.py": "07738c654c57e01838c34aa096ec6752905f862ffec517390a7b1db4cc842952"
+    },
+    "import_check": {
+      "exit": 0,
+      "stdout_bytes_during_import": 0,
+      "tools_listed": 5,
+      "schemas": "Annotated descriptions present; Literal -> enum; required sets as designed"
+    },
+    "smoke_chain": {
+      "exit": 0,
+      "wall_time": "66 s (DESeq2 35.7 s at n_cpus=8)",
+      "max_rss_kb": 817712,
+      "inputs": "notebooks/bulk_rna/data/hsctgfb_as_returned.h5ad (obs condition/sample_id), executor network CSV snapshots",
+      "results": {
+        "t1_n_genes_after_19510": {
+          "ok": true,
+          "detail": [
+            58674,
+            19510
+          ]
+        },
+        "t1_kept_genes_ordered_equal_reference": {
+          "ok": true,
+          "detail": null
+        },
+        "t1_X_equal_reference": {
+          "ok": true,
+          "detail": null
+        },
+        "t1_repeat_fresh_dir": {
+          "ok": true,
+          "detail": null
+        },
+        "t2_rank_obsm_matches_reference": {
+          "ok": true,
+          "detail": [
+            {
+              "obsm": "PC1",
+              "obs": "condition",
+              "stat": 267.5409851074219,
+              "padj": 0.0008177597192116082
+            }
+          ]
+        },
+        "t2_variance_ratio_matches": {
+          "ok": true,
+          "detail": [
+            0.6149707994767412,
+            0.14678879713488946,
+            0.10126783655712764,
+            0.07409037244614598,
+            0.06288219438509618
+          ]
+        },
+        "t3_index_equal": {
+          "ok": true,
+          "detail": [
+            19510,
+            6
+          ]
+        },
+        "t3_stat_bitwise_equal_reference": {
+          "ok": true,
+          "detail": null
+        },
+        "t3_all_columns_bitwise_equal_reference": {
+          "ok": true,
+          "detail": null
+        },
+        "t3_csv_bytes_equal_reference_csv": {
+          "ok": true,
+          "detail": null
+        },
+        "t3_counts_summary": {
+          "ok": true,
+          "detail": [
+            8517,
+            4328,
+            4189,
+            "35.7s"
+          ]
+        },
+        "t4_collectri_scores_padj_sig_equal_reference": {
+          "ok": true,
+          "detail": [
+            655,
+            143,
+            42990
+          ]
+        },
+        "t4_progeny_scores_padj_sig_equal_reference": {
+          "ok": true,
+          "detail": [
+            14,
+            12,
+            62421
+          ]
+        },
+        "t4_hallmark_scores_padj_sig_equal_reference": {
+          "ok": true,
+          "detail": [
+            50,
+            30,
+            7318
+          ]
+        },
+        "t4_collectri_top_tfs": {
+          "ok": true,
+          "detail": {
+            "positive": [
+              {
+                "source": "SRF",
+                "score": 7.383742530399846,
+                "padj": 3.477631724257968e-11
+              },
+              {
+                "source": "MYOCD",
+                "score": 7.345932745635272,
+                "padj": 3.477631724257968e-11
+              },
+              {
+                "source": "SMAD3",
+                "score": 7.206794380712145,
+                "padj": 7.777984506462943e-11
+              },
+              {
+                "source": "TCF21",
+                "score": 6.161999174245595,
+                "padj": 7.995410555849958e-08
+              },
+              {
+                "source": "ZEB2",
+                "score": 5.789579129841623,
+                "padj": 5.586459224105056e-07
+              }
+            ],
+            "negative": [
+              {
+                "source": "IRF1",
+                "score": -9.359191851511149,
+                "padj": 5.8178855028855644e-18
+              },
+              {
+                "source": "SKIL",
+                "score": -7.435938852999661,
+                "padj": 3.477631724257968e-11
+              },
+              {
+                "source": "NR1H4",
+                "score": -5.898247142435999,
+                "padj": 3.4944048366014613e-07
+              },
+              {
+                "source": "NR4A3",
+                "score": -5.725051203672264,
+                "padj": 6.872344897601579e-07
+              },
+              {
+                "source": "SPI1",
+                "score": -5.423646909232006,
+                "padj": 2.9772056677757064e-06
+              }
+            ]
+          }
+        },
+        "t4_progeny_TGFb_59.359794": {
+          "ok": true,
+          "detail": {
+            "source": "TGFb",
+            "score": 59.359794170609085,
+            "padj": 0.0
+          }
+        },
+        "t4_sig_counts_143_12_30": {
+          "ok": true,
+          "detail": null
+        },
+        "t5_progeny_TGFb_leading_edges_equal_reference": {
+          "ok": true,
+          "detail": [
+            581,
+            292,
+            [
+              "IL11",
+              "AMIGO2",
+              "SERPINE2",
+              "ACTC1",
+              "NOX4"
+            ],
+            [
+              "SMAD3",
+              "ADAMTS1",
+              "GALNT15",
+              "HGF",
+              "NID2"
+            ]
+          ]
+        },
+        "t5_hallmark_leading_edge_equal_reference": {
+          "ok": true,
+          "detail": [
+            19,
+            [
+              "PMEPA1",
+              "JUNB",
+              "SKIL",
+              "LTBP2",
+              "KLF10"
+            ],
+            [
+              "source_targets plot: the network has no weight column",
+              "network plot: no scores_path from decoupler_score_activities_ulm was given"
+            ]
+          ]
+        },
+        "t5_collectri_SRF_runs_all_plots": {
+          "ok": true,
+          "detail": {
+            "positive_weights": 28,
+            "negative_weights": 2,
+            "score": 7.383742530399846
+          }
+        },
+        "err_missing_condition_key": {
+          "ok": true,
+          "detail": "Error calling tool 'pydeseq2_test_differential_expression': condition_key ['treatment_status'] not found in adata.obs columns ['condition', 'sample_id']"
+        },
+        "err_missing_group_level": {
+          "ok": true,
+          "detail": "Error calling tool 'pydeseq2_test_differential_expression': level(s) ['TGFb'] not found in adata.obs['condition']; available levels: ['control', 'treatment']"
+        },
+        "err_missing_group_key": {
+          "ok": true,
+          "detail": "Error calling tool 'decoupler_filter_genes_by_expression': group_key ['nope'] not found in adata.obs columns ['condition', 'sample_id']"
+        },
+        "err_unknown_source": {
+          "ok": true,
+          "detail": "Error calling tool 'decoupler_inspect_source_targets': source 'NOT_A_PATHWAY' not found in the progeny network"
+        },
+        "err_missing_stat_column": {
+          "ok": true,
+          "detail": "Error calling tool 'decoupler_score_activities_ulm': DE results lack column(s) ['nope']; available columns: ['baseMean', 'log2FoldChange', 'lfcSE', 'stat', 'pvalue', 'padj']"
+        }
+      },
+      "outputs_dir": "tmp/impl_bulk_enrichment/outputs/",
+      "stdout": "tmp/impl_bulk_enrichment/smoke_chain_attempt1.out",
+      "stderr": "tmp/impl_bulk_enrichment/smoke_chain_attempt1.err"
+    },
+    "smoke_extra": {
+      "exit": 0,
+      "fixtures": "tmp/impl_bulk_enrichment/fixtures/ (dev only: filtered + synthetic batch column; X*1.5; numeric 0/1 condition)",
+      "results": {
+        "pydeseq2_formula_two_terms_accepted": {
+          "ok": true,
+          "detail": {
+            "variables": [
+              "batch",
+              "condition"
+            ],
+            "design_columns": [
+              "Intercept",
+              "batch[T.b2]",
+              "batch[T.b3]",
+              "condition[T.treatment]"
+            ]
+          }
+        },
+        "err_design_without_condition_key": {
+          "ok": true,
+          "detail": "Error calling tool 'pydeseq2_test_differential_expression': design '~batch' does not include condition_key 'condition'"
+        },
+        "err_non_integer_counts": {
+          "ok": true,
+          "detail": "Error calling tool 'pydeseq2_test_differential_expression': counts must be non-negative integers (raw counts); normalised or log values are not valid input"
+        },
+        "err_numeric_condition_column": {
+          "ok": true,
+          "detail": "Error calling tool 'pydeseq2_test_differential_expression': condition_key 'cond_num' is numeric/boolean; PyDESeq2 treats it as continuous. Store the condition labels as strings."
+        },
+        "err_same_group_reference": {
+          "ok": true,
+          "detail": "Error calling tool 'pydeseq2_test_differential_expression': group and reference must be different condition levels"
+        },
+        "download_branch_hallmark": {
+          "ok": true,
+          "detail": {
+            "rows": 7318,
+            "n_sig": 30,
+            "equals_snapshot_scores": true
+          }
+        }
+      }
+    },
+    "key_numbers": {
+      "genes_after_filter": 19510,
+      "deseq2_stat_vs_reference": "bitwise equal to notebooks/bulk_rna/reference/deseq2/results_df.parquet for all 6 columns; CSV bytes identical to reference/deseq2/results_df.csv",
+      "collectri_top": "positive SRF 7.383743, MYOCD 7.345933, SMAD3 7.206794; negative IRF1 -9.359192, SKIL -7.435939, NR1H4 -5.898247",
+      "progeny_TGFb": 59.359794170609085,
+      "n_significant_collectri_progeny_hallmark": [
+        143,
+        12,
+        30
+      ],
+      "ulm_tables": "scores, padj and significant subset frames equal reference/ulm/{net}_scores_full/_padj_full/_scores_padj_lt_0.05 CSVs (DataFrame.equals) with contrast_name='treatment.vs.control'",
+      "leading_edges": "PROGENy TGFb +581 / -292 and Hallmark TGF_BETA_SIGNALING 19 genes, ordered lists equal reference/leading_edge/leading_edges.json",
+      "rank_obsm": "pc_metadata_associations.csv equals reference rank_obsm.csv (DataFrame.equals); |X_pca| identical in float32",
+      "pca_variance_ratio": "matches reference within ~3e-16 absolute (not bitwise: 0.6149707994767412 vs ...409); cause not investigated"
+    }
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "changes_before_run": "initial implementation; _num made None-safe and two summary lambdas rewritten as defs before the first run",
+      "outcome": "import check, 25 chain checks and 6 extra checks all passed; no production edits after"
+    }
+  ],
+  "attempts_used": 1,
+  "figures_reviewed_visually": [
+    "pc_metadata_association_heatmap.png",
+    "pca_scatter.png",
+    "SRF_network.png (4 sources as cell 36)",
+    "hallmark_ulm_dotplot.png"
+  ],
+  "notes_for_verifier": [
+    "Run with the executor snapshots via network_path for exact comparisons; pass contrast_name='treatment.vs.control' to match reference ulm table row labels.",
+    "Figures from dc.pl.volcano and dc.pl.source_targets use adjustText with a wall-clock limit, so label placement is not reproducible; compare data, not pixels. Tool PNGs are saved via savefig (savefig.dpi=150 from sc.set_figure_params), not the inline backend, so pixel comparison with notebooks/bulk_rna/images is not meaningful.",
+    "Metadata-input rule: condition labels come only from obs[condition_key]; the tool never creates or overwrites them. Relabelled-column/level tests (e.g. 'treatment_status' with 'TGFb'/'Ctrl') were not run by the implementer.",
+    "decoupler_score_activities_ulm and decoupler_inspect_source_targets download networks when network_path is omitted (hallmark download branch exercised once: 7318 rows, scores equal to snapshot on 2026-10-27).",
+    "PyDESeq2 runtime 28-80 s for this dataset; use generous MCP call timeouts.",
+    "sc.set_figure_params at import changes process-wide rcParams (tutorial cell 2)."
+  ],
+  "not_done": [
+    "formal test suite (verifier's task)",
+    "relabelled-metadata DE run and covariate-design full DE fit (only construction-level formula check)"
+  ]
+}

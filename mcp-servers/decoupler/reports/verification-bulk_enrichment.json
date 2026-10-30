@@ -1,0 +1,352 @@
+{
+  "module": "bulk_enrichment",
+  "verifier_attempt": 2,
+  "implementation_run_id": "implementer-bulk_enrichment-attempt-1",
+  "written_utc": "2026-10-28T01:10:36.906343+00:00",
+  "status": "verified: all 5 exposed tools pass; no production repairs; no exclusions requested",
+  "attempt_history": [
+    {
+      "attempt": 1,
+      "status": "cancelled by coordinator at 2026-10-27T23:43Z (user asked to pause the analysis)",
+      "state_found_on_resume": "Production files unchanged (bulk_enrichment.py sha256 9a29baf1...). Completed before the stop: evidence/role reading, upstream source review, two mechanism probes (tmp/verify_bulk_enrichment/probe_varratio.py, probe_intX.py), schema probe, and all 21 fixtures under tests/data/bulk_enrichment/ (hashes re-verified against fixtures_manifest.json on resume, 0 mismatches). tests/code/bulk_enrichment/ was empty: no test file had been written. The coordinator's note that the stop happened while reading tutorial cells was outdated; the fixture build had already finished."
+    },
+    {
+      "attempt": 2,
+      "started_utc": "2026-10-28T00:40:46Z",
+      "status": "completed",
+      "work": "test suite written and run; reports and acceptance cases written"
+    }
+  ],
+  "independence": "Fresh verifier distinct from implementer-bulk_enrichment-attempt-1. Expectations come from the stage-2 executor reference files (notebooks/bulk_rna/reference, sha256-checked against its manifest before and after the session) and from direct upstream calls made inside the tests on the same saved inputs. Wrapper outputs are never their own expectation.",
+  "read_only_shared_dependencies": {
+    "decoupler": "2.3.1, installed non-editable from repo/decoupler @ 27a1be7c75d88306bf3c2e4d0e7fb4b42d48f78a",
+    "pydeseq2": "0.5.4",
+    "scanpy": "1.12.4",
+    "anndata": "0.13.4",
+    "pandas": "3.1.0",
+    "numpy": "2.5.4",
+    "igraph": "1.0.0",
+    "fastmcp": "4.0.3",
+    "interpreter": "/home/asu/Science/paper2agent-runs/decoupler/decoupler-env/bin/python (CPython 3.13.12)",
+    "evidence": "notebooks/bulk_rna/** (executor; read only)"
+  },
+  "source_call_review": {
+    "decoupler_filter_genes_by_expression": {
+      "upstream_calls": [
+        "dc.pl.filter_by_expr (cell 11) on the unfiltered matrix",
+        "dc.pp.filter_by_expr (cell 13, inplace)"
+      ],
+      "traced": "Both calls in the wrapper body pass group/min_count/min_total_count/large_n/min_prop through unchanged (a spy confirmed the arguments, including non-default values). No filtering logic is reimplemented. AnnData.write_h5ad is used for output.",
+      "findings": [
+        "group_key is required, but upstream accepts group=None, which treats all samples as one group. This is a stricter rule than upstream, and the scanner listed the parameter as optional. The implementation report records it as a coordinator-brief decision. It does not affect the tutorial or the downstream DE tool, which needs groups anyway. Not repaired; left for the coordinator to decide.",
+        "lib_size is not exposed (not used by the tutorial). This is acceptable."
+      ]
+    },
+    "decoupler_rank_pcs_by_metadata": {
+      "upstream_calls": [
+        "sc.pp.normalize_total(target_sum=1e4)",
+        "sc.pp.log1p",
+        "sc.pp.scale(max_value=10)",
+        "sc.tl.pca",
+        "dc.tl.rankby_obsm(key='X_pca', obs_keys)",
+        "sc.pl.pca_variance_ratio",
+        "dc.pl.obsm(nvar, titles, figsize=(6,3))",
+        "sc.pl.pca(color, ncols=1, size=300, frameon=True)"
+      ],
+      "traced": "These are the calls from cells 15, 17, 19 and 21 with the same arguments. The rank_obsm table is written unchanged from adata.uns['rank_obsm'].",
+      "findings": [
+        "color_keys are restricted to obs columns (scanpy would also accept gene names). This is acceptable because after the tutorial's swap_layer, X holds counts in the notebook but normalised values in the wrapper, so gene colouring would be ambiguous. obs_keys and color_keys are validated, which gives a clear error instead of a KeyError."
+      ]
+    },
+    "pydeseq2_test_differential_expression": {
+      "upstream_calls": [
+        "DefaultInference(n_cpus)",
+        "DeseqDataSet(adata=adata.copy(), design, refit_cooks=True, inference, quiet=True)",
+        "dds.deseq2()",
+        "DeseqStats(dds, contrast=[condition_key, group, reference], inference, quiet=True).summary()",
+        "dc.pl.volcano(results_df, x='log2FoldChange', y='padj', top=10)"
+      ],
+      "traced": "These are the cell 23-26 calls. design, the contrast levels and n_cpus reach PyDESeq2: the two-factor run equals a direct ~batch + condition fit bitwise, and the swapped contrast equals a direct swapped DeseqStats bitwise.",
+      "findings": [
+        "The pre-check for finite, non-negative, integer counts duplicates pydeseq2.utils.test_valid_counts. Upstream raises a ValueError for the same fixtures ('The count matrix should only contain integers.' / '... non-negative values.'). The check is redundant but cheap and its message is clearer. It is not a scientific deviation and was not repaired.",
+        "The numeric/boolean condition column guard is justified. Upstream silently treats a 0/1 column as continuous (design columns ['Intercept', 'cond_num']), so a level contrast would not mean what the user asked.",
+        "The check that the design contains condition_key happens after DeseqDataSet construction and before the expensive fit. It is cheap and appropriate.",
+        "Sparse X is densified as an I/O adaptation; no scientific change."
+      ]
+    },
+    "decoupler_score_activities_ulm": {
+      "upstream_calls": [
+        "results_df[[stat]].T (cell 28)",
+        "dc.op.collectri|progeny|hallmark(organism='human') or network_path",
+        "dc.mt.ulm(data, net) (cells 32/42/54)",
+        "padj.T < threshold mask",
+        "dc.pl.barplot (cells 34/44/56)",
+        "cell 46/58 melt/clip/-log10 transform + dc.pl.dotplot"
+      ],
+      "traced": "There is no reimplementation of ulm. The scores, padj and significant tables equal both the notebook objects and a fresh direct dc.mt.ulm call bitwise. The barplot and dotplot inputs, captured with a spy, equal the tutorial's data.",
+      "findings": [
+        "The non-finite stat check duplicates an upstream assertion in dc.pp.extract but gives a clearer message. It is acceptable.",
+        "<network>_network_used.csv copies the full network into each call's output (2-3 MB for CollecTRI/PROGENy). This is provenance for drifting downloads and redundant when network_path is given. Minor; acceptable."
+      ]
+    },
+    "decoupler_inspect_source_targets": {
+      "upstream_calls": [
+        "dc.pl.volcano(de, x='log2FoldChange', y='pvalue', net, name, top=10) (cell 38)",
+        "dc.pl.source_targets(de, x='weight', y=stat, net, name, top=15, figsize=(4,4)) (cell 48)",
+        "dc.pl.leading_edge(de, stat, net subset, name) (cells 50/60)",
+        "dc.pl.network(net, data, score, sources, targets=10, figsize=(5,5), vcenter=True, by_abs=True, size_node=10, t_label) (cell 36)"
+      ],
+      "traced": "A spy captured the data, net and arguments for every plotter. They equal the tutorial objects: the cell-28 stat matrix with its 'treatment.vs.control' row label, the cell-32 significant tf_acts, and the snapshot networks. Leading-edge lists equal the kernel captures and direct calls.",
+      "findings": [
+        "The source-presence and measured-target checks give a clear error instead of the upstream assert. Sign components without measured targets are skipped and reported in 'skipped'."
+      ]
+    }
+  },
+  "flagged_choice_verdicts": {
+    "quiet=True": "ACCEPT (necessary). In pydeseq2 0.5.4, quiet only gates print() calls. summary() prints results_df to stdout, and the size-factor message 'Using None as control genes...' also goes to stdout. test_quiet_and_copy_choices showed non-empty stdout with quiet=False, empty stdout with quiet=True, and bitwise-identical results. The stdio transport test then confirmed every stdout line is JSON-RPC during a DE call.",
+    "adata.copy()": "ACCEPT (necessary). DeseqDataSet does __dict__.update(adata.__dict__) and adds trend_coeffs and disp_function_type to the caller's uns (re-observed in this session). Copying protects the loaded object. The DE results are bitwise equal to the notebook, and the input .h5ad is unchanged.",
+    "float cast in PCA": "ACCEPT with corrected rationale. The cast is not needed to avoid a crash: scanpy normalize_total silently converts integer X to float32 (probe_intX.py). The wrapper instead processes integer counts in float64, the dtype of the tutorial's loader (dc.ds.hsctgfb casts with astype(float)). On int64 counts the wrapper equals the direct tutorial calls on X.astype(float64) bitwise, and differs from scanpy's native float32 path by less than 1e-5 in variance ratio. Float inputs are only copied. This is a documented dtype choice, not a scientific change.",
+    "dropping swap_layer": "ACCEPT. The tool writes no AnnData back, and none of its outputs depend on X after PCA (rank_obsm uses obsm/obs; the plots use obsm/uns/obs columns only, because color_keys must be obs columns). The direct tutorial path including layers['counts'] + dc.pp.swap_layer equals the wrapper bitwise.",
+    "CollecTRI dotplot settings": "ACCEPT as a documented addition. The scanner's tool specification requires a dot plot for every network. The CollecTRI dot plot uses dc.pl.dotplot with the cell-46 settings: scale 0.15, which is the upstream default, and figsize (4,4). Its data equals the cell-46 transformation applied directly to the reference CollecTRI acts and padj. There is no tutorial figure to compare against; I looked at the image (top 10: SRF, MYOCD, SMAD3, TCF21, ZEB2, SMAD2 / IRF1, SKIL, NR1H4, NR4A3).",
+    "leading-edge +/- split on every weighted network": "ACCEPT. The GSEA running sum in dc.pl.leading_edge ignores weights, so mixing activating and repressing targets would blur the edge. Cell 50 is the tutorial's own remedy, and the scanner specified it for signed networks. It reproduces cells 50 and 60 exactly; for CollecTRI (weights +/-1; 5822 negative edges, no zero weights in either snapshot) it equals direct split calls. Zero-weight edges would be dropped from both parts, as in cell 50. Recorded as an extension beyond the tutorial for CollecTRI.",
+    "global plot lock": "ACCEPT. FastMCP 4.0.3 runs sync tools in worker threads, and pyplot state is process-global (dc.pl.obsm calls plt.close() on the current figure). Five concurrent calls through one client used 5 worker threads and made 14 plot calls; none overlapped in time, and all results equalled the references. Only plotting is locked, so computation such as DESeq2 still runs concurrently.",
+    "sc.set_figure_params at import": "ACCEPT for this server, with a caveat. This is tutorial cell 2. It writes nothing to stdout (stdio test), but it changes process-wide rcParams: figure.figsize [6.4,4.8]->[3,3], figure.dpi 100->80, savefig.dpi 'figure'->150, font.size 10->14, axes.grid False->True. If the coordinator mounts other plotting modules in the same process, their figure style changes too. In that case, scope it with plt.rc_context inside _PLOT_LOCK. Not changed here."
+  },
+  "scientific_comparisons": {
+    "filter": {
+      "reference": "reference/filter_by_expr/kept_genes.txt and adata_filtered_by_expr.h5ad",
+      "result": "19510 genes in identical order; X and obs bitwise equal; equal to a direct dc.pp.filter_by_expr call",
+      "tolerance": "exact"
+    },
+    "rank_pcs": {
+      "vs_direct_same_input": "exact (bitwise, float32 columns compared in float32 because pandas writes float32 in its shortest float32 form)",
+      "vs_notebook": "sign-invariant: |stat|, pval, padj rtol 1e-5; X_pca per-column sign alignment rtol 1e-5 atol 1e-5; variance ratio atol 1e-12. Observed: rank_obsm and X_pca bitwise equal; variance ratio differs by 2.2e-16.",
+      "variance_ratio_mechanism": "Inspected, not assumed (probe_varratio.py). The tutorial calls on the h5ad-reloaded (C-contiguous) filtered matrix give the same 2.2e-16 offset as the wrapper, while the in-memory, non-contiguous matrix after inplace filtering gives the reference bits. The cause is input memory layout, not the wrapper.",
+      "significant": "only PC1~condition, padj 8.1776e-4"
+    },
+    "deseq2": {
+      "reference": "reference/deseq2/results_df.parquet",
+      "result": "all 19510 x 6 values bitwise equal (index order, NaN pattern); a direct cell-23 call in this session is also bitwise equal; 8517 padj<0.05 (4328 up / 4189 down)",
+      "tolerance": "0; justified by the executor's 4 bitwise-identical replays and exact float64 CSV round trip",
+      "volcano": "dc.pl.volcano received data equal to the reference results_df, x='log2FoldChange', y='padj', top=10"
+    },
+    "ulm": {
+      "reference": "reference/ulm/{net}_scores_full, _padj_full, _scores_padj_lt_0.05 parquet",
+      "result": "scores, padj and significant tables bitwise equal for collectri/progeny/hallmark, also equal to fresh dc.mt.ulm calls; significant 143/12/30 (64/79, 8/4, 13/17 +/-); sources 655/14/50",
+      "barplot": "data = significant acts; name/top/figsize = cells 34/44/56",
+      "dotplot": "df equals reference progeny/hallmark dotplot_df (cells 46/58) and the cell-46 transform for collectri; scale/figsize/top = tutorial",
+      "tolerance": "exact"
+    },
+    "leading_edges": {
+      "progeny_TGFb": "+581 / -292 genes, ordered lists equal to the kernel captures and to direct calls",
+      "hallmark_TGF_BETA_SIGNALING": "19 genes, equal",
+      "collectri_SRF_IRF1_progeny_JAK-STAT_hallmark_EMT": "equal to direct split/unsplit dc.pl.leading_edge calls"
+    },
+    "network_plot": "dc.pl.network received data = reference data_stat_matrix (row 'treatment.vs.control'), score = reference collectri significant tf_acts, sources ['SRF','MYOCD','IRF1','SKIL'], targets=10, figsize (5,5), vcenter, by_abs, size_node=10, t_label. Visually identical in structure to notebook figure_8.",
+    "figures_viewed": [
+      "pc_metadata_association_heatmap.png (matches notebook figure_4)",
+      "SRF_network.png (matches figure_8)",
+      "collectri_ulm_dotplot.png",
+      "TGFb_source_targets.png (data verified; label jitter expected)"
+    ],
+    "figure_policy": "Volcano (cell 38) and source_targets (cell 48) have adjustText label jitter, so their data and arguments were compared through spies instead of pixels. Every PNG artifact was checked for PNG signature and size."
+  },
+  "changed_input_checks": {
+    "relabelled_permuted_metadata": "Fixture: condition renamed to treatment_status; control->vehicle, treatment->TGFb_treated; 'condition' dropped; rows interleaved [Ctrl1,TGFb1,Ctrl2,TGFb2,Ctrl3,TGFb3], so a row-order split is detectable and the formula baseline flips. Filter equals direct and keeps the obs order and labels. rank_pcs with obs_keys/color_keys/nvar=3 equals direct. DE (TGFb_treated vs vehicle) equals a direct PyDESeq2 call bitwise. Input files are unchanged (sha256). group_key='condition' on this file is an error, so there is no hidden fallback. Property vs notebook: LFC within 1e-3 abs (observed 5.8e-4), Spearman of stat > 0.9999 (observed 0.999999), significant set symmetric difference 5 of 8517.",
+    "relabelled_property_threshold_revision": "My first secondary threshold (Pearson r of stat > 0.99999, LFC rtol/atol 1e-4) was set before seeing data and failed at r = 0.99990. I inspected the differences: baseMean |d| <= 7e-10, LFC <= 5.8e-4, but lfcSE differs by up to 0.13 for a few high-count genes (e.g. TNFRSF11B stat -14.8 vs -22.2). Upstream PyDESeq2 is therefore not bitwise invariant to sample order and baseline relabelling; which part of the fit causes it was not established. The primary check (wrapper bitwise equal to a direct call on the same input) was never relaxed. The secondary property now uses LFC, rank and significant-set criteria with margins based on these observations.",
+    "swapped_contrast": "group=control, reference=treatment equals direct DeseqStats(contrast=['condition','control','treatment']) bitwise. LFC and stat are exactly negated; baseMean, lfcSE, pvalue and padj are identical; up/down counts swap (4189/4328).",
+    "two_factor_design": "Fixture adds batch b1-b3 pairing Ctrl_i and TGFb_i (artificial). design='~batch + condition' with n_cpus=4 equals a direct n_cpus=8 fit with the same design bitwise (design columns Intercept, batch[T.b2], batch[T.b3], condition[T.treatment]), and stat differs from the single-factor reference (max |d| > 1e-2).",
+    "non_default_thresholds": "filter min_count=50, min_total_count=100, large_n=2, min_prop=0.5 equals the direct call (fewer than 19510 genes kept). ulm padj_threshold=0.001 equals the direct mask (fewer than 143). stat_column='log2FoldChange' equals a direct ulm on log2FoldChange (row label 'log2FoldChange'). barplot_top=5 and dotplot_top=3 reach the plotters. contrast_name None gives row 'stat' with identical values. Hallmark CSV and TSV network_path inputs equal the reference.",
+    "other_sources": "progeny JAK-STAT, hallmark EPITHELIAL_MESENCHYMAL_TRANSITION and collectri IRF1 equal direct leading-edge calls. stat_column='log2FoldChange' for progeny TGFb equals the direct call and differs from the stat-based edge.",
+    "integer_counts": "int64 X in rank_pcs equals direct tutorial calls on X.astype(float64)."
+  },
+  "error_checks": {
+    "all_surface_as": "MCP tool errors (result.is_error with raise_on_error=False through FastMCP Client)",
+    "missing_obs_column": "filter group_key, DE condition_key, rank obs_keys/color_keys -> 'not found in adata.obs columns'",
+    "missing_group": "DE group 'TGFb' -> \"level(s) ['TGFb'] not found\"; group == reference -> 'must be different'",
+    "invalid_counts": "non-integer (X*1.5) and negative counts -> 'non-negative integers'; numeric 0/1 condition -> 'numeric'",
+    "design": "'~batch' without condition_key -> 'does not include condition_key'; '~not_a_column + condition' -> upstream formulaic error naming the column",
+    "unknown_network_source": "inspect 'NOT_A_PATHWAY' -> \"not found in the progeny network\"",
+    "de_csv_without_stat": "ulm and inspect -> \"lack column(s) ['stat']\"; non-finite stat -> 'non-finite'",
+    "missing_files": "data_path, de_results_path, network_path, scores_path -> 'does not exist'",
+    "other": "padj_threshold 0 or 1.5; network table without source/target; network enum 'dorothea' (schema validation); scores table with 2 rows; network_sources absent from scores"
+  },
+  "composition_and_isolation": {
+    "chain": "test_chain_filter_rank_de_ulm_inspect passes each tool's own output path to the next: raw -> filter -> rank_pcs and DE on the filtered h5ad -> ulm x3 on the DE CSV -> inspect with the DE CSV and the ulm significant-scores CSV. Every stage equals the notebook reference (DE bitwise, ulm bitwise, leading edges exact, network-plot score equal to tf_acts).",
+    "repeated_calls": "Each tool called twice with the same output_dir gives distinct fresh subdirectories, no shared artifact paths and identical contents.",
+    "inputs_unchanged": "The session fixture re-hashes all reference and fixture files after the whole run; every tool test with a user file also checks its sha256.",
+    "concurrency": "5 concurrent calls on one in-process client: 5 worker threads, 14 plot calls, none overlapping (lock works), correct results.",
+    "stdio": "test_stdio_transport_stdout_is_pure_jsonrpc launches the module in a subprocess over real stdio (raw newline-delimited JSON-RPC): initialize, tools/list (5 tools), then one call to each tool including a PyDESeq2 fit. All 7 stdout lines were JSON-RPC 2.0, with nothing printed by PyDESeq2, scanpy, decoupler or the import-time sc.set_figure_params. Banner and logs went to stderr."
+  },
+  "network_dependent_tests": {
+    "marker": "network (registered in tests/code/bulk_enrichment/conftest.py)",
+    "tests": "test_live_download_rough_agreement[collectri|progeny|hallmark]: ulm without network_path; checks origin, columns, weight presence, rows within 0.8-1.25x of the snapshot, common sources >= 90%, Pearson r >= 0.95 on common sources. Skips (not fails) only if a HEAD request to the resource fails.",
+    "observed_2026-10-28": "collectri 42990 rows / 655 sources / 143 significant; progeny 62421 / 14 / 12; hallmark 7318 / 50 / 30. Identical to the snapshots (r = 1.0).",
+    "exact_comparisons": "Always use the executor snapshots via network_path."
+  },
+  "tool_format": "check_tool_format passes for all 5 tools: Annotated description on every parameter, Literal network -> enum, two-line docstring, exact required sets, and a message/reference/artifacts return dict with absolute artifact paths in fresh directories.",
+  "repairs": {
+    "production": "none. src/tools/bulk_enrichment.py and src/tools/__init__.py are unchanged from the implementer's hashes. Attempts used per tool: 0 of 6.",
+    "test_side_corrections_during_development": [
+      "Spy now snapshots AnnData arguments; before this it held a reference that dc.pp.filter_by_expr later subset in place, which was a test artifact.",
+      "Exact rank_obsm comparison is done in the source dtype (float32 columns are written by pandas in shortest float32 form).",
+      "The relabelled rank_pcs property no longer compares padj, because BH runs over 5 tests with obs_keys=['treatment_status'] versus 10 in the tutorial.",
+      "Relabelled DE secondary property threshold revised; see changed_input_checks.relabelled_property_threshold_revision. Primary exact checks unchanged."
+    ]
+  },
+  "exclusions_requested": [],
+  "remaining_deviations_for_coordinator": [
+    "Filter group_key is required while upstream allows None (all samples one group). Coordinator-brief decision; recommend keeping or making it optional; not changed here.",
+    "The DE count pre-check duplicates PyDESeq2's own validation (harmless).",
+    "sc.set_figure_params at import changes process-wide rcParams; scope it if other plotting modules share the server process."
+  ],
+  "limitations": [
+    "All comparisons ran on one machine (WSL2, OpenBLAS, 20 cores). Cross-platform or BLAS variation was not measured, so the bitwise tolerances are platform-specific.",
+    "Figures were checked for production and data or arguments, and 4 were viewed. There was no pixel comparison: the wrapper saves with savefig.dpi=150 while the notebook used the inline backend, and cells 38/48 have label jitter.",
+    "The live-download agreement reflects the resources on 2026-10-28 only.",
+    "The two-factor design uses an artificial batch, so it only shows that the parameter reaches PyDESeq2.",
+    "PyDESeq2's sensitivity to sample order and baseline level (lfcSE for a few high-count genes) was observed but its mechanism inside PyDESeq2 was not established.",
+    "Acceptance cases were dry-run with a verifier-owned launcher and expected list; the coordinator's stage-4/5 runs remain the packaging authority."
+  ],
+  "test_execution": {
+    "final_command": "\"$PROJECT_PYTHON\" -m pytest tests/code/bulk_enrichment -p no:cacheprovider -rA --durations=15 --junitxml=tests/logs/bulk_enrichment/pytest_attempt2_final.xml",
+    "cwd": "/home/asu/Science/paper2agent-runs/decoupler",
+    "exit_code": 0,
+    "totals": {
+      "tests": 74,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "time_s": 513.597
+    },
+    "per_file": {
+      "test_chain_bulk_enrichment": {
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "errors": 0
+      },
+      "test_decoupler_filter_genes_by_expression": {
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0,
+        "errors": 0
+      },
+      "test_decoupler_inspect_source_targets": {
+        "passed": 16,
+        "failed": 0,
+        "skipped": 0,
+        "errors": 0
+      },
+      "test_decoupler_rank_pcs_by_metadata": {
+        "passed": 8,
+        "failed": 0,
+        "skipped": 0,
+        "errors": 0
+      },
+      "test_decoupler_score_activities_ulm": {
+        "passed": 22,
+        "failed": 0,
+        "skipped": 0,
+        "errors": 0
+      },
+      "test_pydeseq2_test_differential_expression": {
+        "passed": 18,
+        "failed": 0,
+        "skipped": 0,
+        "errors": 0
+      }
+    },
+    "failures": [],
+    "log": "tests/logs/bulk_enrichment/pytest_attempt2_final.log",
+    "junit_xml": "tests/logs/bulk_enrichment/pytest_attempt2_final.xml",
+    "includes_network_marked_tests": true,
+    "development_runs_attempt2": [
+      {
+        "scope": "test_decoupler_filter_genes_by_expression.py",
+        "outcome": "6 passed, 1 failed -> spy kept a live AnnData reference (test artifact); after fix 7 passed"
+      },
+      {
+        "scope": "test_decoupler_rank_pcs_by_metadata.py",
+        "outcome": "7 passed, 1 failed (float32 CSV dtype in exact comparison), then 7 passed, 1 failed (padj property invalid for a 5-test BH); after both test fixes 8 passed"
+      },
+      {
+        "scope": "test_pydeseq2_test_differential_expression.py",
+        "outcome": "17 passed, 1 failed (secondary relabelled-property threshold; primary exact check passed); threshold revised from inspected data"
+      },
+      {
+        "scope": "ulm + inspect (offline)",
+        "outcome": "35 passed"
+      },
+      {
+        "scope": "chain concurrency + stdio",
+        "outcome": "2 passed"
+      },
+      {
+        "scope": "ulm network-marked",
+        "outcome": "3 passed"
+      }
+    ],
+    "log_note": "The 29 \"ERROR fastmcp.server.server\" lines in the log are captured server log records from the expected-error cases; junit shows 0 failures, 0 errors."
+  },
+  "mcp_acceptance_dry_run": {
+    "command": "\"$PROJECT_PYTHON\" $SKILL/scripts/verify_mcp_server.py --server tmp/verify_bulk_enrichment/serve_bulk_enrichment.py --expected tmp/verify_bulk_enrichment/expected_tools_bulk_enrichment.json --cases reports/mcp-acceptance-bulk_enrichment.json --require-all-tools --cwd $PROJECT_ROOT --call-timeout 900 --report tmp/verify_bulk_enrichment/acceptance_dry_run.json",
+    "exit": "exit 0",
+    "success": true,
+    "fastmcp": "4.0.3",
+    "cases_checked": 27,
+    "cases_failed": [],
+    "report": "tmp/verify_bulk_enrichment/acceptance_dry_run.json",
+    "note": "Dev-only stdio launcher and expected-tool list owned by this verifier; the coordinator's stage-4/5 runs use the real server and reports/expected-mcp-tools.json."
+  },
+  "production_files_final": [
+    {
+      "path": "src/tools/bulk_enrichment.py",
+      "sha256": "9a29baf1f90634a490a818f2e8f835061205fbd42838e3f0d565f1a93833a039"
+    },
+    {
+      "path": "src/tools/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "test_files": [
+    {
+      "path": "tests/code/bulk_enrichment/conftest.py",
+      "sha256": "a2912d45f9d0feebcfdbd70e3cb7b0da3c3378f64d463bed5405742b692be418"
+    },
+    {
+      "path": "tests/code/bulk_enrichment/test_chain_bulk_enrichment.py",
+      "sha256": "c346719aad26a3b8a405d46eacd552c06b0eddad81962103cf8684181c8f73c8"
+    },
+    {
+      "path": "tests/code/bulk_enrichment/test_decoupler_filter_genes_by_expression.py",
+      "sha256": "f5def4ef9d2254710c6ffe25390442e620f14d3881868c74facaffcd5cd40269"
+    },
+    {
+      "path": "tests/code/bulk_enrichment/test_decoupler_inspect_source_targets.py",
+      "sha256": "a51e4dc1ed8aa5c1ba9e30bded7083e3a765f0e10cd92eac88fc1bbe142bdade"
+    },
+    {
+      "path": "tests/code/bulk_enrichment/test_decoupler_rank_pcs_by_metadata.py",
+      "sha256": "255f7d226f40c160c1d3e9345f00646535d29a05f0bccd9491475b0942054adc"
+    },
+    {
+      "path": "tests/code/bulk_enrichment/test_decoupler_score_activities_ulm.py",
+      "sha256": "c1513dbd6836fd9cb01eb98828d4f94da5edfac60abf1324c5c6d80d7fe9a7b7"
+    },
+    {
+      "path": "tests/code/bulk_enrichment/test_pydeseq2_test_differential_expression.py",
+      "sha256": "ef3e2905a0e7d49398e61e736df11395625769cbb64515b3ca6d8b5b7b19059c"
+    }
+  ],
+  "fixture_manifest": {
+    "path": "tests/data/bulk_enrichment/fixtures_manifest.json",
+    "sha256": "8ab0bf1d78317607d0080c9fff966436ed73a9555ed7ce58e0ac12fb00396d30",
+    "builder": "tests/data/bulk_enrichment/build_fixtures.py",
+    "builder_sha256": "60d6bd1474ddb75455f45c4da559074e03f164e6f456c6f183dcaee0b1675d36"
+  },
+  "acceptance_cases": {
+    "path": "reports/mcp-acceptance-bulk_enrichment.json",
+    "sha256": "11bd40d9d5ea283abeaec230e82744a265eab2a3f5803c1b3adce0aeac5e35c9"
+  }
+}

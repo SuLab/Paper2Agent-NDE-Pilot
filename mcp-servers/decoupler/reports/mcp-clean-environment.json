@@ -1,0 +1,548 @@
+{
+  "success": true,
+  "mode": "calls",
+  "require_all_tools": true,
+  "server": "/home/asu/Science/paper2agent-runs/decoupler/src/decoupler_mcp.py",
+  "cwd": "/home/asu/Science/paper2agent-runs/decoupler",
+  "python": "/tmp/claude-1000/-home-asu-Science-Paper2Agent/d2536f51-2133-41ea-8332-1193e4e1d01d/scratchpad/dc-clean-XDQP/env/bin/python",
+  "python_version": "3.13.12",
+  "fastmcp": "4.0.3",
+  "expected": [
+    "decoupler_filter_genes_by_expression",
+    "decoupler_inspect_source_targets",
+    "decoupler_rank_pcs_by_metadata",
+    "decoupler_score_activities_ulm",
+    "pydeseq2_test_differential_expression"
+  ],
+  "actual": [
+    "decoupler_filter_genes_by_expression",
+    "decoupler_inspect_source_targets",
+    "decoupler_rank_pcs_by_metadata",
+    "decoupler_score_activities_ulm",
+    "pydeseq2_test_differential_expression"
+  ],
+  "missing": [],
+  "unexpected": [],
+  "schemas": {
+    "decoupler_filter_genes_by_expression": {
+      "input": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "data_path": {
+            "description": "AnnData .h5ad of raw counts with samples as observations and genes as variables",
+            "type": "string"
+          },
+          "group_key": {
+            "description": "adata.obs column with the experimental groups; its smallest group sets the minimum sample size",
+            "type": "string"
+          },
+          "min_count": {
+            "default": 10,
+            "description": "Minimum count a gene needs in the minimum number of samples (applied as a CPM cutoff)",
+            "type": "integer"
+          },
+          "min_total_count": {
+            "default": 15,
+            "description": "Minimum total count of a gene across all samples",
+            "type": "integer"
+          },
+          "large_n": {
+            "default": 10,
+            "description": "Number of samples per group considered large",
+            "type": "integer"
+          },
+          "min_prop": {
+            "default": 0.7,
+            "description": "Minimum proportion of samples in the smallest group expressing the gene when groups are large",
+            "type": "number"
+          },
+          "output_dir": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Base output directory; a fresh subdirectory is created"
+          }
+        },
+        "required": [
+          "data_path",
+          "group_key"
+        ]
+      },
+      "output": {
+        "additionalProperties": true,
+        "type": "object"
+      }
+    },
+    "decoupler_rank_pcs_by_metadata": {
+      "input": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "data_path": {
+            "description": "AnnData .h5ad of bulk counts (samples x genes) with sample metadata, e.g. the filtered .h5ad from decoupler_filter_genes_by_expression",
+            "type": "string"
+          },
+          "color_keys": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "adata.obs columns used to colour the PCA scatter; defaults to the tested metadata columns"
+          },
+          "obs_keys": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "adata.obs columns tested for association with each PC; defaults to all obs columns"
+          },
+          "nvar": {
+            "default": 5,
+            "description": "Number of leading PCs shown in the association heatmap",
+            "type": "integer"
+          },
+          "output_dir": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Base output directory; a fresh subdirectory is created"
+          }
+        },
+        "required": [
+          "data_path"
+        ]
+      },
+      "output": {
+        "additionalProperties": true,
+        "type": "object"
+      }
+    },
+    "pydeseq2_test_differential_expression": {
+      "input": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "data_path": {
+            "description": "AnnData .h5ad of raw integer counts (samples x genes) with sample metadata, e.g. the filtered .h5ad from decoupler_filter_genes_by_expression",
+            "type": "string"
+          },
+          "condition_key": {
+            "description": "adata.obs column holding the condition labels to contrast",
+            "type": "string"
+          },
+          "group": {
+            "description": "Condition level tested against the reference (numerator of the fold change)",
+            "type": "string"
+          },
+          "reference": {
+            "description": "Condition level used as the reference (denominator of the fold change)",
+            "type": "string"
+          },
+          "design": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Formulaic design formula such as '~batch + condition'; defaults to '~<condition_key>'"
+          },
+          "n_cpus": {
+            "default": 8,
+            "description": "CPU workers for PyDESeq2 inference; results do not depend on it",
+            "type": "integer"
+          },
+          "output_dir": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Base output directory; a fresh subdirectory is created"
+          }
+        },
+        "required": [
+          "data_path",
+          "condition_key",
+          "group",
+          "reference"
+        ]
+      },
+      "output": {
+        "additionalProperties": true,
+        "type": "object"
+      }
+    },
+    "decoupler_score_activities_ulm": {
+      "input": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "de_results_path": {
+            "description": "CSV of gene-level DE results with genes in the first column, as written by pydeseq2_test_differential_expression",
+            "type": "string"
+          },
+          "network": {
+            "description": "Human prior-knowledge network: CollecTRI TF regulons, PROGENy pathway footprints or MSigDB Hallmark gene sets",
+            "enum": [
+              "collectri",
+              "progeny",
+              "hallmark"
+            ],
+            "type": "string"
+          },
+          "stat_column": {
+            "default": "stat",
+            "description": "DE column used as the gene-level statistic; the tutorial recommends the Wald 'stat' over log2FoldChange",
+            "type": "string"
+          },
+          "contrast_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Row label of the contrast in output tables and plots; defaults to the stat column name"
+          },
+          "padj_threshold": {
+            "default": 0.05,
+            "description": "Adjusted p-value cutoff defining significant sources",
+            "type": "number"
+          },
+          "barplot_top": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Number of top sources in the bar plot; defaults to the tutorial value (25 CollecTRI/PROGENy, 10 Hallmark)"
+          },
+          "dotplot_top": {
+            "default": 10,
+            "description": "Number of top significant sources in the dot plot",
+            "type": "integer"
+          },
+          "network_path": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Saved network table (CSV, TSV or Parquet with source, target and optional weight) used instead of downloading"
+          },
+          "output_dir": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Base output directory; a fresh subdirectory is created"
+          }
+        },
+        "required": [
+          "de_results_path",
+          "network"
+        ]
+      },
+      "output": {
+        "additionalProperties": true,
+        "type": "object"
+      }
+    },
+    "decoupler_inspect_source_targets": {
+      "input": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "de_results_path": {
+            "description": "CSV of gene-level DE results (gene index; log2FoldChange, pvalue and the stat column), as written by pydeseq2_test_differential_expression",
+            "type": "string"
+          },
+          "network": {
+            "description": "Human prior-knowledge network containing the source: CollecTRI, PROGENy or MSigDB Hallmark",
+            "enum": [
+              "collectri",
+              "progeny",
+              "hallmark"
+            ],
+            "type": "string"
+          },
+          "source": {
+            "description": "Source to inspect (TF, pathway or gene set), e.g. a top hit of decoupler_score_activities_ulm",
+            "type": "string"
+          },
+          "stat_column": {
+            "default": "stat",
+            "description": "DE column used as the ranking statistic for the leading edge and target plots",
+            "type": "string"
+          },
+          "scores_path": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Wide ulm scores CSV from decoupler_score_activities_ulm; needed for the network plot, which is skipped without it"
+          },
+          "network_sources": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Sources drawn in the network plot; defaults to [source]"
+          },
+          "network_path": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Saved network table (CSV, TSV or Parquet with source, target and optional weight) used instead of downloading"
+          },
+          "output_dir": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Base output directory; a fresh subdirectory is created"
+          }
+        },
+        "required": [
+          "de_results_path",
+          "network",
+          "source"
+        ]
+      },
+      "output": {
+        "additionalProperties": true,
+        "type": "object"
+      }
+    }
+  },
+  "cases": [
+    {
+      "name": "filter-tutorial-reference",
+      "tool": "decoupler_filter_genes_by_expression",
+      "success": true,
+      "artifacts_checked": 2
+    },
+    {
+      "name": "filter-tutorial-reference-repeat",
+      "tool": "decoupler_filter_genes_by_expression",
+      "success": true,
+      "artifacts_checked": 2
+    },
+    {
+      "name": "filter-relabelled-metadata",
+      "tool": "decoupler_filter_genes_by_expression",
+      "success": true,
+      "artifacts_checked": 2
+    },
+    {
+      "name": "filter-error-missing-group-column",
+      "tool": "decoupler_filter_genes_by_expression",
+      "success": true
+    },
+    {
+      "name": "filter-error-missing-file",
+      "tool": "decoupler_filter_genes_by_expression",
+      "success": true
+    },
+    {
+      "name": "rank-pcs-tutorial-reference",
+      "tool": "decoupler_rank_pcs_by_metadata",
+      "success": true,
+      "artifacts_checked": 6
+    },
+    {
+      "name": "rank-pcs-tutorial-reference-repeat",
+      "tool": "decoupler_rank_pcs_by_metadata",
+      "success": true,
+      "artifacts_checked": 6
+    },
+    {
+      "name": "rank-pcs-error-missing-obs-key",
+      "tool": "decoupler_rank_pcs_by_metadata",
+      "success": true
+    },
+    {
+      "name": "deseq2-tutorial-reference",
+      "tool": "pydeseq2_test_differential_expression",
+      "success": true,
+      "artifacts_checked": 2
+    },
+    {
+      "name": "deseq2-small-subset",
+      "tool": "pydeseq2_test_differential_expression",
+      "success": true,
+      "artifacts_checked": 2
+    },
+    {
+      "name": "deseq2-small-subset-repeat",
+      "tool": "pydeseq2_test_differential_expression",
+      "success": true,
+      "artifacts_checked": 2
+    },
+    {
+      "name": "deseq2-error-missing-group-level",
+      "tool": "pydeseq2_test_differential_expression",
+      "success": true
+    },
+    {
+      "name": "deseq2-error-missing-condition-column",
+      "tool": "pydeseq2_test_differential_expression",
+      "success": true
+    },
+    {
+      "name": "deseq2-error-non-integer-counts",
+      "tool": "pydeseq2_test_differential_expression",
+      "success": true
+    },
+    {
+      "name": "ulm-collectri-tutorial-reference",
+      "tool": "decoupler_score_activities_ulm",
+      "success": true,
+      "artifacts_checked": 6
+    },
+    {
+      "name": "ulm-progeny-tutorial-reference",
+      "tool": "decoupler_score_activities_ulm",
+      "success": true,
+      "artifacts_checked": 6
+    },
+    {
+      "name": "ulm-hallmark-tutorial-reference",
+      "tool": "decoupler_score_activities_ulm",
+      "success": true,
+      "artifacts_checked": 6
+    },
+    {
+      "name": "ulm-progeny-repeat",
+      "tool": "decoupler_score_activities_ulm",
+      "success": true,
+      "artifacts_checked": 6
+    },
+    {
+      "name": "ulm-error-missing-stat-column",
+      "tool": "decoupler_score_activities_ulm",
+      "success": true
+    },
+    {
+      "name": "ulm-error-network-without-source-target",
+      "tool": "decoupler_score_activities_ulm",
+      "success": true
+    },
+    {
+      "name": "ulm-error-missing-network-file",
+      "tool": "decoupler_score_activities_ulm",
+      "success": true
+    },
+    {
+      "name": "inspect-progeny-TGFb-tutorial-reference",
+      "tool": "decoupler_inspect_source_targets",
+      "success": true,
+      "artifacts_checked": 7
+    },
+    {
+      "name": "inspect-hallmark-TGF_BETA-tutorial-reference",
+      "tool": "decoupler_inspect_source_targets",
+      "success": true,
+      "artifacts_checked": 4
+    },
+    {
+      "name": "inspect-hallmark-TGF_BETA-repeat",
+      "tool": "decoupler_inspect_source_targets",
+      "success": true,
+      "artifacts_checked": 4
+    },
+    {
+      "name": "inspect-collectri-SRF-network-plot",
+      "tool": "decoupler_inspect_source_targets",
+      "success": true,
+      "artifacts_checked": 8
+    },
+    {
+      "name": "inspect-error-unknown-source",
+      "tool": "decoupler_inspect_source_targets",
+      "success": true
+    },
+    {
+      "name": "inspect-error-missing-de-file",
+      "tool": "decoupler_inspect_source_targets",
+      "success": true
+    }
+  ]
+}

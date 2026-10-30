@@ -1,0 +1,140 @@
+{
+  "scan_metadata": {
+    "repository": "Teichlab/celltypist",
+    "repository_path": "repo/celltypist",
+    "source_commit": "fe357564a6625d3b1732a022fd39f18e55696e80",
+    "package_version": "1.7.1 (celltypist/__init__.py)",
+    "paper": "Dominguez Conde et al., 'Cross-tissue immune cell analysis reveals tissue-specific features in humans', Science 2022, doi:10.1126/science.abl5197",
+    "route": "python",
+    "scan_date": "2026-10-27",
+    "tutorial_filter": {
+      "mode": "exact paths supplied by coordinator",
+      "paths": [
+        "docs/notebook/celltypist_tutorial.ipynb",
+        "docs/notebook/celltypist_tutorial_ml.ipynb"
+      ],
+      "matched": [
+        "docs/notebook/celltypist_tutorial.ipynb",
+        "docs/notebook/celltypist_tutorial_ml.ipynb"
+      ],
+      "explicitly_excluded": [
+        "docs/notebook/celltypist_tutorial_cv.ipynb"
+      ]
+    },
+    "evaluated_source_files": 4,
+    "included_source_files": 2,
+    "supporting_sources_read": [
+      "celltypist/__init__.py",
+      "celltypist/annotate.py",
+      "celltypist/classifier.py",
+      "celltypist/models.py",
+      "celltypist/train.py",
+      "celltypist/plot.py",
+      "celltypist/samples.py",
+      "celltypist/command_line.py",
+      "README.md",
+      "docs/source/index.rst",
+      "requirements.txt",
+      "setup.py"
+    ],
+    "repository_tests": "None. The repository at this commit has no tests/ directory or test files (full file listing checked). Verification therefore rests on the executed tutorial outputs plus direct upstream calls on the same inputs.",
+    "network_checks_run_2026-10-27": {
+      "models_index": "GET https://celltypist.cog.sanger.ac.uk/models/models.json -> 200; 61 models; default=Immune_All_Low.pkl (v2, date 2022-07-16 00:20:42.927778, 98 cell types). The main tutorial printed this same build; the ml tutorial printed an older build (2022-04-04 23:51:15, 90 cell types, 5212 features) that the index no longer lists.",
+      "demo_data": "HEAD Notebook_demo_data/demo_2000_cells.h5ad 200 (35,730,948 B); demo_400_cells.h5ad 200 (7,990,288 B); demo_500_cells.h5ad 200 (9,868,548 B); all last-modified 2021-10-31."
+    },
+    "notebook_sha256": {
+      "docs/notebook/celltypist_tutorial.ipynb": "4b5473ccbf3c4e6257ae8c2b6449d998827a8ce3caabf334dafb12bb48450870",
+      "docs/notebook/celltypist_tutorial_ml.ipynb": "e8a71e0442791faa22f114cba3334a8824831f4392d8f66e01c4b7c4fe0ce284",
+      "docs/notebook/celltypist_tutorial_cv.ipynb": "78684889655cece873519fac5db8415cab494ed6bc730c572bc184a99c301b86"
+    },
+    "success": true,
+    "explanation": "Both filtered tutorials matched. They demonstrate one coherent workflow: list/choose a model, annotate a log1p-normalised (1e4) AnnData ('best match' or 'prob match', optional majority voting), export labels/probabilities, compare predictions with an existing label column (celltypist.dotplot, pd.crosstab, per-group probability boxplots), train a custom model from a labelled reference, and inspect a model's top driving genes. Duplicate demonstrations (built-in vs custom model, best vs prob match, two tutorials) were merged into 5 exposed tools across two modules: celltypist_tutorial owns 4 and celltypist_tutorial_ml owns 1. Model download, AnnData/table conversion, demo-data download and UMAP embedding plots are internal or omitted. Selecting a tool does not establish that it runs; the environment and execution stages decide that."
+  },
+  "tutorials": [
+    {
+      "path": "docs/notebook/celltypist_tutorial.ipynb",
+      "tutorial_id": "celltypist_tutorial",
+      "title": "Using CellTypist for cell type classification",
+      "description": "Annotates demo_2000_cells with the built-in Immune_All_Low.pkl model (best match + majority voting), converts results to AnnData, compares with the existing 'cell_type' column via celltypist.dotplot, trains a custom model on demo_2000_cells (feature_selection=True), predicts demo_400_cells with it, and inspects top driving genes (Mast cells) with violin plots.",
+      "type": "notebook",
+      "include_in_tools": true,
+      "reason_for_include_or_exclude": "Matches the explicit tutorial filter. Covers the core user tasks (model listing, annotation, reference comparison, training, marker inspection) on public Sanger-hosted demo data (demo_2000_cells, demo_400_cells).",
+      "executed_outputs_present": true,
+      "figure_cells": [
+        39,
+        41,
+        59,
+        60,
+        67,
+        68
+      ],
+      "suggested_tools": [
+        {
+          "tool_name": "celltypist_list_models",
+          "source_section": "Assign cell type labels using a CellTypist built-in model (cells 15-20: models.models_description)",
+          "description": "List the available built-in CellTypist models and their descriptions from the CellTypist model index.",
+          "primary_input": "none (optional refresh_index flag)",
+          "outputs": "Table of model filenames and descriptions (CSV + returned rows)",
+          "applicable_to_new_data": true
+        },
+        {
+          "tool_name": "celltypist_annotate_cells",
+          "source_section": "Assign cell type labels using a CellTypist built-in model (cells 22-35) and Assign cell type labels using a custom model (cells 55-57); prob-match mode supported by celltypist_tutorial_ml cells 55-61, 77-78",
+          "description": "Annotate cells in a log1p-normalised (1e4) AnnData with a built-in or custom CellTypist model using best-match or probability-match (multi-label) mode, with optional majority voting; writes the annotated h5ad plus predicted-label, probability and decision tables.",
+          "primary_input": "h5ad path (log1p-normalised to 1e4 counts/cell in .X or .raw.X, gene symbols) + model name or .pkl path",
+          "outputs": "annotated.h5ad (predicted_labels, over_clustering, majority_voting, conf_score), predicted_labels.csv, probability_matrix.csv, decision_matrix.csv, label-frequency summary",
+          "applicable_to_new_data": true
+        },
+        {
+          "tool_name": "celltypist_train_model",
+          "source_section": "Assign cell type labels using a custom model (cells 48-54: celltypist.train, Model.write, Model.load)",
+          "description": "Train a custom CellTypist logistic-regression model from a labelled reference AnnData (optional SGD feature selection, optional random_state) and save it as a .pkl model.",
+          "primary_input": "h5ad path (log1p-normalised to 1e4) + obs label column name",
+          "outputs": "Absolute model .pkl path, model cell types, feature count, description",
+          "applicable_to_new_data": true
+        },
+        {
+          "tool_name": "celltypist_inspect_model",
+          "source_section": "Model meta information (cells 22-26) and Examine expression of cell type-driving genes (cells 61-68: Model.extract_top_markers, sc.pl.violin)",
+          "description": "Report a CellTypist model's metadata and cell types, extract the top driving genes per cell type, and optionally plot their expression in a user AnnData grouped by a chosen label column.",
+          "primary_input": "model name or .pkl path (+ optional h5ad path and groupby obs column)",
+          "outputs": "Model summary, markers table (cell_type, rank, gene), optional violin PNGs",
+          "applicable_to_new_data": true
+        }
+      ]
+    },
+    {
+      "path": "docs/notebook/celltypist_tutorial_ml.ipynb",
+      "tutorial_id": "celltypist_tutorial_ml",
+      "title": "Using CellTypist for multi-label classification",
+      "description": "Annotates demo_500_cells (includes novel 'Microglia' and in-silico doublet 'Macro_pDC') with Immune_All_Low.pkl in 'best match' and 'prob match' (p_thres=0.5) modes with majority voting, inserts probabilities with to_adata(insert_prob=True), compares with 'cell_type' via pd.crosstab and celltypist.dotplot (predicted_labels and majority_voting), trains a custom model on demo_2000_cells, predicts demo_500 in prob-match mode, shows per-group probability boxplots, and extracts top driving genes (Macrophages).",
+      "type": "notebook",
+      "include_in_tools": true,
+      "reason_for_include_or_exclude": "Matches the explicit tutorial filter. It is the only source that demonstrates multi-label 'prob match' mode, insert_prob, both use_as_prediction variants of the dotplot, the reference-vs-prediction crosstab, and the per-reference-group probability boxplots.",
+      "executed_outputs_present": true,
+      "figure_cells": [
+        17,
+        45,
+        49,
+        51,
+        58,
+        62,
+        80,
+        82,
+        90,
+        91
+      ],
+      "figure_note": "Cell 82 emits two PNGs (Microglia and Macro_pDC boxplots), so the notebook holds 11 PNG outputs in 10 cells.",
+      "suggested_tools": [
+        {
+          "tool_name": "celltypist_compare_with_reference",
+          "source_section": "Single-label classification by finding the best match in the model (cells 47-51: pd.crosstab, celltypist.dotplot with predicted_labels and majority_voting) and Multi-label classification using a custom model (cells 78-83: per-group probability boxplots); dotplot also in celltypist_tutorial cells 41, 60",
+          "description": "Compare CellTypist predictions (predicted_labels or majority_voting) from celltypist_annotate_cells with an existing reference label/cluster column: label-transfer dot plot with its fraction and mean-probability tables, a reference-by-prediction crosstab, and optional probability boxplots for selected reference groups.",
+          "primary_input": "celltypist_annotate_cells output directory + reference obs column name (+ optional reference groups for probability boxplots)",
+          "outputs": "Dot-plot PNG, dot fraction and mean-probability CSVs, crosstab CSV, optional per-group probability boxplot PNGs",
+          "applicable_to_new_data": true
+        }
+      ]
+    }
+  ]
+}

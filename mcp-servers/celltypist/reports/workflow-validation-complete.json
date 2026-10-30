@@ -1,0 +1,103 @@
+{
+  "validator": "paper2agent-workflow",
+  "schema_version": 1,
+  "success": true,
+  "through": "complete",
+  "errors": [],
+  "passed_assignments": [
+    {
+      "role": "environment",
+      "task": "project",
+      "run_id": "environment-attempt-1"
+    },
+    {
+      "role": "executor",
+      "task": "celltypist_tutorial",
+      "run_id": "executor-celltypist_tutorial-attempt-1"
+    },
+    {
+      "role": "executor",
+      "task": "celltypist_tutorial_ml",
+      "run_id": "executor-celltypist_tutorial_ml-attempt-1"
+    },
+    {
+      "role": "implementer",
+      "task": "celltypist_tutorial",
+      "run_id": "implementer-celltypist_tutorial-attempt-1"
+    },
+    {
+      "role": "implementer",
+      "task": "celltypist_tutorial_ml",
+      "run_id": "implementer-celltypist_tutorial_ml-attempt-1"
+    },
+    {
+      "role": "scanner",
+      "task": "project",
+      "run_id": "scanner-attempt-1"
+    },
+    {
+      "role": "verifier",
+      "task": "celltypist_tutorial",
+      "run_id": "verifier-celltypist_tutorial-attempt-2"
+    },
+    {
+      "role": "verifier",
+      "task": "celltypist_tutorial_ml",
+      "run_id": "verifier-celltypist_tutorial_ml-attempt-2"
+    }
+  ],
+  "exclusions": [],
+  "scope": "Validates recorded state and artifact consistency; does not authenticate host identities or establish numerical/scientific correctness.",
+  "expected_assignments": [
+    {
+      "role": "environment",
+      "task": "project"
+    },
+    {
+      "role": "executor",
+      "task": "celltypist_tutorial"
+    },
+    {
+      "role": "executor",
+      "task": "celltypist_tutorial_ml"
+    },
+    {
+      "role": "implementer",
+      "task": "celltypist_tutorial"
+    },
+    {
+      "role": "implementer",
+      "task": "celltypist_tutorial_ml"
+    },
+    {
+      "role": "scanner",
+      "task": "project"
+    },
+    {
+      "role": "verifier",
+      "task": "celltypist_tutorial"
+    },
+    {
+      "role": "verifier",
+      "task": "celltypist_tutorial_ml"
+    }
+  ],
+  "active_tutorials": [
+    "celltypist_tutorial",
+    "celltypist_tutorial_ml"
+  ],
+  "active_modules": [
+    "celltypist_tutorial",
+    "celltypist_tutorial_ml"
+  ],
+  "exposed_tools": [
+    "celltypist_annotate_cells",
+    "celltypist_compare_with_reference",
+    "celltypist_inspect_model",
+    "celltypist_list_models",
+    "celltypist_train_model"
+  ],
+  "completion_files_checked": 10,
+  "project_root": "/home/asu/Science/paper2agent-runs/celltypist",
+  "state": "/home/asu/Science/paper2agent-runs/celltypist/reports/agent-runs.json"
+}

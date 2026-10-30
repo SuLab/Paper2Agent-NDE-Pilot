@@ -1,0 +1,403 @@
+{
+ "module": "celltypist_tutorial",
+ "generated": "2026-10-27T16:29:12",
+ "status": "implemented; development smoke checks passed (attempt 1 of 3, no code changes after it)",
+ "source": {
+  "repository": "Teichlab/celltypist",
+  "commit": "fe357564a6625d3b1732a022fd39f18e55696e80",
+  "tutorial": "docs/notebook/celltypist_tutorial.ipynb",
+  "reference_url": "https://github.com/Teichlab/celltypist/blob/fe357564a6625d3b1732a022fd39f18e55696e80/docs/notebook/celltypist_tutorial.ipynb",
+  "installed_package": "celltypist 1.7.1, non-editable in celltypist-env; `diff -r repo/celltypist/celltypist <site-packages>/celltypist -x __pycache__` reports no differences, so the line numbers below hold for both",
+  "supporting_evidence": "docs/notebook/celltypist_tutorial_ml.ipynb (prob match, custom-model prob match)"
+ },
+ "production_files": {
+  "src/tools/celltypist_tutorial.py": {
+   "sha256": "5a32c110d7ef55bd517d9eaa2261a523dfffc38df832bd9424d7391eae9f360b",
+   "server": "celltypist_tutorial_mcp = FastMCP(name=\"celltypist_tutorial\")"
+  },
+  "src/tools/__init__.py": {
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "note": "created empty"
+  }
+ },
+ "runtime": {
+  "fastmcp": "4.0.3",
+  "python": "$PROJECT_ROOT/celltypist-env/bin/python",
+  "CELLTYPIST_FOLDER": "Read by celltypist.models at import (models.py:16-20): models_path is fixed when celltypist is first imported. The module never sets it, and the server process or test harness must export it before import. Default upstream: ~/.celltypist.",
+  "stdout": "Checked, no redirect added. celltypist logs through logging.basicConfig (logger.py:2), whose default stream is stderr. The package source contains no print(). Both smoke runs captured fd 1 of the whole process to a file: 0 bytes (logs/smoke_attempt1_stdout.txt, logs/smoke_attempt1_branches_stdout.txt). That covers annotate with Leiden over-clustering, training with n_jobs=10 (joblib workers inherit fd 1), violin plotting and FastMCP's error tracebacks, which go to stderr.",
+  "matplotlib": "matplotlib.use('Agg') before scanpy/celltypist import (headless server).",
+  "output_dirs": "_fresh_output_dir(): tempfile.mkdtemp(prefix='<tool>_<YYYYmmdd-HHMMSS>_', dir=<output_dir or $TMPDIR/celltypist_mcp_outputs>) inside every call; created only after inputs validate and the upstream computation succeeds. Repeated identical annotate calls landed in distinct directories (smoke annotate_repeat)."
+ },
+ "shared_helpers": {
+  "_resolve_model": "Used by annotate and inspect. A string containing '/' is a model file path (expanduser+resolve, must exist), mirroring Model.load's own name/path rule (models.py:91). Otherwise it is a built-in name. If $CELLTYPIST_FOLDER/data/models/<name> is missing, the helper calls models.download_models(model=name) (models.py:474-517), which fetches only that model, plus models.json if absent. It raises ValueError for a name absent from the index. Afterwards the helper checks the file exists and raises RuntimeError if the download failed. That check matters because download_models only logs download errors (models.py:516-517), and a following Model.load -> get_all_models -> download_if_required (models.py:407-429) would otherwise download all 61 models whenever the cache holds no .pkl. The name itself, not the path, is then passed on to celltypist, as in tutorial cell 28.",
+  "_h5ad_path": "Resolves the path. Requires an existing file with suffix .h5ad. This is needed because the wrapper reads the file with sc.read and passes an AnnData, and upstream treats an in-memory AnnData as already log1p-normalised. A .csv/.mtx would therefore skip upstream's raw-count normalisation (classifier.py:278-306), so non-h5ad input is rejected with a clear error.",
+  "_fresh_output_dir": "See runtime.output_dirs."
+ },
+ "tools": {
+  "celltypist_list_models": {
+   "tutorial_cells": [
+    16,
+    18,
+    20
+   ],
+   "upstream_calls": [
+    "repo/celltypist/celltypist/models.py::get_models_index (line 432; only when refresh_index=True, force_update=True)",
+    "repo/celltypist/celltypist/models.py::models_description (line 520; on_the_fly=False, reads cached models.json)",
+    "repo/celltypist/celltypist/models.py::get_default_model (line 387)",
+    "repo/celltypist/celltypist/models.py::get_model_path (line 369; reported index_path)"
+   ],
+   "parameters": {
+    "refresh_index": {
+     "default": false,
+     "source": "scanner tool_review; the tutorial's download_models(force_update=True) in cell 16 refreshes the index. The tool deliberately never downloads models."
+    },
+    "output_dir": {
+     "default": null,
+     "source": "runtime contract (fresh per-call subdirectory)"
+    }
+   },
+   "outputs": "models_description.csv: the upstream DataFrame written with to_csv(index=False), columns exactly [model, description]. Returns n_models, default_model, index_path, and models (the same rows as records, which is the content an agent picks a model from).",
+   "deviations": "Never calls download_models() without a model name. Tutorial cell 16 downloaded every model (12 then, 61 now). Listing needs only the index, and the first call downloads models.json if it is not cached (models.py:447-449)."
+  },
+  "celltypist_annotate_cells": {
+   "tutorial_cells": [
+    28,
+    31,
+    33,
+    35,
+    56,
+    57
+   ],
+   "supporting_cells_ml": [
+    34,
+    55,
+    77
+   ],
+   "upstream_calls": [
+    "scanpy.read(<h5ad>), the same reader celltypist uses for an .h5ad path (classifier.py:308)",
+    "repo/celltypist/celltypist/annotate.py::annotate (line 9). Model.load at line 81, Classifier at 83, celltype at 85, majority-voting skip for <=50 cells at 88-90, user over_clustering obs key at 95-97, majority_vote at 110",
+    "repo/celltypist/celltypist/classifier.py::AnnotationResult.to_table (line 188; folder=<fresh dir>, prefix='', xlsx=False)",
+    "repo/celltypist/celltypist/classifier.py::AnnotationResult.to_adata (line 78; insert_labels=True, insert_conf=True, defaults insert_conf_by='predicted_labels', insert_prob=False)",
+    "repo/celltypist/celltypist/classifier.py::AnnotationResult.summary_frequency (line 57; by='predicted_labels', and 'majority_voting' when present)",
+    "anndata.AnnData.write_h5ad(<dir>/annotated.h5ad)"
+   ],
+   "parameters": {
+    "adata_path": {
+     "required": true,
+     "source": "user data; annotate(filename) accepts an AnnData (annotate.py:9). The expression check stays upstream (classifier.py:310-327) and is not duplicated."
+    },
+    "model": {
+     "default": "Immune_All_Low.pkl",
+     "source": "upstream default via the models.json 'default' flag (models.py:89-90, 387-404); tutorial cell 28. Custom models are passed as a .pkl path (tutorial cell 56)."
+    },
+    "mode": {
+     "default": "best match",
+     "values": [
+      "best match",
+      "prob match"
+     ],
+     "source": "annotate.py:14; models.py:156-165; ml tutorial cell 55 uses 'prob match'"
+    },
+    "p_thres": {
+     "default": 0.5,
+     "source": "annotate.py:15; ml cell 55"
+    },
+    "majority_voting": {
+     "default": false,
+     "source": "upstream default annotate.py:16. Tutorials use True; the scanner says to keep the upstream default."
+    },
+    "over_clustering_key": {
+     "default": null,
+     "maps_to": "annotate(over_clustering=<obs key>)",
+     "source": "annotate.py:17, 92-97. Restricted to an obs key (the upstream plain-text-file fallback at 98-105 is not exposed). Validated only when majority_voting=True, because upstream ignores it otherwise."
+    },
+    "min_prop": {
+     "default": 0.0,
+     "source": "annotate.py:19 -> classifier.py:465-494 ('Heterogeneous')"
+    },
+    "output_dir": {
+     "default": null,
+     "source": "runtime contract"
+    },
+    "not_exposed": "transpose_input, gene_file, cell_file (only for non-h5ad inputs); use_GPU (no GPU stack); insert_conf_by (not in the coordinator spec)"
+   },
+   "io_adaptations": [
+    "Input is read once with sc.read and the AnnData is passed to annotate, as the tutorial does with adata_2000. This allows the over_clustering_key column check (metadata-input rule) without reading the file twice.",
+    "Composition contract with celltypist_tutorial_ml.celltypist_compare_with_reference: the fresh output_dir holds exactly predicted_labels.csv, decision_matrix.csv, probability_matrix.csv (written by to_table, no prefix, no xlsx) and annotated.h5ad (to_adata(insert_labels=True, insert_conf=True), no probabilities). Its absolute path is returned as `output_dir`, and the artifacts list carries all four paths.",
+    "Probabilities are not inserted into the h5ad: 11 of 98 Immune_All_Low cell-type names contain '/', which anndata 0.13 rejects or warns about as obs keys.",
+    "annotated.h5ad keeps upstream side effects: X_pca, connectivities, distances, uns['neighbors'] and uns['over_clustering'] when celltypist built the over-clustering. An existing neighbour graph in the input is reused (classifier.py:435-440)."
+   ],
+   "returns": "message, reference, artifacts[4], output_dir, n_cells, n_model_cell_types, model, model_file, mode, majority_voting_requested, majority_voting_performed, label_frequencies{predicted_labels[, majority_voting]: [{celltype, counts}]}, plus p_thres (prob match) and over_clustering_source, n_over_clusters, min_prop (when majority voting ran)",
+   "deviations": "None in computation. When celltypist skips majority voting for <=50 cells, the message says so and majority_voting_performed=false."
+  },
+  "celltypist_train_model": {
+   "tutorial_cells": [
+    49,
+    52,
+    54
+   ],
+   "upstream_calls": [
+    "scanpy.read(<h5ad>), the same reader train() uses for an .h5ad path (train.py:57)",
+    "repo/celltypist/celltypist/train.py::train (line 190; labels=<label_key> resolved from adata.obs at line 70-71, check_expression default at 331, feature selection at 374-394)",
+    "repo/celltypist/celltypist/models.py::Model.write (line 167; forces a .pkl extension)"
+   ],
+   "parameters": {
+    "adata_path": {
+     "required": true,
+     "source": "user reference data"
+    },
+    "label_key": {
+     "required": true,
+     "source": "metadata-input rule; tutorial uses 'cell_type', never defaulted. Validated to exist in obs before training; otherwise upstream would try to read it as a file path (train.py:72-73, _to_vector)."
+    },
+    "feature_selection": {
+     "default": false,
+     "source": "upstream default train.py:205; tutorial cell 49 uses True"
+    },
+    "top_genes": {
+     "default": 300,
+     "source": "train.py:205; must be >=1 (a non-positive value would make the argpartition slice at train.py:379 meaningless)"
+    },
+    "n_jobs": {
+     "default": null,
+     "source": "train.py:197; tutorial uses 10"
+    },
+    "seed": {
+     "default": null,
+     "maps_to": "train(**{'random_state': seed}) only when not None",
+     "source": "train.py:209 **kwargs -> _SGDClassifier SGDClassifier(**kwargs) line 159 and _LRClassifier LogisticRegression(**kwargs) line 126. Forwarding is confirmed in reports/executed_notebook_celltypist_tutorial.json seed_provenance."
+    },
+    "model_name": {
+     "default": "celltypist_model",
+     "source": "I/O only (output file stem; a trailing .pkl is stripped, directories rejected)"
+    },
+    "output_dir": {
+     "default": null,
+     "source": "runtime contract"
+    },
+    "not_exposed": "C, solver, max_iter, use_SGD, alpha, mini_batch and its options, use_GPU, with_mean, check_expression, and the free-text date/details/url/source/version (not demonstrated in the tutorial and not in the coordinator spec)"
+   },
+   "returns": "message, reference, artifacts[model .pkl], output_dir, model_path, n_cells, n_cell_types, cell_types, n_features, label_key, feature_selection, top_genes, n_jobs, seed, description",
+   "deviations": "None. Reproducibility caveat (ml executor evidence): with a seed, n_jobs=10 runs are bit-identical, but n_jobs=None vs 10 differs by about 1e-10 in coef_ while selecting the same genes."
+  },
+  "celltypist_inspect_model": {
+   "tutorial_cells": [
+    22,
+    24,
+    26,
+    63,
+    64,
+    66,
+    67,
+    68
+   ],
+   "upstream_calls": [
+    "repo/celltypist/celltypist/models.py::Model.load (line 74), Model.cell_types (105), Model.features (110), Model.description",
+    "repo/celltypist/celltypist/models.py::Model.extract_top_markers (line 174; raises ValueError for an unknown cell type, not duplicated)",
+    "scanpy.pl.violin(adata, genes, groupby=groupby_key, rotation=90, show=False) (tutorial cells 67-68), then matplotlib savefig(bbox_inches='tight')"
+   ],
+   "parameters": {
+    "model": {
+     "required": true,
+     "source": "tutorial cells 22 and 63 (built-in name or saved .pkl); same _resolve_model rule as annotate"
+    },
+    "cell_types": {
+     "default": null,
+     "meaning": "all model cell types",
+     "source": "scanner tool_review; tutorial uses 'Mast cells'"
+    },
+    "top_n": {
+     "default": 10,
+     "source": "models.py:174 upstream default (tutorial uses 3); must be >=1, because upstream slices [:top_n] and a negative value would silently drop genes"
+    },
+    "only_positive": {
+     "default": true,
+     "source": "models.py:174"
+    },
+    "adata_path": {
+     "default": null,
+     "source": "optional violin input (tutorial cells 67-68)"
+    },
+    "groupby_key": {
+     "default": null,
+     "source": "required with adata_path; validated against obs (tutorial: 'cell_type' on training data, 'majority_voting' on annotated query data)"
+    },
+    "output_dir": {
+     "default": null,
+     "source": "runtime contract"
+    }
+   },
+   "io_adaptations": [
+    "top_markers.csv (cell_type, rank, gene) for every selected cell type; the same markers are returned inline as top_markers.",
+    "Violin plots are drawn only when adata_path is given. cell_types must then be listed explicitly, which avoids one plot for each of up to ~100 model types. One PNG is written per listed cell type: violin_<NN>_<sanitised name>.png.",
+    "Genes absent from the plotted matrix are dropped from the plot and reported in genes_missing_from_adata. The plotted matrix is adata.raw when present, matching scanpy's check_use_raw default. When no gene is present, the plot is skipped."
+   ],
+   "returns": "message, reference, artifacts, output_dir, model, model_file, description, n_cell_types, n_features, cell_types, top_markers, plus groupby_key and genes_missing_from_adata when adata_path is given",
+   "deviations": "None in computation."
+  }
+ },
+ "attempts": [
+  {
+   "attempt": 1,
+   "changes": "initial implementation",
+   "outcome": "import/schema check and both smoke runs passed; no code edits afterwards"
+  }
+ ],
+ "smoke_checks": {
+  "note": "Development checks only. The fresh verifier owns the formal test suite. All runs use fastmcp.Client(celltypist_tutorial_mcp) in process.",
+  "environment": "MPLCONFIGDIR=$I/.mpl NUMBA_CACHE_DIR=$I/.numba CELLTYPIST_FOLDER=$I/celltypist_home (I=$PROJECT_ROOT/tmp/impl_celltypist_tutorial; celltypist_home/data/models holds byte copies of notebooks/celltypist_tutorial/data/Immune_All_Low.pkl sha256 290874d3... and models.json sha256 f617fcd7...)",
+  "commands": [
+   "$PROJECT_ROOT/celltypist-env/bin/python -I $I/scripts/schema_check.py $PROJECT_ROOT/src $I/logs/schema.json  (exit 0; 4 tools listed, schemas in logs/schema.json)",
+   "$PROJECT_ROOT/celltypist-env/bin/python -I $I/scripts/smoke.py $PROJECT_ROOT/src $PROJECT_ROOT $I/logs/smoke_attempt1.json $I/outputs/attempt1 > logs/smoke_attempt1_stdout.txt 2> logs/smoke_attempt1_stderr.txt  (exit 0, stdout 0 bytes)",
+   "$PROJECT_ROOT/celltypist-env/bin/python -I $I/scripts/smoke_branches.py $PROJECT_ROOT/src $PROJECT_ROOT $I/logs/smoke_attempt1_branches.json $I/outputs/attempt1_branches <trained seeded pkl from smoke.py>  (exit 0, stdout 0 bytes)"
+  ],
+  "script_sha256": {
+   "schema_check.py": "acb601aba966d9b15a27eea8262b963d9903d747814c0aa6228c3a8f09055ab0",
+   "smoke.py": "1948e4851afd894599ffa5f56297984e61fc011eca06bbede005908f6fa45772",
+   "smoke_branches.py": "281c8be5e693284973b70bc068004552c01ee792209e4e1d8da1929e98c6af8a",
+   "write_report.py": "aa5caa170d830a789d3a78a428d1b0e8dd7e4b7021b9a2bd1e592eb8a32bb9e9"
+  },
+  "outcomes": {
+   "list_models": {
+    "n_models": 61,
+    "default_model": "Immune_All_Low.pkl",
+    "columns": [
+     "model",
+     "description"
+    ],
+    "csv_equals_reference": true
+   },
+   "annotate_demo2000_ImmuneAllLow_mv_vs_reference/annotate_demo2000_ImmuneAllLow_mv": {
+    "files": [
+     "annotated.h5ad",
+     "decision_matrix.csv",
+     "predicted_labels.csv",
+     "probability_matrix.csv"
+    ],
+    "n_cells": 2000,
+    "majority_voting_performed": true,
+    "n_over_clusters": 46,
+    "index_equal": true,
+    "predicted_labels_equal": true,
+    "over_clustering_equal": true,
+    "majority_voting_equal": true,
+    "decision_max_abs_diff": 0.0,
+    "probability_max_abs_diff": 0.0,
+    "h5ad_obs_columns": [
+     "cell_type",
+     "predicted_labels",
+     "over_clustering",
+     "majority_voting",
+     "conf_score"
+    ],
+    "h5ad_conf_score_max_abs_diff": 0.0,
+    "h5ad_has_neighbors": true
+   },
+   "annotate_repeat_call": {
+    "different_dir": true,
+    "labels_identical": true
+   },
+   "train_seeded_rs0_vs_reference/train_seeded_rs0/run1 (n_jobs=10, seed=0, feature_selection=True)": {
+    "n_features": 2652,
+    "n_cell_types": 10,
+    "features_identical_incl_order": true,
+    "cell_types_identical": true,
+    "coef_bitwise_identical": true,
+    "intercept_bitwise_identical": true
+   },
+   "inspect_seeded_model_Mast_cells_top3_vs_reference/top_markers.json": {
+    "top_markers": {
+     "Mast cells": [
+      "TPSB2",
+      "KRT1",
+      "SLC45A3"
+     ]
+    },
+    "equals_reference": true,
+    "artifacts": [
+     "top_markers.csv",
+     "violin_01_Mast_cells.png"
+    ],
+    "genes_missing_from_adata": {}
+   },
+   "inspect_builtin_Immune_All_Low": {
+    "n_cell_types": 98,
+    "n_features": 6639,
+    "description": {
+     "date": "2022-07-16 00:20:42.927778",
+     "details": "immune sub-populations combined from 20 tissues of 18 studies",
+     "url": "https://celltypist.cog.sanger.ac.uk/models/Pan_Immune_CellTypist/v2/Immune_All_Low.pkl",
+     "source": "https://doi.org/10.1126/science.abl5197",
+     "version": "v2",
+     "number_celltypes": "98"
+    }
+   },
+   "annotate_prob_match_demo400_seeded_model": {
+    "n_cells": 400,
+    "p_thres": 0.5,
+    "majority_voting_performed": false,
+    "n_distinct_labels": 12
+   },
+   "user_over_clustering_key_vs_direct_upstream_annotate": {
+    "over_clustering_source": "cell_type",
+    "n_over_clusters": 10,
+    "min_prop": 0.9,
+    "majority_voting_equals_direct_upstream": true,
+    "over_clustering_equals_direct_upstream": true,
+    "majority_voting_values": [
+     "DC1",
+     "Endothelial cells",
+     "Follicular B cells",
+     "Kupffer cells",
+     "Macrophages",
+     "Mast cells",
+     "Neutrophil-myeloid progenitor",
+     "Plasma cells",
+     "gamma-delta T cells",
+     "pDC"
+    ]
+   },
+   "inspect_violin_on_annotated_h5ad_by_majority_voting": {
+    "artifacts": [
+     "top_markers.csv",
+     "violin_01_Mast_cells.png",
+     "violin_02_pDC.png"
+    ]
+   },
+   "majority_voting_skip_40_cells": {
+    "message": "Annotated 40 cells with model_from_immune2000.pkl (best match); majority voting was skipped by CellTypist because the dataset has 50 or fewer cells",
+    "majority_voting_performed": false,
+    "files": [
+     "annotated.h5ad",
+     "decision_matrix.csv",
+     "predicted_labels.csv",
+     "probability_matrix.csv"
+    ]
+   },
+   "input_errors": {
+    "missing_label_key": "Error calling tool 'celltypist_train_model': \"label_key 'no_such_column' is not an obs column of demo_400_cells.h5ad; available columns: ['cell_type']\"",
+    "missing_over_clustering_key": "Error calling tool 'celltypist_annotate_cells': \"over_clustering_key 'no_such_column' is not an obs column of demo_400_cells.h5ad; available columns: ['cell_type']\"",
+    "unknown_builtin_model": "Error calling tool 'celltypist_inspect_model': 🛑 No models match the celltypist model repertoire. Please provide valid model names",
+    "unknown_cell_type": "Error calling tool 'celltypist_inspect_model': 🛑 'Unicorn cells' is not found. Please provide a valid cell type name",
+    "non_h5ad": "Error calling tool 'celltypist_annotate_cells': Expected an AnnData .h5ad file, got: models.json",
+    "missing_file": "Error calling tool 'celltypist_train_model': No such file: /home/asu/Science/paper2agent-runs/celltypist/tmp/impl_celltypist_tutorial/inputs/absent.h5ad",
+    "violin_without_groupby": "Error calling tool 'celltypist_inspect_model': groupby_key is required when adata_path is given",
+    "missing_groupby_key": "Error calling tool 'celltypist_inspect_model': \"groupby_key 'nope' is not an obs column of demo_400_first40.h5ad; available columns: ['cell_type']\"",
+    "bad_mode": "1 validation error for call[celltypist_annotate_cells]\nmode\n  Input should be 'best match' or 'prob match' [type=literal_error, input_value='best', input_type=str]\n    For further information visit ht"
+   },
+   "models_cache_after_all_calls": [
+    "Immune_All_Low.pkl",
+    "models.json"
+   ],
+   "violin_png_visual_check": "violin_01_Mast_cells.png on demo_2000 by cell_type shows TPSB2/KRT1/SLC45A3 x 10 groups with rotated labels, the same structure as tutorial figure_5 (cell 67)"
+  }
+ },
+ "for_verifier": [
+  "Direct-upstream comparisons should load the same model bytes: Immune_All_Low.pkl sha256 290874d3... (notebooks/celltypist_tutorial/data). A fresh CELLTYPIST_FOLDER without that file makes the tool download the current build.",
+  "Composition with celltypist_tutorial_ml depends on the exact four file names in output_dir; test that tool on this tool's real output.",
+  "_resolve_model's guard against downloading all models is the main non-trivial wrapper logic. Check it with an empty CELLTYPIST_FOLDER, e.g. an unknown name should raise without network downloads of other models (here models_cache_after held only Immune_All_Low.pkl + models.json).",
+  "Missing-column errors are raised as KeyError, so FastMCP renders the message inside quotes. This is cosmetic.",
+  "majority_voting results depend on the scanpy/igraph/leidenalg versions. They are exact here (scanpy 1.12.4, leidenalg 0.12.0, igraph 1.0.0).",
+  "Seeded training is bit-identical only at the same n_jobs (10 used here)."
+ ]
+}

@@ -1,0 +1,80 @@
+{
+  "scan_metadata": {
+    "repository": "scverse/decoupler",
+    "repository_version": "2.3.1",
+    "repository_commit": "27a1be7c75d88306bf3c2e4d0e7fb4b42d48f78a",
+    "tutorials_submodule": {
+      "path": "docs/notebooks",
+      "commit": "306be6673a5df5baf780e44ea929391616dbe5d8"
+    },
+    "paper": "Badia-i-Mompel et al., decoupleR: ensemble of computational methods to infer biological activities from omics data, Bioinformatics Advances 2022, doi:10.1093/bioadv/vbac016",
+    "scan_date": "2026-10-27",
+    "route": "python",
+    "requested_filter": "docs/notebooks/bulk/rna.ipynb",
+    "filter_match": "exact path match (case-insensitive substring) to 1 notebook; title 'Bulk Enrichment Analysis'",
+    "evaluated_source_files": 11,
+    "included_source_files": 1,
+    "proposed_exposed_tools": 5,
+    "success": true,
+    "explanation": "Filter matched exactly one notebook (docs/notebooks/bulk/rna.ipynb, sha256 17b5e32e241626da72800125b6ae979c179ddf6e35be83892e5c75013e12fe2b, 61 cells, 30 code cells, 17 executed PNG figures, kernel Python 3.12.3). Tools were selected only from operations executed in that notebook; implementations were confirmed in src/decoupler/** and the PyDESeq2 API (dependency), and verification sources were matched to tests/**. Duplicate basename rna.ipynb (bulk/ vs bench/) is resolved by tutorial id 'bulk_rna'. Five tools proposed in one owning module 'bulk_enrichment'; loading/format steps kept internal; three ulm demonstrations merged into one scoring tool; one demonstration-only plot (obsbar) omitted."
+  },
+  "tutorials": [
+    {
+      "path": "docs/notebooks/bulk/rna.ipynb",
+      "tutorial_id": "bulk_rna",
+      "sha256": "17b5e32e241626da72800125b6ae979c179ddf6e35be83892e5c75013e12fe2b",
+      "title": "Bulk Enrichment Analysis",
+      "description": "Bulk RNA-seq workflow on GSE151251 (dc.ds.hsctgfb: 6 hepatic stellate cell samples, 3 control vs 3 TGF-beta): edgeR-style gene filtering, PCA/metadata association QC, PyDESeq2 Wald test (treatment vs control), and ulm activity scoring with CollecTRI TFs, PROGENy pathways and MSigDB Hallmark gene sets, with volcano, bar, dot, network, source-target scatter and leading-edge plots.",
+      "type": "notebook",
+      "include_in_tools": true,
+      "reason_for_include_or_exclude": "Matches the exact requested filter; contains complete, executed user tasks applicable to a new bulk count matrix with treatment/control metadata.",
+      "suggested_tools": [
+        {
+          "tool_name": "decoupler_filter_genes_by_expression",
+          "owning_module": "bulk_enrichment",
+          "source_section": "cell 11 (exec 5): dc.pl.filter_by_expr; cell 13 (exec 6): dc.pp.filter_by_expr",
+          "description": "Remove lowly profiled genes from a raw bulk count matrix (edgeR filterByExpr logic) and inspect threshold choice.",
+          "primary_input": "raw counts + sample metadata; group_key (metadata column, optional, tutorial 'condition'); min_count=10, min_total_count=15, large_n=10, min_prop=0.7 (tutorial values = API defaults); lib_size optional (API param, None).",
+          "outputs": "filtered counts (h5ad keeping obs) for downstream DE; kept-gene list/count; threshold diagnostic PNG (log10 total counts vs number of samples with dashed cutoffs).",
+          "applicable_to_new_data": true
+        },
+        {
+          "tool_name": "decoupler_rank_pcs_by_metadata",
+          "owning_module": "bulk_enrichment",
+          "source_section": "cell 15 (exec 7); cell 17 (exec 8); cell 19 (exec 9); cell 21 (exec 10)",
+          "description": "Explore sample variability: PCA on normalised counts and test association of each PC with each metadata column (ANOVA for categorical, Spearman for numeric, BH-adjusted) to identify covariates for the DE design.",
+          "primary_input": "filtered (or raw) counts + metadata; obs_keys optional (rankby_obsm API param; default all metadata columns); color_keys for PCA scatter (tutorial ['condition','sample_id']); nvar=5 for association plot.",
+          "outputs": "PC x metadata association table (obsm, obs, stat, pval, padj); explained-variance ratios; PNGs: PCA variance ratio, dc.pl.obsm association heatmap, PCA scatter coloured by metadata.",
+          "applicable_to_new_data": true
+        },
+        {
+          "tool_name": "pydeseq2_test_differential_expression",
+          "owning_module": "bulk_enrichment",
+          "source_section": "cell 23 (exec 11); cell 24 (exec 12); cell 26 (exec 13): dc.pl.volcano",
+          "description": "Differential expression between two user-specified groups with PyDESeq2 (Wald test), giving the gene-level statistics used for enrichment.",
+          "primary_input": "filtered counts + metadata (output of decoupler_filter_genes_by_expression); condition_key, group (numerator), reference (denominator); design formula optional (default '~{condition_key}', must contain condition_key; covariates must exist in metadata); n_cpus (runtime only). refit_cooks=True fixed as in tutorial.",
+          "outputs": "results table indexed by gene: baseMean, log2FoldChange, lfcSE, stat, pvalue, padj (CSV); volcano PNG (x=log2FoldChange, y=padj, top=10).",
+          "applicable_to_new_data": true
+        },
+        {
+          "tool_name": "decoupler_score_activities_ulm",
+          "owning_module": "bulk_enrichment",
+          "source_section": "cell 28 (exec 14); cells 30/32/34 (exec 15-17) CollecTRI; cells 40/42/44/46 (exec 20-23) PROGENy; cells 52/54/56/58 (exec 26-29) Hallmark",
+          "description": "Infer TF / pathway / Hallmark activities for a contrast by running ulm on the gene-level DE statistic against a chosen prior-knowledge network.",
+          "primary_input": "DE results table (gene index) with stat_column (default 'stat'); network in {collectri, progeny, hallmark} (organism fixed to human); contrast_name (default f'{group}.vs.{reference}' or user value; tutorial 'treatment.vs.control'); padj_threshold=0.05; barplot top (tutorial 25 for CollecTRI/PROGENy, 10 for Hallmark); dotplot top=10.",
+          "outputs": "full scores and BH-adjusted p-values for all sources (long table: source, score, padj, significant); significance-filtered subset; barplot PNG; dotplot PNG (score vs source, size -log10 padj clipped at 2.22e-16); network snapshot size (rows) for provenance.",
+          "applicable_to_new_data": true
+        },
+        {
+          "tool_name": "decoupler_inspect_source_targets",
+          "owning_module": "bulk_enrichment",
+          "source_section": "cell 36 (exec 18) network; cell 38 (exec 19) volcano SRF; cell 48 (exec 24) source_targets TGFb; cell 50 (exec 25) leading_edge TGFb +/-; cell 60 (exec 30) leading_edge TGF_BETA_SIGNALING",
+          "description": "Explain an activity score by inspecting the target genes of selected TFs/pathways: target volcano, weight-vs-statistic scatter, leading-edge genes, and a regulator-target network graph.",
+          "primary_input": "DE results table; network in {collectri, progeny, hallmark}; source name(s) chosen by the user from scoring results (tutorial SRF / TGFb / TGF_BETA_SIGNALING; network plot sources SRF, MYOCD, IRF1, SKIL); optional activity-score table from decoupler_score_activities_ulm for the network plot.",
+          "outputs": "leading-edge gene lists (split into positive/negative weight components when the network has signed weights, as in cell 50; single list for unweighted sets, as in cell 60); PNGs: target volcano (x=log2FoldChange, y=pvalue, top=10), source_targets scatter (x=weight, y=stat, top=15; weighted networks only), leading-edge plot(s), network plot (targets=10, by_abs=True, vcenter=True, size_node=10).",
+          "applicable_to_new_data": true
+        }
+      ]
+    }
+  ]
+}

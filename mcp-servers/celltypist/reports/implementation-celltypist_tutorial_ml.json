@@ -1,0 +1,140 @@
+{
+  "module": "celltypist_tutorial_ml",
+  "role": "tool implementer (stage 3)",
+  "date": "2026-10-27",
+  "status": "implemented; development smoke check 28/28 passed; stdio launch check passed",
+  "production_files": [
+    {
+      "path": "src/tools/celltypist_tutorial_ml.py",
+      "sha256": "c6ee78ae8fea3e712ba92e845bfdc3a7c9461ec5d13c122b3cd5e8b0350718c2",
+      "lines": 195,
+      "fastmcp_instance": "celltypist_tutorial_ml_mcp = FastMCP(name=\"celltypist_tutorial_ml\")"
+    }
+  ],
+  "not_touched": "src/tools/__init__.py (owned by the celltypist_tutorial implementer), notebooks/, repo/, tests/. The module does not import the other module.",
+  "reference": "https://github.com/Teichlab/celltypist/blob/fe357564a6625d3b1732a022fd39f18e55696e80/docs/notebook/celltypist_tutorial_ml.ipynb",
+  "upstream": {
+    "repository": "Teichlab/celltypist",
+    "commit": "fe357564a6625d3b1732a022fd39f18e55696e80",
+    "installed_version": "celltypist 1.7.1 (project env)",
+    "env_versions": {"fastmcp": "4.0.3", "scanpy": "1.12.4", "anndata": "0.13.4", "pandas": "3.1.0", "matplotlib": "3.11.2"}
+  },
+  "tools": [
+    {
+      "name": "celltypist_compare_with_reference",
+      "signature": "celltypist_compare_with_reference(annotation_dir: str, reference_key: str, use_as_prediction: Literal['majority_voting','predicted_labels'] = 'majority_voting', reference_groups: list[str] | None = None, plot_group_probabilities: bool = True, output_dir: str | None = None) -> dict",
+      "upstream_calls": [
+        {
+          "call": "celltypist.dotplot(predictions, use_as_reference=reference_key, use_as_prediction=use_as_prediction, return_fig=True)",
+          "location": "repo/celltypist/celltypist/plot.py::dotplot::73 (uses _get_fraction_prob_df::7); re-exported in celltypist/__init__.py:4",
+          "wrapper_line": "src/tools/celltypist_tutorial_ml.py:140",
+          "tutorial_cells": "ml cells 49 (predicted_labels) and 51 (majority_voting); main tutorial cells 41 and 60 (majority_voting). 0-based cell indices of the executed notebooks."
+        },
+        {
+          "call": "DotPlot.make_figure(); dp.fig.savefig(png, bbox_inches='tight', dpi=150); dp.dot_size_df / dp.dot_color_df .to_csv",
+          "location": "scanpy/plotting/_baseplot_class.py::BasePlot.make_figure::647 (scanpy 1.12.4). Same render path as BasePlot.savefig::846, but saving the DotPlot's own figure instead of pyplot's current figure.",
+          "note": "dot_size_df / dot_color_df are read from the DotPlot that upstream built; the fraction/mean-probability computation is not re-implemented."
+        },
+        {
+          "call": "celltypist.classifier.AnnotationResult(labels, decision_mat, prob_mat, adata)",
+          "location": "repo/celltypist/celltypist/classifier.py::AnnotationResult.__init__::50 (class at :22)",
+          "wrapper_line": "src/tools/celltypist_tutorial_ml.py:52-83 (_load_annotation_result)"
+        },
+        {
+          "call": "pd.crosstab(obs[reference_key], predicted_labels[use_as_prediction])",
+          "location": "tutorial code, ml cell 47: pd.crosstab(adata.obs.cell_type, adata.obs.majority_voting).loc[['Microglia','Macro_pDC']]",
+          "wrapper_line": "src/tools/celltypist_tutorial_ml.py:156"
+        },
+        {
+          "call": "probability_matrix.loc[obs[reference_key] == group].plot(kind='box', rot=90, figsize=[max(8, 0.25*n_types), 4], title=group)",
+          "location": "tutorial code, ml cell 82: adata.obs.loc[adata.obs.cell_type == 'Microglia', new_model.cell_types].plot(kind='box', rot=90, figsize=[8, 4], title='Microglia')",
+          "wrapper_line": "src/tools/celltypist_tutorial_ml.py:166-176"
+        }
+      ],
+      "parameters": [
+        {"name": "annotation_dir", "required": true, "source": "composition contract with celltypist_annotate_cells (scanner tool_review io_adaptations); files written by AnnotationResult.to_table(folder) (classifier.py:188) plus to_adata().write_h5ad"},
+        {"name": "reference_key", "required": true, "source": "dotplot use_as_reference (plot.py:76); tutorial demo value 'cell_type' is not hard-coded"},
+        {"name": "use_as_prediction", "default": "majority_voting", "source": "upstream dotplot default (plot.py:77); tutorial uses both values (ml cells 49/51); crosstab uses the same column (ml cell 47 used majority_voting)"},
+        {"name": "reference_groups", "default": null, "source": "ml cells 47 (.loc[['Microglia','Macro_pDC']]) and 82 (per-group boxplots); user-supplied, demo names not hard-coded. Matched against reference values as strings so numeric cluster IDs work; duplicates removed preserving order."},
+        {"name": "plot_group_probabilities", "default": true, "source": "toggle for the ml cell 82 boxplots; only acts when reference_groups is given"},
+        {"name": "output_dir", "default": null, "source": "implementer format rule; None -> <tempfile.gettempdir()>/celltypist_mcp_outputs. A fresh tempfile.mkdtemp subdirectory 'compare_with_reference_<YYYYmmdd_HHMMSS>_<random>' is created per call (line 136), only after all input checks pass."}
+      ],
+      "parameters_not_exposed": [
+        {"name": "filter_prediction", "reason": "Upstream defect in this environment. celltypist.dotplot(..., filter_prediction>0) raises KeyError on an in-memory upstream AnnotationResult, with no CSV round-trip involved. The filtered dot_size_df keeps a CategoricalIndex with all categories (plot.py:157-158, :174), and scanpy 1.12.4 DotPlot then reorders by the unused categories (_dotplot.py:325-331). Evidence: tmp/impl_celltypist_tutorial_ml/scripts/probe_filter_prediction_upstream.py, log tmp/impl_celltypist_tutorial_ml/logs/probe_filter_prediction_upstream.log (0.0 works; 0.2 gives KeyError for both return_fig=True and False). Attempt 1 exposed it and failed the smoke; attempt 2 removed it. It was not used in either tutorial. Not worked around."},
+        {"name": "prediction_order / reference_order / title / swap_axes / cmap etc.", "reason": "Not used in the tutorials and no clear user need; upstream defaults are kept."}
+      ],
+      "io_adaptations": [
+        "AnnotationResult reconstruction (_load_annotation_result). predicted_labels.csv is read with index_col=0, dtype=str and keep_default_na=False, so cell IDs, Leiden IDs and labels stay literal strings. predicted_labels and majority_voting are converted with astype('category'). This reproduces upstream's sorted categories (classifier.py:389 dtype='category'; :498 astype('category')), which dotplot uses for row order (plot.py:48). over_clustering is left as str because it is not used. decision_matrix.csv and probability_matrix.csv are read with index_col=0 and converters={0: str}, so numeric-looking cell IDs are not coerced. Their column headers (model cell types, including names with '/') are preserved.",
+        "annotated.h5ad is opened with anndata.read_h5ad(..., backed='r'), so X stays on disk; only obs is used. The file handle is closed in a finally block.",
+        "Alignment checks. Cell IDs in predicted_labels.csv must be unique, and must be identical in order and value to the decision_matrix.csv index, the probability_matrix.csv index and the annotated.h5ad obs_names. decision and probability columns must be equal. Otherwise the tool raises ValueError, naming the first mismatching row. This is needed because _get_fraction_prob_df mixes label-indexed Series with a positional score list (plot.py:40-42).",
+        "Probabilities for the boxplots come from probability_matrix.csv, not from to_adata(insert_prob=True) obs columns (h5ad '/'-name issue). The columns are model.cell_types in model order, so the selection is equivalent to ml cell 82.",
+        "The crosstab uses obs[reference_key] from annotated.h5ad and predicted_labels.csv[use_as_prediction]. These are the same values that to_adata inserts into obs (classifier.py:114), so it equals ml cell 47's adata.obs crosstab.",
+        "Input errors are raised before any output directory is created: missing dir/files, missing reference_key, missing majority_voting column, absent reference groups, misaligned cell IDs.",
+        "stdout is redirected to stderr for the duration of the call (celltypist's logger already uses stderr). Figures use the Agg backend and are closed after saving."
+      ],
+      "outputs": {
+        "files_in_fresh_dir": {
+          "dotplot.png": "celltypist.dotplot figure (150 dpi)",
+          "dotplot_fraction.csv": "dp.dot_size_df: fraction of each reference group (columns) assigned to each predicted label (rows); index_label = use_as_prediction",
+          "dotplot_mean_probability.csv": "dp.dot_color_df: mean probability of the predicted label within each reference group",
+          "crosstab.csv": "full pd.crosstab: reference_key rows x use_as_prediction columns (cell counts)",
+          "probability_boxplot_<NN>_<safe group name>.png": "one per reference group when reference_groups is given and plot_group_probabilities is true"
+        },
+        "return_fields": ["message", "reference", "artifacts[{description, path(absolute)}]", "output_dir", "n_cells", "reference_key", "use_as_prediction", "n_reference_groups", "n_predicted_labels", "n_cells_missing_reference", "reference_group_sizes {group: n} (crosstab row sums)", "selected_groups {group: {n_cells, prediction_counts {label: count>0, descending}}} (only when reference_groups is given; the ml cell 47 .loc rows, without zero columns)"],
+        "no_metrics_added": "No accuracy, agreement or other statistics beyond the crosstab counts and the dotplot's own tables."
+      },
+      "deviations": [
+        "Boxplot width: the tutorial used figsize=[8, 4] with a 10-type custom model. The wrapper keeps 8 inches up to 32 model cell types and uses 0.25 inch per type beyond that (98-type Immune_All_Low gives 24.5 in), because the [8, 4] figure was unreadable for the built-in model (checked visually in attempt 2). This is presentation only; plotted values are unchanged. Attempt 3.",
+        "filter_prediction is not exposed (upstream defect, see parameters_not_exposed).",
+        "The tutorial's two-group crosstab subset (.loc[['Microglia','Macro_pDC']]) becomes (a) the full crosstab CSV and (b) nonzero counts for the user's reference_groups in the result. No second subset CSV is written.",
+        "Figures are saved at dpi=150 with bbox_inches='tight' instead of shown inline."
+      ]
+    }
+  ],
+  "implementation_attempts": [
+    {"attempt": 1, "sha256": "22f5ba54d52c4292a5e8e9edcdf4a6757a9a10b49a1f549845212b5d045e006b", "archived_copy": "tmp/impl_celltypist_tutorial_ml/attempt1_celltypist_tutorial_ml.py", "outcome": "Checks 1-3 (crosstab, dotplot tables, boxplots) passed. A filter_prediction=0.2 call raised upstream KeyError, confirmed to be upstream with probe_filter_prediction_upstream.py. Log: tmp/impl_celltypist_tutorial_ml/logs/smoke_attempt1.{stdout,stderr}"},
+    {"attempt": 2, "change": "removed filter_prediction parameter and n_dotplot_predicted_labels field", "outcome": "smoke 28/28 (logs/smoke_attempt2.stdout). Visual review: 98-type boxplot labels overlapped at [8, 4]."},
+    {"attempt": 3, "change": "boxplot width max(8, 0.25*n_types)", "sha256": "c6ee78ae8fea3e712ba92e845bfdc3a7c9461ec5d13c122b3cd5e8b0350718c2", "outcome": "smoke 28/28 (logs/smoke_attempt3.stdout); stdio check passed; boxplot legible. Final."}
+  ],
+  "dev_fixtures": {
+    "dir": "tmp/impl_celltypist_tutorial_ml/fixtures/",
+    "builder": "tmp/impl_celltypist_tutorial_ml/scripts/build_dev_fixtures.py (sha256 d1c646e64062bdda277b83c37673d282e3b13a1e0cc70b30dfc8e91255d1d281)",
+    "command": "cd $PROJECT_ROOT && CELLTYPIST_FOLDER=$PROJECT_ROOT/tmp/impl_celltypist_tutorial_ml/celltypist_home MPLCONFIGDIR=... NUMBA_CACHE_DIR=... $PROJECT_PYTHON tmp/impl_celltypist_tutorial_ml/scripts/build_dev_fixtures.py  -> rc 0, 48 s",
+    "model_cache": "tmp/impl_celltypist_tutorial_ml/celltypist_home/data/models/{Immune_All_Low.pkl sha256 290874d3..., models.json sha256 f617fcd7...}, copied from notebooks/celltypist_tutorial_ml/data/. Nothing was downloaded.",
+    "fixtures": {
+      "builtin_bestmatch": "celltypist.annotate(demo_500_cells.h5ad, model='Immune_All_Low.pkl', mode='best match', majority_voting=True) -> to_table(dir) + to_adata().write_h5ad(dir/annotated.h5ad)",
+      "custom_seed0_probmatch": "celltypist.annotate(demo_500_cells.h5ad, model=<abs>/notebooks/celltypist_tutorial_ml/data/model_from_immune2000_seed0_run1_njobs10.pkl, mode='prob match', p_thres=0.5, majority_voting=True) -> same writes"
+    },
+    "byte_identity_with_executor_reference": "predicted_labels.csv, decision_matrix.csv and probability_matrix.csv of both fixtures are sha256-identical to notebooks/celltypist_tutorial_ml/reference/{builtin_bestmatch,custom_seed0_probmatch}/. Over-clustering and majority voting reproduced exactly in this environment."
+  },
+  "smoke_check": {
+    "command": "cd $PROJECT_ROOT && CELLTYPIST_FOLDER=$PROJECT_ROOT/tmp/impl_celltypist_tutorial_ml/celltypist_home $PROJECT_PYTHON tmp/impl_celltypist_tutorial_ml/scripts/smoke_check.py",
+    "script_sha256": "5ef22afb3f14a205062067f92d27a5b8507d21f3f6fa561ed83d280bb6df0626",
+    "transport": "fastmcp.Client(celltypist_tutorial_ml_mcp) in-memory; call_tool + result.data",
+    "outcome": "28/28 passed, rc 0 (tmp/impl_celltypist_tutorial_ml/smoke_results.json, logs/smoke_attempt3.stdout)",
+    "key_results": {
+      "ml_cell47_bestmatch_majority_voting_rows": {
+        "Microglia": {"Macrophages": 32, "DC1": 13, "Alveolar macrophages": 8, "pDC": 5, "Endothelial cells": 1, "Neutrophil-myeloid progenitor": 1},
+        "Macro_pDC": {"pDC": 34, "Alveolar macrophages": 5, "Macrophages": 1},
+        "matches": "reference/builtin_bestmatch/crosstab_cell_type_x_majority_voting_Microglia_Macro_pDC.csv exactly, and the executed notebook's cell 47 output"
+      },
+      "full_crosstab_and_dotplot_tables": "max_abs_diff 0 against reference CSVs for builtin best match (majority_voting and predicted_labels) and custom seed0 prob match (majority_voting): crosstab, dotplot fraction, dotplot mean probability",
+      "custom_probmatch_selected_groups": {"Microglia": {"Unassigned": 51, "pDC": 4, "Macrophages|pDC": 2, "DC1": 1, "Endothelial cells": 1, "Neutrophil-myeloid progenitor": 1}, "Macro_pDC": {"Macrophages|pDC": 35, "Macrophages": 3, "Unassigned": 2}},
+      "figures_viewed": "dotplot.png (best match, majority_voting) matches notebooks/celltypist_tutorial_ml/images/figure_4.png (ml cell 51): same rows, columns, diagonal order, sizes and colours, higher dpi. The custom-model Microglia and Macro_pDC boxplots match reference/figures/custom_seed0_boxplot_*.png and ml cell 82: Kupffer cells is the highest Microglia distribution, and Macrophages and pDC are near 1 for Macro_pDC. The 98-type built-in boxplot is legible after attempt 3.",
+      "changed_input": "renamed reference column 'author_label' with renamed groups grp_*. Counts are identical to the cell_type run, and the input h5ad is not mutated.",
+      "errors_checked": ["missing reference_key", "absent group", "missing annotation_dir", "majority_voting column absent (then predicted_labels succeeds)", "misaligned cell IDs (reversed probability rows)", "no output dir created on input error"],
+      "repeat_calls": "each call created a distinct compare_with_reference_* directory"
+    },
+    "stdio_check": {
+      "command": "$PROJECT_PYTHON tmp/impl_celltypist_tutorial_ml/scripts/stdio_check.py (PythonStdioTransport -> scripts/stdio_server.py -> celltypist_tutorial_ml_mcp.run())",
+      "outcome": "rc 0; tool listed; Microglia counts identical; 6 artifacts exist. Protocol stdout not polluted (logs/stdio_check.{stdout,stderr})."
+    }
+  },
+  "verifier_notes": [
+    "Compare dotplot_fraction/mean_probability CSVs with a direct in-memory celltypist.dotplot(..., return_fig=True).dot_size_df/dot_color_df on the same annotate result. This tests the CSV reconstruction, especially category order of predicted_labels/majority_voting and multi-label names such as 'Macrophages|pDC'.",
+    "The input contract assumes celltypist_annotate_cells writes exactly predicted_labels.csv, decision_matrix.csv, probability_matrix.csv (to_table, no prefix) and annotated.h5ad (to_adata, insert_prob=False). Check it against the other module's actual output, including the composition call annotate -> compare.",
+    "filter_prediction is intentionally absent because of the upstream KeyError; re-run probe_filter_prediction_upstream.py if the dependency stack changes.",
+    "Default output base when output_dir is None: <tempfile.gettempdir()>/celltypist_mcp_outputs. The coordinator may want this to match the other module's convention.",
+    "Reference groups are matched as strings against the reference values (str(v)). An integer-coded cluster column therefore accepts '3'."
+  ]
+}

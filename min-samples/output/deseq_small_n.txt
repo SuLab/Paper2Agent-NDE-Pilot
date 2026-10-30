@@ -1,0 +1,8 @@
+1 vs 1                                 n=2  resid_df=0  ERROR ValueError: The number of samples and the number of design variables are equal, i.e., there are no replicates to estimate the dispersion. Please use a design with fewer var  
+1 vs 2                                 n=3  resid_df=1  OK  true DE found 166/200, false positives 1; ulm UP score 20.0 (padj 0.0e+00), DECOY -1.5  WARN: As the residual degrees of freedom is less than 3, the distribution of
+2 vs 2                                 n=4  resid_df=2  OK  true DE found 184/200, false positives 11; ulm UP score 20.9 (padj 0.0e+00), DECOY -1.6  WARN: As the residual degrees of freedom is less than 3, the distribution of
+3 vs 3                                 n=6  resid_df=4  OK  true DE found 196/200, false positives 13; ulm UP score 21.2 (padj 0.0e+00), DECOY -3.6  
+4 vs 4                                 n=8  resid_df=6  OK  true DE found 196/200, false positives 19; ulm UP score 22.4 (padj 0.0e+00), DECOY -2.4  
+2 donors paired (~donor+condition)     n=4  resid_df=1  OK  true DE found 181/200, false positives 2; ulm UP score 20.9 (padj 0.0e+00), DECOY -1.5  WARN: As the residual degrees of freedom is less than 3, the distribution of
+3 donors paired                        n=6  resid_df=2  OK  true DE found 196/200, false positives 19; ulm UP score 20.8 (padj 0.0e+00), DECOY -2.2  WARN: As the residual degrees of freedom is less than 3, the distribution of
+4 donors paired                        n=8  resid_df=3  OK  true DE found 197/200, false positives 21; ulm UP score 20.7 (padj 0.0e+00), DECOY -1.7  WARN: As the residual degrees of freedom is less than 3, the distribution of

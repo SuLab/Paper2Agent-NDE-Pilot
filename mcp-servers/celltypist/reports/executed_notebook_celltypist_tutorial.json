@@ -1,0 +1,2794 @@
+{
+ "celltypist_tutorial": {
+  "execution_id": "celltypist_tutorial",
+  "owning_module": "celltypist_tutorial",
+  "generated": "2026-10-27T16:14:58.543483",
+  "status": "success",
+  "source": {
+   "repository": "Teichlab/celltypist",
+   "path": "repo/celltypist/docs/notebook/celltypist_tutorial.ipynb",
+   "revision": "fe357564a6625d3b1732a022fd39f18e55696e80",
+   "url": "https://github.com/Teichlab/celltypist/blob/fe357564a6625d3b1732a022fd39f18e55696e80/docs/notebook/celltypist_tutorial.ipynb",
+   "sha256": "4b5473ccbf3c4e6257ae8c2b6449d998827a8ce3caabf334dafb12bb48450870",
+   "pristine_copy": "notebooks/celltypist_tutorial/source/celltypist_tutorial.ipynb"
+  },
+  "execution_mode": "papermill notebook (kernel celltypist-p2a) + driver script (same upstream APIs on saved inputs) + fresh-process replay script",
+  "execution_path": "notebooks/celltypist_tutorial/celltypist_tutorial_execution_final.ipynb",
+  "inspection_notebook": "notebooks/celltypist_tutorial/celltypist_tutorial_inspection.ipynb",
+  "input_notebook": "notebooks/celltypist_tutorial/celltypist_tutorial_input.ipynb",
+  "notebook_changes": [
+   {
+    "cell_index": 3,
+    "kind": "setup skipped (no computational effect)",
+    "before": "!pip install celltypist",
+    "after": "# [Paper2MCP change 1/2] Upstream cell: `!pip install celltypist` -- skipped.\n# The pinned local source (Teichlab/celltypist @ fe357564a6625d3b1732a022fd39f18e55696e80, celltypist 1.7.1)\n# is preinstalled in the project kernel `celltypist-p2a`; executors must not install packages.\n# This replacement only prints runtime provenance; it performs no computation used later.\nimport os, sys\nfrom importlib.metadata import version as _p2a_version\nprint('python:', sys.executable)\nprint('celltypist (installed dist):', _p2a_version('celltypist'))\nprint('CELLTYPIST_FOLDER =', os.environ.get('CELLTYPIST_FOLDER'))\nprint('cwd =', os.getcwd())",
+    "reason": "Pinned local celltypist source is preinstalled in kernel celltypist-p2a; executors must not install packages (PyPI would give a different version)."
+   },
+   {
+    "cell_index": 16,
+    "kind": "coordinator-authorised download restriction",
+    "before": "# Enabling `force_update = True` will overwrite existing (old) models.\nmodels.download_models(force_update = True)",
+    "after": "# Enabling `force_update = True` will overwrite existing (old) models.\n# [Paper2MCP change 2/2] upstream: models.download_models(force_update = True)  -> would fetch all 61 models in the current index.\n# Coordinator-authorised change: download only the model this tutorial uses.\nmodels.download_models(force_update = True, model = 'Immune_All_Low.pkl')",
+    "reason": "Download only Immune_All_Low.pkl (the only built-in model the tutorial uses) instead of all 61 models in the current index."
+   },
+   {
+    "cell_index": [
+     69,
+     70
+    ],
+    "kind": "appended output-persistence cells (no computation changed)",
+    "after": [
+     "## [Paper2MCP appended] Persist outputs of this run\nThe cells below were appended by the Paper2MCP source executor. They only read objects created above\n(including IPython's `Out` cache for results displayed earlier, e.g. the demo_2000 `predicted_labels` and\n`adata.obs` tables that later cells overwrite) and write them to `reference/notebook_run/`.\nNo CellTypist computation is re-run; `AnnotationResult.to_table` is used only as the upstream CSV writer.",
+     "# [Paper2MCP appended cell] persist native outputs of THIS notebook run\nimport os, sys, json, platform, traceback\nimport numpy as np, pandas as pd\n\n_P2A_OUT = os.path.abspath('reference/notebook_run')\nos.makedirs(_P2A_OUT, exist_ok=True)\n_p2a_status = {'items': {}, 'exec_counts': {}}\n\ndef _p2a_out_by_source(src):\n    \"\"\"Return (execution_count, cached output) of the FIRST executed cell whose source equals `src`.\"\"\"\n    hits = [i for i, s in enumerate(In) if s.strip() == src]\n    if not hits:\n        raise KeyError(f'no executed cell with source {src!r}')\n    n = hits[0]\n    if n not in Out:\n        raise KeyError(f'execution {n} ({src!r}) has no cached output')\n    _p2a_status['exec_counts'][src] = n\n    return Out[n]\n\ndef _p2a_try(name, fn):\n    try:\n        fn()\n        _p2a_status['items'][name] = 'ok'\n    except Exception as e:\n        _p2a_status['items'][name] = 'error: ' + repr(e)\n        traceback.print_exc()\n\ndef _p2a_write_model(m, folder):\n    os.makedirs(folder, exist_ok=True)\n    ct = np.asarray(m.cell_types); ft = np.asarray(m.features)\n    pd.Series(ct, name='cell_type').to_csv(f'{folder}/cell_types.csv', index=False)\n    pd.Series(ft, name='feature').to_csv(f'{folder}/features.csv', index=False)\n    pd.DataFrame(m.classifier.coef_, index=ct, columns=ft).to_csv(f'{folder}/coef.csv')\n    pd.Series(m.classifier.intercept_, index=ct, name='intercept').to_csv(f'{folder}/intercept.csv')\n    pd.DataFrame({'feature': ft, 'scaler_mean': m.scaler.mean_, 'scaler_scale': m.scaler.scale_}).to_csv(f'{folder}/scaler.csv', index=False)\n    np.savez(f'{folder}/model_arrays.npz', cell_types=ct.astype(str), features=ft.astype(str),\n             coef=m.classifier.coef_, intercept=m.classifier.intercept_,\n             scaler_mean=m.scaler.mean_, scaler_scale=m.scaler.scale_)\n    with open(f'{folder}/summary.json', 'w') as fh:\n        json.dump({'n_cell_types': int(len(ct)), 'n_features': int(len(ft)), 'coef_shape': list(m.classifier.coef_.shape),\n                   'description': {k: (v if isinstance(v, (str, int, float)) else str(v)) for k, v in m.description.items()},\n                   'classifier_params': {k: repr(v) for k, v in m.classifier.get_params().items()}}, fh, indent=1)\n\n# (a) demo_2000 + Immune_All_Low.pkl, majority_voting=True: full labels table displayed by `predictions.predicted_labels`\ndef _a():\n    df = _p2a_out_by_source('predictions.predicted_labels')\n    assert isinstance(df, pd.DataFrame) and df.shape[0] == 2000, (type(df), getattr(df, 'shape', None))\n    os.makedirs(f'{_P2A_OUT}/demo2000_ImmuneAllLow_mv', exist_ok=True)\n    df.to_csv(f'{_P2A_OUT}/demo2000_ImmuneAllLow_mv/predicted_labels.csv')\n_p2a_try('demo2000_ImmuneAllLow_mv/predicted_labels.csv', _a)\n\n# (b) same run: `adata.obs` after predictions.to_adata() (cell_type + labels + conf_score)\ndef _b():\n    obs = _p2a_out_by_source('adata.obs')\n    assert isinstance(obs, pd.DataFrame) and obs.shape[0] == 2000 and 'conf_score' in obs, obs.columns\n    os.makedirs(f'{_P2A_OUT}/demo2000_ImmuneAllLow_mv', exist_ok=True)\n    obs.to_csv(f'{_P2A_OUT}/demo2000_ImmuneAllLow_mv/obs_after_to_adata.csv')\n_p2a_try('demo2000_ImmuneAllLow_mv/obs_after_to_adata.csv', _b)\n\n# (c) models.models_description() table as displayed\ndef _c():\n    md = _p2a_out_by_source('models.models_description()')\n    assert isinstance(md, pd.DataFrame)\n    md.to_csv(f'{_P2A_OUT}/models_description.csv', index=False)\n_p2a_try('models_description.csv', _c)\n\n# (d) Immune_All_Low.pkl as loaded by models.Model.load (displayed `model` and `model.cell_types`)\ndef _d():\n    m = _p2a_out_by_source('model')\n    ct = _p2a_out_by_source('model.cell_types')\n    os.makedirs(f'{_P2A_OUT}/immune_all_low_model', exist_ok=True)\n    pd.Series(np.asarray(ct), name='cell_type').to_csv(f'{_P2A_OUT}/immune_all_low_model/cell_types.csv', index=False)\n    with open(f'{_P2A_OUT}/immune_all_low_model/summary.json', 'w') as fh:\n        json.dump({'repr': repr(m), 'n_cell_types': int(len(m.cell_types)), 'n_features': int(len(m.features)),\n                   'description': {k: str(v) for k, v in m.description.items()}}, fh, indent=1)\n_p2a_try('immune_all_low_model/', _d)\n\n# (e) demo_400 + custom model (majority_voting=True): current `predictions` and `adata` (= adata_400 after to_adata)\ndef _e():\n    assert predictions.predicted_labels.shape[0] == 400\n    folder = f'{_P2A_OUT}/demo400_custom_asrun_mv'\n    os.makedirs(folder, exist_ok=True)\n    predictions.to_table(folder)            # upstream writer: predicted_labels / decision_matrix / probability_matrix .csv\n    adata.obs.to_csv(f'{folder}/obs_after_to_adata.csv')\n_p2a_try('demo400_custom_asrun_mv/', _e)\n\n# (f) custom model trained in this run (as reloaded from celltypist_demo_folder/model_from_immune2000.pkl)\ndef _f():\n    _p2a_write_model(model, f'{_P2A_OUT}/custom_model_asrun')\n    same = (np.array_equal(new_model.features, model.features) and np.array_equal(new_model.classifier.coef_, model.classifier.coef_))\n    _p2a_status['new_model_equals_reloaded_model'] = bool(same)\n_p2a_try('custom_model_asrun/', _f)\n\n# (g) model.extract_top_markers(\"Mast cells\", 3)\ndef _g():\n    with open(f'{_P2A_OUT}/top_markers_mast_cells_3.json', 'w') as fh:\n        json.dump({'call': 'model.extract_top_markers(\"Mast cells\", 3)', 'model': 'celltypist_demo_folder/model_from_immune2000.pkl',\n                   'result': [str(x) for x in top_3_genes]}, fh, indent=1)\n_p2a_try('top_markers_mast_cells_3.json', _g)\n\n# (h) runtime\ndef _h():\n    import celltypist, scanpy, anndata, sklearn, scipy, matplotlib, threadpoolctl\n    try:\n        import leidenalg, igraph\n        extra = {'leidenalg': leidenalg.__version__, 'igraph': igraph.__version__}\n    except Exception as e:\n        extra = {'leiden_import_error': repr(e)}\n    info = {'python': sys.version, 'executable': sys.executable, 'platform': platform.platform(),\n            'cpu_count': os.cpu_count(), 'cwd': os.getcwd(),\n            'versions': {'celltypist': celltypist.__version__, 'scanpy': scanpy.__version__, 'anndata': anndata.__version__,\n                         'scikit-learn': sklearn.__version__, 'numpy': np.__version__, 'pandas': pd.__version__,\n                         'scipy': scipy.__version__, 'matplotlib': matplotlib.__version__, **extra},\n            'celltypist_file': celltypist.__file__, 'models_path': models.models_path,\n            'env': {k: os.environ.get(k) for k in ['CELLTYPIST_FOLDER', 'OMP_NUM_THREADS', 'OPENBLAS_NUM_THREADS', 'MKL_NUM_THREADS', 'NUMBA_NUM_THREADS', 'MPLCONFIGDIR', 'NUMBA_CACHE_DIR']},\n            'threadpools': threadpoolctl.threadpool_info()}\n    with open(f'{_P2A_OUT}/runtime.json', 'w') as fh:\n        json.dump(info, fh, indent=1, default=str)\n_p2a_try('runtime.json', _h)\n\nwith open(f'{_P2A_OUT}/capture_status.json', 'w') as fh:\n    json.dump(_p2a_status, fh, indent=1, default=str)\nprint(json.dumps(_p2a_status, indent=1, default=str))"
+    ]
+   }
+  ],
+  "kernel": {
+   "name": "celltypist-p2a",
+   "kernelspec": "celltypist-env/share/jupyter/kernels/celltypist-p2a/kernel.json",
+   "interpreter": "/home/asu/Science/paper2agent-runs/celltypist/celltypist-env/bin/python"
+  },
+  "environment_variables": {
+   "CELLTYPIST_FOLDER": "notebooks/celltypist_tutorial/celltypist_home",
+   "MPLCONFIGDIR/NUMBA_CACHE_DIR/JUPYTER_RUNTIME_DIR/IPYTHONDIR": "notebooks/celltypist_tutorial/.runtime/* (keeps caches inside this namespace)",
+   "definition": "notebooks/celltypist_tutorial/scripts/env.sh"
+  },
+  "commands": [
+   {
+    "step": 1,
+    "command": "cp -p repo/celltypist/docs/notebook/celltypist_tutorial.ipynb notebooks/celltypist_tutorial/source/celltypist_tutorial.ipynb",
+    "exit": 0,
+    "note": "sha256 4b5473cc... equals scanner record"
+   },
+   {
+    "step": 2,
+    "command": "\"$PROJECT_PYTHON\" -I $NB/scripts/prepare_notebook.py $NB/source/celltypist_tutorial.ipynb $NB/celltypist_tutorial_input.ipynb $NB/logs/notebook_changes.json",
+    "exit": 0
+   },
+   {
+    "step": 3,
+    "command": "\"$PROJECT_PYTHON\" -m papermill $NB/celltypist_tutorial_input.ipynb $NB/celltypist_tutorial_execution_attempt1.ipynb -k celltypist-p2a --cwd $NB --log-output --request-save-on-cell-execute",
+    "exit": 0,
+    "wall_s": 321.38,
+    "log": "notebooks/celltypist_tutorial/logs/papermill_attempt1.log",
+    "note": "then renamed (mv) to celltypist_tutorial_execution_final.ipynb; no second notebook run"
+   },
+   {
+    "step": 4,
+    "command": "\"$PROJECT_PYTHON\" -I <skill>/scripts/extract_notebook_images.py celltypist_tutorial_execution_final.ipynb images",
+    "cwd": "$NB",
+    "exit": 0,
+    "note": "6 images"
+   },
+   {
+    "step": 5,
+    "command": "\"$PROJECT_PYTHON\" -I <skill>/scripts/preprocess_notebook.py celltypist_tutorial_execution_final.ipynb celltypist_tutorial_inspection.ipynb",
+    "cwd": "$NB",
+    "exit": 0
+   },
+   {
+    "step": 6,
+    "command": "\"$PROJECT_PYTHON\" -I scripts/extract_notebook_logs.py celltypist_tutorial_execution_final.ipynb source/celltypist_tutorial.ipynb reference/notebook_run",
+    "cwd": "$NB",
+    "exit": 0
+   },
+   {
+    "step": 7,
+    "command": "\"$PROJECT_PYTHON\" -I scripts/stage_inputs.py",
+    "cwd": "$NB",
+    "exit": 0,
+    "wall_s": 13.65,
+    "log": "notebooks/celltypist_tutorial/logs/stage_inputs.log"
+   },
+   {
+    "step": 8,
+    "command": "\"$PROJECT_PYTHON\" -I scripts/driver.py",
+    "cwd": "$NB",
+    "exit": 1,
+    "wall_s": 33.18,
+    "log": "notebooks/celltypist_tutorial/logs/driver_attempt1.log",
+    "note": "driver helper bug: save_annotation returned the AnnData instead of .obs -> KeyError 'cell_type' in agreement(); partial output deleted"
+   },
+   {
+    "step": 9,
+    "command": "\"$PROJECT_PYTHON\" -I scripts/driver.py",
+    "cwd": "$NB",
+    "exit": 0,
+    "wall_s": 100.82,
+    "log": "notebooks/celltypist_tutorial/logs/driver_attempt2.log",
+    "note": "succeeded, but matrices.npz stored cell/class names as object arrays (unloadable with allow_pickle=False); outputs superseded by step 11 (key arrays kept in scratch for a cross-process check, step 13)"
+   },
+   {
+    "step": 10,
+    "command": "\"$PROJECT_PYTHON\" -I scripts/replay.py",
+    "cwd": "$NB",
+    "exit": 1,
+    "wall_s": 41.8,
+    "log": "notebooks/celltypist_tutorial/logs/replay_attempt1.log",
+    "note": "ValueError: Object arrays cannot be loaded when allow_pickle=False (driver npz dtype); fixed in scripts/common.py (np.asarray(..., dtype=str)); driver and replay outputs cleared and rerun"
+   },
+   {
+    "step": 11,
+    "command": "\"$PROJECT_PYTHON\" -I scripts/driver.py",
+    "cwd": "$NB",
+    "exit": 0,
+    "wall_s": 71.28,
+    "log": "notebooks/celltypist_tutorial/logs/driver_attempt3.log",
+    "note": "final reference outputs"
+   },
+   {
+    "step": 12,
+    "command": "\"$PROJECT_PYTHON\" -I scripts/replay.py",
+    "cwd": "$NB",
+    "exit": 0,
+    "wall_s": 61.46,
+    "log": "notebooks/celltypist_tutorial/logs/replay_attempt2.log",
+    "note": "final replay (fresh process)"
+   },
+   {
+    "step": 13,
+    "command": "inline python: compare driver attempt-2 (scratch copies) vs attempt-3 seeded model arrays, demo2000/demo400 decision matrices and labels",
+    "exit": 0,
+    "log": "notebooks/celltypist_tutorial/logs/driver_attempt2_vs_attempt3.txt",
+    "note": "all bitwise identical across the two driver processes"
+   },
+   {
+    "step": 14,
+    "command": "\"$PROJECT_PYTHON\" -I scripts/build_report.py logs/commands.json",
+    "cwd": "$NB",
+    "exit": 0
+   }
+  ],
+  "attempts": [
+   {
+    "what": "notebook execution (papermill)",
+    "attempt": 1,
+    "status": "success",
+    "changes_before": "none"
+   },
+   {
+    "what": "driver.py",
+    "attempt": 1,
+    "status": "failed (own script bug, not upstream)",
+    "fix": "save_annotation returns adata.obs"
+   },
+   {
+    "what": "driver.py",
+    "attempt": 2,
+    "status": "success, superseded",
+    "fix": "npz name arrays stored as unicode (dtype=str)"
+   },
+   {
+    "what": "replay.py",
+    "attempt": 1,
+    "status": "failed (could not load attempt-2 npz)",
+    "fix": "same dtype fix; driver rerun"
+   },
+   {
+    "what": "driver.py",
+    "attempt": 3,
+    "status": "success (final)"
+   },
+   {
+    "what": "replay.py",
+    "attempt": 2,
+    "status": "success (final)"
+   }
+  ],
+  "runtime": {
+   "versions": {
+    "celltypist": "1.7.1",
+    "scanpy": "1.12.4",
+    "anndata": "0.13.4",
+    "scikit-learn": "1.7.2",
+    "numpy": "2.5.4",
+    "pandas": "3.1.0",
+    "scipy": "1.18.1",
+    "matplotlib": "3.11.2",
+    "leidenalg": "0.12.0",
+    "igraph": "1.0.0"
+   },
+   "python": "3.12.13 (main, Mar 10 2026, 18:17:25) [Clang 21.1.4 ]",
+   "platform": "Linux-6.18.54.1-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+   "cpu_count": 20,
+   "blas": [
+    {
+     "internal_api": "openblas",
+     "num_threads": 20,
+     "version": "0.3.34.106.0",
+     "threading_layer": "pthreads",
+     "architecture": "Haswell"
+    },
+    {
+     "internal_api": "openmp",
+     "num_threads": 20,
+     "version": null,
+     "threading_layer": null,
+     "architecture": null
+    },
+    {
+     "internal_api": "openblas",
+     "num_threads": 20,
+     "version": "0.3.31.dev",
+     "threading_layer": "pthreads",
+     "architecture": "Haswell"
+    },
+    {
+     "internal_api": "openmp",
+     "num_threads": 20,
+     "version": null,
+     "threading_layer": null,
+     "architecture": null
+    },
+    {
+     "internal_api": "openmp",
+     "num_threads": 20,
+     "version": null,
+     "threading_layer": null,
+     "architecture": null
+    }
+   ],
+   "thread_env_vars": {
+    "CELLTYPIST_FOLDER": "/home/asu/Science/paper2agent-runs/celltypist/notebooks/celltypist_tutorial/celltypist_home",
+    "OMP_NUM_THREADS": null,
+    "OPENBLAS_NUM_THREADS": null,
+    "MKL_NUM_THREADS": null,
+    "NUMBA_NUM_THREADS": null,
+    "MPLCONFIGDIR": "/home/asu/Science/paper2agent-runs/celltypist/notebooks/celltypist_tutorial/.runtime/mplconfig",
+    "NUMBA_CACHE_DIR": "/home/asu/Science/paper2agent-runs/celltypist/notebooks/celltypist_tutorial/.runtime/numba_cache"
+   },
+   "gpu": "none (use_GPU=False everywhere)",
+   "n_jobs": {
+    "celltypist.train": 10,
+    "celltypist.annotate": "not a parameter (single process; BLAS threads = 20)"
+   },
+   "notebook_cell_durations_s": {
+    "3": 0.03,
+    "4": 8.64,
+    "5": 0.39,
+    "7": 157.88,
+    "9": 0.02,
+    "11": 0.06,
+    "13": 0.03,
+    "16": 21.09,
+    "18": 0.02,
+    "20": 0.03,
+    "22": 0.02,
+    "24": 0.02,
+    "26": 0.02,
+    "28": 36.31,
+    "31": 0.05,
+    "33": 0.05,
+    "35": 0.05,
+    "37": 3.29,
+    "39": 0.41,
+    "41": 0.35,
+    "45": 0.1,
+    "47": 54.18,
+    "49": 18.88,
+    "52": 0.08,
+    "54": 0.1,
+    "56": 5.94,
+    "57": 0.07,
+    "58": 0.73,
+    "59": 0.24,
+    "60": 0.25,
+    "63": 0.04,
+    "64": 0.04,
+    "66": 0.04,
+    "67": 1.51,
+    "68": 1.11,
+    "70": 0.16
+   },
+   "notebook_wall_s": 321.38,
+   "driver_wall_s": 67.9,
+   "replay_wall_s": 57.4,
+   "step_wall_s": {
+    "annotate_demo2000_mv (driver)": 33.28,
+    "annotate_demo2000_nomv (driver)": 4.4,
+    "train_seeded_run1": 11.52,
+    "train_seeded_run2": 4.52,
+    "train_seeded_run3 (replay)": 11.33,
+    "annotate_demo400_seeded_mv (driver)": 6.97
+   }
+  },
+  "data_provenance": {
+   "generated": "2026-10-27T16:06:45.328448",
+   "script": "scripts/stage_inputs.py",
+   "files": {
+    "demo_2000_cells.h5ad": {
+     "path": "notebooks/celltypist_tutorial/data/demo_2000_cells.h5ad",
+     "as_run_path": "notebooks/celltypist_tutorial/celltypist_demo_folder/demo_2000_cells.h5ad",
+     "sha256": "167d038d57bc7aee2854f12c3337cc1f58846f4ae7382745639a0957831bae9b",
+     "as_run_sha256": "167d038d57bc7aee2854f12c3337cc1f58846f4ae7382745639a0957831bae9b",
+     "bytes": 35730948,
+     "as_run_mtime": "2026-10-27T16:03:40.199684",
+     "url": "https://celltypist.cog.sanger.ac.uk/Notebook_demo_data/demo_2000_cells.h5ad",
+     "produced_by": "downloaded by notebook cell 7: sc.read('celltypist_demo_folder/demo_2000_cells.h5ad', backup_url=...)",
+     "validation": {
+      "hdf5_signature": true,
+      "shape": [
+       2000,
+       18950
+      ],
+      "obs_columns": [
+       "cell_type"
+      ],
+      "X_type": "csr_matrix",
+      "X_dtype": "float32",
+      "first_cell_expm1_sum": 10000.0,
+      "cell_type_counts": {
+       "DC1": 200,
+       "Endothelial cells": 200,
+       "Follicular B cells": 200,
+       "Kupffer cells": 200,
+       "Macrophages": 200,
+       "Mast cells": 200,
+       "Neutrophil-myeloid progenitor": 200,
+       "Plasma cells": 200,
+       "gamma-delta T cells": 200,
+       "pDC": 200
+      }
+     },
+     "remote_head_at_staging": {
+      "status": 200,
+      "content_length": "35730948",
+      "content_type": "application/x-hdf",
+      "last_modified": "Sun, 31 Oct 2021 20:51:59 GMT",
+      "etag": "\"ada26e79aaec2901c8e61bed0d3757c8-3\""
+     }
+    },
+    "demo_400_cells.h5ad": {
+     "path": "notebooks/celltypist_tutorial/data/demo_400_cells.h5ad",
+     "as_run_path": "notebooks/celltypist_tutorial/celltypist_demo_folder/demo_400_cells.h5ad",
+     "sha256": "7f1efb7242cf043b6e91b6fdeb99ad025cba152887c5a4567d54f6a748a6a119",
+     "as_run_sha256": "7f1efb7242cf043b6e91b6fdeb99ad025cba152887c5a4567d54f6a748a6a119",
+     "bytes": 7990288,
+     "as_run_mtime": "2026-10-27T16:05:37.906873",
+     "url": "https://celltypist.cog.sanger.ac.uk/Notebook_demo_data/demo_400_cells.h5ad",
+     "produced_by": "downloaded by notebook cell 47: sc.read('celltypist_demo_folder/demo_400_cells.h5ad', backup_url=...)",
+     "validation": {
+      "hdf5_signature": true,
+      "shape": [
+       400,
+       18950
+      ],
+      "obs_columns": [
+       "cell_type"
+      ],
+      "X_type": "csr_matrix",
+      "X_dtype": "float32",
+      "first_cell_expm1_sum": 10000.0009765625,
+      "cell_type_counts": {
+       "DC1": 40,
+       "Endothelial cells": 40,
+       "Follicular B cells": 40,
+       "Kupffer cells": 40,
+       "Macrophages": 40,
+       "Mast cells": 40,
+       "Neutrophil-myeloid progenitor": 40,
+       "Plasma cells": 40,
+       "gamma-delta T cells": 40,
+       "pDC": 40
+      }
+     },
+     "remote_head_at_staging": {
+      "status": 200,
+      "content_length": "7990288",
+      "content_type": "application/x-hdf",
+      "last_modified": "Sun, 31 Oct 2021 20:51:30 GMT",
+      "etag": "\"6c72aa68ebd5db68dcc34b3c95958cf8\""
+     }
+    },
+    "Immune_All_Low.pkl": {
+     "path": "notebooks/celltypist_tutorial/data/Immune_All_Low.pkl",
+     "as_run_path": "notebooks/celltypist_tutorial/celltypist_home/data/models/Immune_All_Low.pkl",
+     "sha256": "290874d35dac039d4c9218c343fde4aac1077709b72a331ce7266f6828c36502",
+     "as_run_sha256": "290874d35dac039d4c9218c343fde4aac1077709b72a331ce7266f6828c36502",
+     "bytes": 2824990,
+     "as_run_mtime": "2026-10-27T16:04:01.677566",
+     "url": "https://celltypist.cog.sanger.ac.uk/models/Pan_Immune_CellTypist/v2/Immune_All_Low.pkl",
+     "produced_by": "downloaded by notebook cell 16: models.download_models(force_update=True, model='Immune_All_Low.pkl')",
+     "validation": {
+      "pickle_header": true,
+      "n_cell_types": 98,
+      "n_features": 6639,
+      "description": {
+       "date": "2022-07-16 00:20:42.927778",
+       "details": "immune sub-populations combined from 20 tissues of 18 studies",
+       "url": "https://celltypist.cog.sanger.ac.uk/models/Pan_Immune_CellTypist/v2/Immune_All_Low.pkl",
+       "source": "https://doi.org/10.1126/science.abl5197",
+       "version": "v2",
+       "number_celltypes": "98"
+      }
+     },
+     "remote_head_at_staging": {
+      "status": 200,
+      "content_length": "2824990",
+      "content_type": "application/octet-stream",
+      "last_modified": "Sat, 16 Jul 2022 21:06:41 GMT",
+      "etag": "\"f0ecbcf5687f2dff6dc5a46cecc9dab5\""
+     }
+    },
+    "models.json": {
+     "path": "notebooks/celltypist_tutorial/data/models.json",
+     "as_run_path": "notebooks/celltypist_tutorial/celltypist_home/data/models/models.json",
+     "sha256": "f617fcd7863b08e6ba2dca1db959d60d6f82f06a0833897e8968c9164a18b132",
+     "as_run_sha256": "f617fcd7863b08e6ba2dca1db959d60d6f82f06a0833897e8968c9164a18b132",
+     "bytes": 25568,
+     "as_run_mtime": "2026-10-27T16:03:41.859983",
+     "url": "https://celltypist.cog.sanger.ac.uk/models/models.json",
+     "produced_by": "downloaded by notebook cell 16 (get_models_index(force_update=True) inside download_models)",
+     "validation": {
+      "json_models": 61,
+      "default_model": [
+       "Immune_All_Low.pkl"
+      ]
+     },
+     "remote_head_at_staging": {
+      "status": 200,
+      "content_length": "25568",
+      "content_type": "text/plain",
+      "last_modified": "Mon, 16 Mar 2026 16:08:46 GMT",
+      "etag": "\"89e241c3334a57378e8c5985ed1c4065\""
+     }
+    },
+    "model_from_immune2000.pkl": {
+     "path": "notebooks/celltypist_tutorial/data/model_from_immune2000.pkl",
+     "as_run_path": "notebooks/celltypist_tutorial/celltypist_demo_folder/model_from_immune2000.pkl",
+     "sha256": "b791a0bcbb0653f97cf5ebd122d0b5f6ea649799258bce670be2f05d2f866350",
+     "as_run_sha256": "b791a0bcbb0653f97cf5ebd122d0b5f6ea649799258bce670be2f05d2f866350",
+     "bytes": 293616,
+     "as_run_mtime": "2026-10-27T16:05:57.377856",
+     "url": null,
+     "produced_by": "written by notebook cell 52: new_model.write('celltypist_demo_folder/model_from_immune2000.pkl') from the unseeded celltypist.train(adata_2000, labels='cell_type', n_jobs=10, feature_selection=True) of cell 49",
+     "validation": {
+      "pickle_header": true,
+      "n_cell_types": 10,
+      "n_features": 2595,
+      "description": {
+       "date": "2026-10-27 16:05:56.878562",
+       "details": "",
+       "url": "",
+       "source": "",
+       "version": "",
+       "number_celltypes": "10"
+      }
+     }
+    }
+   },
+   "immune_all_low_index_entry": {
+    "filename": "Immune_All_Low.pkl",
+    "url": "https://celltypist.cog.sanger.ac.uk/models/Pan_Immune_CellTypist/v2/Immune_All_Low.pkl",
+    "version": "v2",
+    "date": "2022-07-16 00:20:42.927778",
+    "details": "immune sub-populations combined from 20 tissues of 18 studies",
+    "No_celltypes": 98,
+    "source": "https://doi.org/10.1126/science.abl5197",
+    "default": true
+   },
+   "models_json_n_models": 61
+  },
+  "model_provenance": {
+   "Immune_All_Low.pkl": {
+    "index_entry": {
+     "filename": "Immune_All_Low.pkl",
+     "url": "https://celltypist.cog.sanger.ac.uk/models/Pan_Immune_CellTypist/v2/Immune_All_Low.pkl",
+     "version": "v2",
+     "date": "2022-07-16 00:20:42.927778",
+     "details": "immune sub-populations combined from 20 tissues of 18 studies",
+     "No_celltypes": 98,
+     "source": "https://doi.org/10.1126/science.abl5197",
+     "default": true
+    },
+    "sha256": "290874d35dac039d4c9218c343fde4aac1077709b72a331ce7266f6828c36502",
+    "same_build_as_upstream_stored_output": true,
+    "pickled_with_sklearn": "0.24.1 (InconsistentVersionWarning on unpickle under 1.7.2; celltypist.classifier suppresses UserWarning)"
+   },
+   "models.json": {
+    "n_models": 61,
+    "sha256": "f617fcd7863b08e6ba2dca1db959d60d6f82f06a0833897e8968c9164a18b132"
+   },
+   "model_from_immune2000.pkl (as-run, unseeded)": {
+    "sha256": "b791a0bcbb0653f97cf5ebd122d0b5f6ea649799258bce670be2f05d2f866350",
+    "n_features": 2595,
+    "n_cell_types": 10,
+    "trained_by": "notebook cell 49, random_state not set (SGD unseeded)"
+   },
+   "model_seeded_rs0_run1.pkl / run2.pkl (deterministic reference)": {
+    "run1": {
+     "pkl": "notebooks/celltypist_tutorial/data/model_seeded_rs0_run1.pkl",
+     "pkl_sha256": "45cfb04b781fc0cc53e59d53cb0fdef812a36e9d05b71a1b44c8556c3f247733",
+     "n_features": 2652
+    },
+    "run2": {
+     "pkl": "notebooks/celltypist_tutorial/data/model_seeded_rs0_run2.pkl",
+     "pkl_sha256": "1a170b20caa801b3d830d1c331453c9ae0b9a840844adb8804d25cf4ab1bf637",
+     "n_features": 2652
+    },
+    "note": "pkl sha256 differ only because Model.description['date'] = datetime.now() at training time; arrays are compared in seed_provenance"
+   }
+  },
+  "seed_provenance": {
+   "tutorial_call_unseeded": "celltypist.train(adata_2000, labels='cell_type', n_jobs=10, feature_selection=True) -> SGDClassifier(random_state=None) uses numpy's global RNG",
+   "kwargs_forwarding_confirmed": "train(**kwargs) -> _SGDClassifier(..., **kwargs) -> SGDClassifier(random_state=0) (first round) and _LRClassifier(..., **kwargs) -> LogisticRegression(random_state=0) (second round); repo/celltypist/celltypist/train.py",
+   "seeded_call": "celltypist.train(adata_2000, labels='cell_type', n_jobs=10, feature_selection=True, random_state=0)",
+   "run1_vs_run2_same_process": {
+    "cell_types_identical": true,
+    "features_identical_incl_order": true,
+    "n_features": [
+     2652,
+     2652
+    ],
+    "features_jaccard": 1.0,
+    "coef_bitwise_identical": true,
+    "coef_max_abs_diff": 0.0,
+    "intercept_bitwise_identical": true,
+    "intercept_max_abs_diff": 0.0,
+    "scaler_identical": true,
+    "description_dates": [
+     "2026-10-27 16:12:41.537304",
+     "2026-10-27 16:12:46.314733"
+    ]
+   },
+   "run3_fresh_process_vs_run1": {
+    "wall_seconds": 11.330706000007922,
+    "log": [
+     "\ud83c\udf73 Preparing data before training",
+     "\u2702\ufe0f 2749 non-expressed genes are filtered out",
+     "\ud83d\udd2c Input data has 2000 cells and 16201 genes",
+     "\u2696\ufe0f Scaling input data",
+     "\ud83c\udfcb\ufe0f Training data using SGD logistic regression",
+     "\ud83d\udd0e Selecting features",
+     "\ud83e\uddec 2652 features are selected",
+     "\ud83c\udfcb\ufe0f Starting the second round of training",
+     "\ud83c\udfcb\ufe0f Training data using logistic regression",
+     "\u2705 Model training done!"
+    ],
+    "n_features": 2652,
+    "features_identical_incl_order": true,
+    "cell_types_identical": true,
+    "coef_bitwise_identical": true,
+    "coef_max_abs_diff": 0.0,
+    "intercept_bitwise_identical": true,
+    "scaler_identical": true
+   },
+   "asrun_vs_seeded": {
+    "cell_types_identical": true,
+    "features_identical_incl_order": false,
+    "n_features": [
+     2595,
+     2652
+    ],
+    "features_jaccard": 0.3921464579464049,
+    "description_dates": [
+     "2026-10-27 16:05:56.878562",
+     "2026-10-27 16:12:41.537304"
+    ]
+   },
+   "majority_voting": "sc.tl.leiden(random_state=0 default, flavor='igraph', n_iterations=2); PCA/neighbors via scanpy defaults (random_state=0)",
+   "umap": "sc.tl.umap default random_state=0 (figures only)"
+  },
+  "key_results": {
+   "demo2000_ImmuneAllLow_features_used": 5645,
+   "demo2000_label_agreement_with_author_cell_type": {
+    "predicted_labels": {
+     "n_equal": 1769,
+     "n": 2000,
+     "fraction": 0.8845
+    },
+    "majority_voting": {
+     "n_equal": 1778,
+     "n": 2000,
+     "fraction": 0.889
+    }
+   },
+   "demo2000_label_agreement_per_group": {
+    "predicted_labels": {
+     "DC1": 1.0,
+     "Endothelial cells": 0.985,
+     "Follicular B cells": 0.98,
+     "Kupffer cells": 0.995,
+     "Macrophages": 0.015,
+     "Mast cells": 0.995,
+     "Neutrophil-myeloid progenitor": 0.91,
+     "Plasma cells": 0.99,
+     "gamma-delta T cells": 0.985,
+     "pDC": 0.99
+    },
+    "majority_voting": {
+     "DC1": 0.995,
+     "Endothelial cells": 0.97,
+     "Follicular B cells": 0.99,
+     "Kupffer cells": 1.0,
+     "Macrophages": 0.0,
+     "Mast cells": 1.0,
+     "Neutrophil-myeloid progenitor": 0.985,
+     "Plasma cells": 0.98,
+     "gamma-delta T cells": 1.0,
+     "pDC": 0.97
+    }
+   },
+   "demo2000_n_over_clusters": 46,
+   "custom_model_asrun": {
+    "n_features": 2595,
+    "cell_types": [
+     "DC1",
+     "Endothelial cells",
+     "Follicular B cells",
+     "Kupffer cells",
+     "Macrophages",
+     "Mast cells",
+     "Neutrophil-myeloid progenitor",
+     "Plasma cells",
+     "gamma-delta T cells",
+     "pDC"
+    ],
+    "demo400_features_used": 2595,
+    "Mast_cells_top3": [
+     "TPSB2",
+     "SLC45A3",
+     "CPA3"
+    ]
+   },
+   "custom_model_seeded_rs0": {
+    "n_features": 2652,
+    "Mast_cells_top3": [
+     "TPSB2",
+     "KRT1",
+     "SLC45A3"
+    ],
+    "demo400_features_used": 2652,
+    "demo400_agreement_with_author_cell_type": {
+     "predicted_labels": 1.0,
+     "majority_voting": 0.9925
+    }
+   },
+   "models_description_rows": 61,
+   "comparison_with_upstream_stored_outputs": {
+    "cell 9 adata_2000.shape": {
+     "this_run": "(2000, 18950)",
+     "upstream_stored_output": "(2000, 18950)",
+     "equal": true
+    },
+    "cell 16 total models in list": {
+     "this_run": "Total models in list: 61",
+     "upstream_stored_output": "Total models in list: 12",
+     "equal": false
+    },
+    "cell 24 model repr header": {
+     "this_run": "CellTypist model with 98 cell types and 6639 features",
+     "upstream_stored_output": "CellTypist model with 98 cell types and 6639 features",
+     "equal": true
+    },
+    "cell 24 model date": {
+     "this_run": "date: 2022-07-16 00:20:42.927778",
+     "upstream_stored_output": "date: 2022-07-16 00:20:42.927778",
+     "equal": true
+    },
+    "cell 24 model version": {
+     "this_run": "version: v2",
+     "upstream_stored_output": "version: v2",
+     "equal": true
+    },
+    "cell 28 features used": {
+     "this_run": "5645 features used for prediction",
+     "upstream_stored_output": "5645 features used for prediction",
+     "equal": true
+    },
+    "cell 28 over-clustering resolution": {
+     "this_run": "resolution set to 5",
+     "upstream_stored_output": "resolution set to 5",
+     "equal": true
+    },
+    "cell 49 non-expressed genes": {
+     "this_run": "2749 non-expressed genes are filtered out",
+     "upstream_stored_output": "2749 non-expressed genes are filtered out",
+     "equal": true
+    },
+    "cell 49 features selected": {
+     "this_run": "2595 features are selected",
+     "upstream_stored_output": "2607 features are selected",
+     "equal": false
+    },
+    "cell 56 features used": {
+     "this_run": "2595 features used for prediction",
+     "upstream_stored_output": "2607 features used for prediction",
+     "equal": false
+    },
+    "cell 66 top 3 Mast cells markers": {
+     "this_run": "array(['TPSB2', 'SLC45A3', 'CPA3'], dtype=object)",
+     "upstream_stored_output": "array(['TPSB2', 'TPSAB1', 'CPA3'], dtype=object)",
+     "equal": false
+    },
+    "cell 26 Immune_All_Low cell_types": {
+     "equal": true,
+     "this_run_len": 2152,
+     "upstream_len": 2152
+    },
+    "cell 64 custom model cell_types": {
+     "equal": true,
+     "this_run_len": 210,
+     "upstream_len": 210
+    },
+    "cell 31 predicted_labels display": {
+     "equal_text": false,
+     "this_run": "                       predicted_labels over_clustering  \\\ncell1                      Plasma cells               0   \ncell2                      Plasma cells               1   \ncell3                      Plasma cells               2   \ncell4                      Plasma cells               3   \ncell5                      Plasma cells               4   \n...                                 ...             ...   \ncell1996                        HSC/MPP              44   \ncell1997  Neutrophil-myeloid progenitor              45   \ncell1998  Neutrophil-myeloid progenitor              41   \ncell1999  Neutrophil-myeloid progenitor              45   \ncell2000  Neutrophil-myeloid progenitor              42   \n\n                        majority_voting  \ncell1                      Plasma cells  \ncell2                      Plasma cells  \ncell3               gamma-delta T cells  \ncell4                      Plasma cells  \ncell5                      Plasma cells  \n...                                 ...  \ncell1996  Neutrophil-myeloid progenitor  \ncell1997  Neutrophil-myeloid progenitor  \ncell1998  Neutrophil-myeloid progenitor  \ncell1999  Neutrophil-myeloid progenitor  \ncell2000  Neutrophil-myeloid progenitor  \n\n[2000 rows x 3 columns]",
+     "upstream_stored_output": "                       predicted_labels over_clustering  \\\ncell1                      Plasma cells              44   \ncell2                      Plasma cells              12   \ncell3                      Plasma cells              36   \ncell4                      Plasma cells               1   \ncell5                      Plasma cells               1   \n...                                 ...             ...   \ncell1996                        HSC/MPP               9   \ncell1997  Neutrophil-myeloid progenitor              27   \ncell1998  Neutrophil-myeloid progenitor              28   \ncell1999  Neutrophil-myeloid progenitor              27   \ncell2000  Neutrophil-myeloid progenitor               9   \n\n                        majority_voting  \ncell1                      Plasma cells  \ncell2                      Plasma cells  \ncell3               gamma-delta T cells  \ncell4                      Plasma cells  \ncell5                      Plasma cells  \n...                                 ...  \ncell1996  Neutrophil-myeloid progenitor  \ncell1997  Neutrophil-myeloid progenitor  \ncell1998  Neutrophil-myeloid progenitor  \ncell1999  Neutrophil-myeloid progenitor  \ncell2000  Neutrophil-myeloid progenitor  \n\n[2000 rows x 3 columns]"
+    },
+    "cell 35 adata.obs display": {
+     "equal_text": false,
+     "this_run": "                              cell_type               predicted_labels  \\\ncell1                      Plasma cells                   Plasma cells   \ncell2                      Plasma cells                   Plasma cells   \ncell3                      Plasma cells                   Plasma cells   \ncell4                      Plasma cells                   Plasma cells   \ncell5                      Plasma cells                   Plasma cells   \n...                                 ...                            ...   \ncell1996  Neutrophil-myeloid progenitor                        HSC/MPP   \ncell1997  Neutrophil-myeloid progenitor  Neutrophil-myeloid progenitor   \ncell1998  Neutrophil-myeloid progenitor  Neutrophil-myeloid progenitor   \ncell1999  Neutrophil-myeloid progenitor  Neutrophil-myeloid progenitor   \ncell2000  Neutrophil-myeloid progenitor  Neutrophil-myeloid progenitor   \n\n         over_clustering                majority_voting  conf_score  \ncell1                  0                   Plasma cells    0.999762  \ncell2                  1                   Plasma cells    0.999926  \ncell3                  2            gamma-delta T cells    0.955991  \ncell4                  3                   Plasma cells    0.999883  \ncell5                  4                   Plasma cells    0.999890  \n...                  ...                            ...         ...  \ncell1996              44  Neutrophil-myeloid progenitor    0.152962  \ncell1997              45  Neutrophil-myeloid progenitor    0.810408  \ncell1998              41  Neutrophil-myeloid progenitor    0.961021  \ncell1999              45  Neutrophil-myeloid progenitor    0.131777  \ncell2000              42  Neutrophil-myeloid progenitor    0.985607  \n\n[2000 rows x 5 columns]",
+     "upstream_stored_output": "                              cell_type               predicted_labels  \\\ncell1                      Plasma cells                   Plasma cells   \ncell2                      Plasma cells                   Plasma cells   \ncell3                      Plasma cells                   Plasma cells   \ncell4                      Plasma cells                   Plasma cells   \ncell5                      Plasma cells                   Plasma cells   \n...                                 ...                            ...   \ncell1996  Neutrophil-myeloid progenitor                        HSC/MPP   \ncell1997  Neutrophil-myeloid progenitor  Neutrophil-myeloid progenitor   \ncell1998  Neutrophil-myeloid progenitor  Neutrophil-myeloid progenitor   \ncell1999  Neutrophil-myeloid progenitor  Neutrophil-myeloid progenitor   \ncell2000  Neutrophil-myeloid progenitor  Neutrophil-myeloid progenitor   \n\n         over_clustering                majority_voting  conf_score  \ncell1                 44                   Plasma cells    0.999762  \ncell2                 12                   Plasma cells    0.999926  \ncell3                 36            gamma-delta T cells    0.955991  \ncell4                  1                   Plasma cells    0.999883  \ncell5                  1                   Plasma cells    0.999890  \n...                  ...                            ...         ...  \ncell1996               9  Neutrophil-myeloid progenitor    0.152962  \ncell1997              27  Neutrophil-myeloid progenitor    0.810408  \ncell1998              28  Neutrophil-myeloid progenitor    0.961021  \ncell1999              27  Neutrophil-myeloid progenitor    0.131777  \ncell2000               9  Neutrophil-myeloid progenitor    0.985607  \n\n[2000 rows x 5 columns]"
+    }
+   }
+  },
+  "replay": {
+   "process": "fresh python process (scripts/replay.py), inputs from notebooks/celltypist_tutorial/data/",
+   "tolerance_policy": "identifiers/labels/cluster IDs exact. Decision scores / probabilities: atol = max(1e-9, B), where B is the\nstandard worst-case float64 forward-error bound for the model's dot products under any summation order\n(gamma_n * sum_j |x_ij w_kj|, n = features used; Higham, Accuracy and Stability of Numerical Algorithms, eq. 3.5),\ncomputed below from the upstream Classifier's own scaled input. Probabilities = expit(decision) and |expit'| <= 1/4,\nso the probability tolerance is atol/4.",
+   "error_bounds": {
+    "demo2000_ImmuneAllLow": {
+     "n_features_used": 5645,
+     "gamma_n": 1.2534417948033729e-12,
+     "max_sum_abs_terms": 142.60508397092826,
+     "bound": 1.7874717240060603e-10
+    },
+    "demo400_custom_asrun": {
+     "n_features_used": 2595,
+     "gamma_n": 5.762057497807882e-13,
+     "max_sum_abs_terms": 58.85579782678929,
+     "bound": 3.391304911573161e-11
+    },
+    "demo400_seeded_rs0": {
+     "n_features_used": 2652,
+     "gamma_n": 5.888622922615298e-13,
+     "max_sum_abs_terms": 63.79363248679946,
+     "bound": 3.756566465786632e-11
+    }
+   },
+   "R1_demo2000_ImmuneAllLow_mv": {
+    "vs_driver_run": {
+     "predicted_labels_identical": true,
+     "predicted_labels_n_mismatch": 0,
+     "over_clustering_identical": true,
+     "over_clustering_n_mismatch": 0,
+     "over_clustering_ARI": 1.0,
+     "majority_voting_identical": true,
+     "majority_voting_n_mismatch": 0,
+     "decision_bitwise_identical": true,
+     "probability_bitwise_identical": true,
+     "decision_max_abs_diff": 0.0,
+     "probability_max_abs_diff": 0.0,
+     "conf_score_max_abs_diff": 0.0,
+     "tolerance_decision_atol": 1e-09,
+     "tolerance_probability_atol": 2.5e-10,
+     "labels_exact_and_numbers_within_tol": true,
+     "over_clustering_and_majority_voting_identical": true,
+     "reference": "notebooks/celltypist_tutorial/reference/annotate_demo2000_ImmuneAllLow_mv"
+    },
+    "vs_notebook_run": {
+     "predicted_labels_identical": true,
+     "predicted_labels_n_mismatch": 0,
+     "over_clustering_identical": true,
+     "over_clustering_n_mismatch": 0,
+     "over_clustering_ARI": 1.0,
+     "majority_voting_identical": true,
+     "majority_voting_n_mismatch": 0,
+     "conf_score_max_abs_diff": 0.0,
+     "tolerance_decision_atol": 1e-09,
+     "tolerance_probability_atol": 2.5e-10,
+     "labels_exact_and_numbers_within_tol": true,
+     "over_clustering_and_majority_voting_identical": true,
+     "reference": "notebooks/celltypist_tutorial/reference/notebook_run/demo2000_ImmuneAllLow_mv"
+    }
+   },
+   "R2_demo2000_ImmuneAllLow_nomv": {
+    "vs_driver_run": {
+     "predicted_labels_identical": true,
+     "predicted_labels_n_mismatch": 0,
+     "decision_bitwise_identical": true,
+     "probability_bitwise_identical": true,
+     "decision_max_abs_diff": 0.0,
+     "probability_max_abs_diff": 0.0,
+     "conf_score_max_abs_diff": 0.0,
+     "tolerance_decision_atol": 1e-09,
+     "tolerance_probability_atol": 2.5e-10,
+     "labels_exact_and_numbers_within_tol": true,
+     "over_clustering_and_majority_voting_identical": null,
+     "reference": "notebooks/celltypist_tutorial/reference/annotate_demo2000_ImmuneAllLow_nomv"
+    },
+    "mv_vs_nomv_within_replay": {
+     "predicted_labels_identical": true,
+     "decision_bitwise_identical": true
+    }
+   },
+   "R3_demo400_custom_asrun_mv": {
+    "vs_notebook_run": {
+     "predicted_labels_identical": true,
+     "predicted_labels_n_mismatch": 0,
+     "over_clustering_identical": true,
+     "over_clustering_n_mismatch": 0,
+     "over_clustering_ARI": 1.0,
+     "majority_voting_identical": true,
+     "majority_voting_n_mismatch": 0,
+     "decision_bitwise_identical": true,
+     "probability_bitwise_identical": true,
+     "decision_max_abs_diff": 0.0,
+     "probability_max_abs_diff": 0.0,
+     "conf_score_max_abs_diff": 0.0,
+     "tolerance_decision_atol": 1e-09,
+     "tolerance_probability_atol": 2.5e-10,
+     "labels_exact_and_numbers_within_tol": true,
+     "over_clustering_and_majority_voting_identical": true,
+     "reference": "notebooks/celltypist_tutorial/reference/notebook_run/demo400_custom_asrun_mv"
+    }
+   },
+   "R4_train_seeded_rs0_run3": {
+    "wall_seconds": 11.330706000007922,
+    "n_features": 2652,
+    "features_identical_incl_order": true,
+    "cell_types_identical": true,
+    "coef_bitwise_identical": true,
+    "coef_max_abs_diff": 0.0,
+    "intercept_bitwise_identical": true,
+    "scaler_identical": true
+   },
+   "R5_demo400_seeded_rs0_mv": {
+    "vs_driver_run": {
+     "predicted_labels_identical": true,
+     "predicted_labels_n_mismatch": 0,
+     "over_clustering_identical": true,
+     "over_clustering_n_mismatch": 0,
+     "over_clustering_ARI": 1.0,
+     "majority_voting_identical": true,
+     "majority_voting_n_mismatch": 0,
+     "decision_bitwise_identical": true,
+     "probability_bitwise_identical": true,
+     "decision_max_abs_diff": 0.0,
+     "probability_max_abs_diff": 0.0,
+     "conf_score_max_abs_diff": 0.0,
+     "tolerance_decision_atol": 1e-09,
+     "tolerance_probability_atol": 2.5e-10,
+     "labels_exact_and_numbers_within_tol": true,
+     "over_clustering_and_majority_voting_identical": true,
+     "reference": "notebooks/celltypist_tutorial/reference/annotate_demo400_seeded_rs0_mv"
+    }
+   },
+   "full_report": "notebooks/celltypist_tutorial/reference/replay/replay_comparison.json"
+  },
+  "figures": {
+   "notebook_embedded": [
+    {
+     "path": "notebooks/celltypist_tutorial/images/figure_1.png",
+     "cell_index": 39,
+     "sha256": "467514d7716977f61004e99eec5ede30d4bb492b2301047aa441ae1b3f7dda30"
+    },
+    {
+     "path": "notebooks/celltypist_tutorial/images/figure_2.png",
+     "cell_index": 41,
+     "sha256": "8673057f0b6d4b57fe976639379bd89413557b68a607532250173276f70c95c0"
+    },
+    {
+     "path": "notebooks/celltypist_tutorial/images/figure_3.png",
+     "cell_index": 59,
+     "sha256": "0f3dfb0bb33f3350e0381aeb2815d70883720d3b932046e079f979a0bed80411"
+    },
+    {
+     "path": "notebooks/celltypist_tutorial/images/figure_4.png",
+     "cell_index": 60,
+     "sha256": "209dd2d83c59d4285de48a7caa717c5921f569d758e60cb6787e657db70e04c9"
+    },
+    {
+     "path": "notebooks/celltypist_tutorial/images/figure_5.png",
+     "cell_index": 67,
+     "sha256": "4c5d7ee4bb094b2c6d8afa353c942a158485a11fafef7e6f14f77748e98cc286"
+    },
+    {
+     "path": "notebooks/celltypist_tutorial/images/figure_6.png",
+     "cell_index": 68,
+     "sha256": "2a5e2150d02fe26c65b3cdc94e1d1cc3c861fa9c71f74dacb5d722d9982b83ba"
+    }
+   ],
+   "notebook_figure_meaning": {
+    "39": "UMAP demo_2000 cell_type/predicted_labels/majority_voting",
+    "41": "dotplot demo_2000 cell_type vs majority_voting (Immune_All_Low)",
+    "59": "UMAP demo_400 (custom model)",
+    "60": "dotplot demo_400 cell_type vs majority_voting (custom as-run model)",
+    "67": "violin TPSB2/SLC45A3/CPA3 on demo_2000 by cell_type",
+    "68": "violin same genes on demo_400 by majority_voting"
+   },
+   "image_manifest": "notebooks/celltypist_tutorial/images/image-manifest.json",
+   "driver_dotplots": [
+    "notebooks/celltypist_tutorial/reference/annotate_demo2000_ImmuneAllLow_mv/dotplot_majority_voting.png",
+    "notebooks/celltypist_tutorial/reference/annotate_demo400_seeded_rs0_mv/dotplot_majority_voting.png"
+   ],
+   "comparison_note": "Figures are structural evidence; compare genes/groups and dotplot tables (dotplot_*_fraction.csv / *_mean_probability.csv), not pixels."
+  },
+  "capture_status": {
+   "items": {
+    "demo2000_ImmuneAllLow_mv/predicted_labels.csv": "ok",
+    "demo2000_ImmuneAllLow_mv/obs_after_to_adata.csv": "ok",
+    "models_description.csv": "ok",
+    "immune_all_low_model/": "ok",
+    "demo400_custom_asrun_mv/": "ok",
+    "custom_model_asrun/": "ok",
+    "top_markers_mast_cells_3.json": "ok",
+    "runtime.json": "ok"
+   },
+   "exec_counts": {
+    "predictions.predicted_labels": 15,
+    "adata.obs": 17,
+    "models.models_description()": 10,
+    "model": 12,
+    "model.cell_types": 13
+   },
+   "new_model_equals_reloaded_model": true
+  },
+  "files": [
+   {
+    "path": "notebooks/celltypist_tutorial/data/Immune_All_Low.pkl",
+    "sha256": "290874d35dac039d4c9218c343fde4aac1077709b72a331ce7266f6828c36502",
+    "bytes": 2824990,
+    "producer": {
+     "script": "scripts/stage_inputs.py (byte copy)",
+     "call": "downloaded by notebook cell 16: models.download_models(force_update=True, model='Immune_All_Low.pkl')",
+     "inputs": [
+      "notebooks/celltypist_tutorial/celltypist_home/data/models/Immune_All_Low.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/data/demo_2000_cells.h5ad",
+    "sha256": "167d038d57bc7aee2854f12c3337cc1f58846f4ae7382745639a0957831bae9b",
+    "bytes": 35730948,
+    "producer": {
+     "script": "scripts/stage_inputs.py (byte copy)",
+     "call": "downloaded by notebook cell 7: sc.read('celltypist_demo_folder/demo_2000_cells.h5ad', backup_url=...)",
+     "inputs": [
+      "notebooks/celltypist_tutorial/celltypist_demo_folder/demo_2000_cells.h5ad"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/data/demo_400_cells.h5ad",
+    "sha256": "7f1efb7242cf043b6e91b6fdeb99ad025cba152887c5a4567d54f6a748a6a119",
+    "bytes": 7990288,
+    "producer": {
+     "script": "scripts/stage_inputs.py (byte copy)",
+     "call": "downloaded by notebook cell 47: sc.read('celltypist_demo_folder/demo_400_cells.h5ad', backup_url=...)",
+     "inputs": [
+      "notebooks/celltypist_tutorial/celltypist_demo_folder/demo_400_cells.h5ad"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/data/model_from_immune2000.pkl",
+    "sha256": "b791a0bcbb0653f97cf5ebd122d0b5f6ea649799258bce670be2f05d2f866350",
+    "bytes": 293616,
+    "producer": {
+     "script": "scripts/stage_inputs.py (byte copy)",
+     "call": "written by notebook cell 52: new_model.write('celltypist_demo_folder/model_from_immune2000.pkl') from the unseeded celltypist.train(adata_2000, labels='cell_type', n_jobs=10, feature_selection=True) of cell 49",
+     "inputs": [
+      "notebooks/celltypist_tutorial/celltypist_demo_folder/model_from_immune2000.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/data/model_seeded_rs0_run1.pkl",
+    "sha256": "45cfb04b781fc0cc53e59d53cb0fdef812a36e9d05b71a1b44c8556c3f247733",
+    "bytes": 299981,
+    "producer": {
+     "script": "scripts/driver.py",
+     "call": "celltypist.train(sc.read(data/demo_2000_cells.h5ad), labels='cell_type', n_jobs=10, feature_selection=True, random_state=0) -> Model.write()",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_2000_cells.h5ad"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/data/model_seeded_rs0_run2.pkl",
+    "sha256": "1a170b20caa801b3d830d1c331453c9ae0b9a840844adb8804d25cf4ab1bf637",
+    "bytes": 299981,
+    "producer": {
+     "script": "scripts/driver.py",
+     "call": "celltypist.train(sc.read(data/demo_2000_cells.h5ad), labels='cell_type', n_jobs=10, feature_selection=True, random_state=0) -> Model.write()",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_2000_cells.h5ad"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/data/models.json",
+    "sha256": "f617fcd7863b08e6ba2dca1db959d60d6f82f06a0833897e8968c9164a18b132",
+    "bytes": 25568,
+    "producer": {
+     "script": "scripts/stage_inputs.py (byte copy)",
+     "call": "downloaded by notebook cell 16 (get_models_index(force_update=True) inside download_models)",
+     "inputs": [
+      "notebooks/celltypist_tutorial/celltypist_home/data/models/models.json"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/data/provenance.json",
+    "sha256": "cc218282613ec877a50151dd35e1e4705ff297b676ae4569c83189e74c538bd0",
+    "bytes": 6631,
+    "producer": {
+     "script": "scripts/stage_inputs.py",
+     "call": "hashes, URLs, remote HEAD, validation",
+     "inputs": null
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/annotate_demo2000_ImmuneAllLow_mv/crosstab_cell_type_vs_majority_voting.csv",
+    "sha256": "500a77ddb12de31453039e5d2f375f2c29e166a8e48cd7f60e165b615120bf15",
+    "bytes": 529,
+    "producer": {
+     "script": "scripts/driver.py",
+     "call": "pandas.crosstab(obs['cell_type'], obs['majority_voting']) (analysis of upstream labels)",
+     "inputs": []
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/annotate_demo2000_ImmuneAllLow_mv/crosstab_cell_type_vs_predicted_labels.csv",
+    "sha256": "d57c07fe546dadd66832bcda2103a07f85a6045a6233db21d61489ec2fc11aa0",
+    "bytes": 1093,
+    "producer": {
+     "script": "scripts/driver.py",
+     "call": "pandas.crosstab(obs['cell_type'], obs['predicted_labels']) (analysis of upstream labels)",
+     "inputs": []
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/annotate_demo2000_ImmuneAllLow_mv/decision_matrix.csv",
+    "sha256": "7f6d303f6ddc5aaa66d63f421eacbd16b21549934ae1be57d6a70374683583af",
+    "bytes": 3813709,
+    "producer": {
+     "script": "scripts/driver.py",
+     "call": "celltypist.annotate(sc.read(data/demo_2000_cells.h5ad), model=data/Immune_All_Low.pkl, majority_voting=True) -> AnnotationResult.to_table(folder)",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_2000_cells.h5ad",
+      "notebooks/celltypist_tutorial/data/Immune_All_Low.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/annotate_demo2000_ImmuneAllLow_mv/dotplot_majority_voting.png",
+    "sha256": "8673057f0b6d4b57fe976639379bd89413557b68a607532250173276f70c95c0",
+    "bytes": 53114,
+    "producer": {
+     "script": "scripts/driver.py",
+     "call": "celltypist.dotplot(celltypist.annotate(sc.read(data/demo_2000_cells.h5ad), model=data/Immune_All_Low.pkl, majority_voting=True), use_as_reference='cell_type', use_as_prediction='majority_voting', return_fig=True).savefig()",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_2000_cells.h5ad",
+      "notebooks/celltypist_tutorial/data/Immune_All_Low.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/annotate_demo2000_ImmuneAllLow_mv/dotplot_majority_voting_fraction.csv",
+    "sha256": "2e7edeb8d8463697ccfe40d6e3a750c99941665f42402d7e6a08ae5a0e5c1c95",
+    "bytes": 730,
+    "producer": {
+     "script": "scripts/driver.py",
+     "call": "celltypist.dotplot(celltypist.annotate(sc.read(data/demo_2000_cells.h5ad), model=data/Immune_All_Low.pkl, majority_voting=True), use_as_reference='cell_type', use_as_prediction='majority_voting', return_fig=True).dot_size_df",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_2000_cells.h5ad",
+      "notebooks/celltypist_tutorial/data/Immune_All_Low.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/annotate_demo2000_ImmuneAllLow_mv/dotplot_majority_voting_mean_probability.csv",
+    "sha256": "78f4fec116390b73f843a6fec7b62ce27b051528b881ec03b6f17131de9e9e7e",
+    "bytes": 1023,
+    "producer": {
+     "script": "scripts/driver.py",
+     "call": "celltypist.dotplot(celltypist.annotate(sc.read(data/demo_2000_cells.h5ad), model=data/Immune_All_Low.pkl, majority_voting=True), use_as_reference='cell_type', use_as_prediction='majority_voting', return_fig=True).dot_color_df",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_2000_cells.h5ad",
+      "notebooks/celltypist_tutorial/data/Immune_All_Low.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/annotate_demo2000_ImmuneAllLow_mv/log.txt",
+    "sha256": "5a77a6741e29a22647db8debf0f438467c343283290bb197786d63837045df96",
+    "bytes": 415,
+    "producer": {
+     "script": "scripts/driver.py",
+     "call": "celltypist logger output of celltypist.annotate(sc.read(data/demo_2000_cells.h5ad), model=data/Immune_All_Low.pkl, majority_voting=True)",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_2000_cells.h5ad",
+      "notebooks/celltypist_tutorial/data/Immune_All_Low.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/annotate_demo2000_ImmuneAllLow_mv/matrices.npz",
+    "sha256": "447e05920371e74cdb707f6bdf373c7339d2ebbbb5ad1f579fd0882fb34b2138",
+    "bytes": 3218260,
+    "producer": {
+     "script": "scripts/driver.py",
+     "call": "celltypist.annotate(sc.read(data/demo_2000_cells.h5ad), model=data/Immune_All_Low.pkl, majority_voting=True) -> decision_matrix / probability_matrix (numpy float64, bit-exact)",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_2000_cells.h5ad",
+      "notebooks/celltypist_tutorial/data/Immune_All_Low.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/annotate_demo2000_ImmuneAllLow_mv/obs_after_to_adata.csv",
+    "sha256": "f663c197fe77a8550a2ae169b595effde8187077c2efd5ce0a4f94f0d176439f",
+    "bytes": 149346,
+    "producer": {
+     "script": "scripts/driver.py",
+     "call": "celltypist.annotate(sc.read(data/demo_2000_cells.h5ad), model=data/Immune_All_Low.pkl, majority_voting=True) -> AnnotationResult.to_adata() .obs (conf_score = max probability)",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_2000_cells.h5ad",
+      "notebooks/celltypist_tutorial/data/Immune_All_Low.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/annotate_demo2000_ImmuneAllLow_mv/predicted_labels.csv",
+    "sha256": "d885e8ea72e710aa9198767e76a175105c49ed4ca8fe59f411beda6ce88cebe0",
+    "bytes": 84049,
+    "producer": {
+     "script": "scripts/driver.py",
+     "call": "celltypist.annotate(sc.read(data/demo_2000_cells.h5ad), model=data/Immune_All_Low.pkl, majority_voting=True) -> AnnotationResult.to_table(folder)",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_2000_cells.h5ad",
+      "notebooks/celltypist_tutorial/data/Immune_All_Low.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/annotate_demo2000_ImmuneAllLow_mv/probability_matrix.csv",
+    "sha256": "22855b9b8abc036c712c9090da9daea30e81f00404c652854fd83a509bf127d2",
+    "bytes": 4369766,
+    "producer": {
+     "script": "scripts/driver.py",
+     "call": "celltypist.annotate(sc.read(data/demo_2000_cells.h5ad), model=data/Immune_All_Low.pkl, majority_voting=True) -> AnnotationResult.to_table(folder)",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_2000_cells.h5ad",
+      "notebooks/celltypist_tutorial/data/Immune_All_Low.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/annotate_demo2000_ImmuneAllLow_mv/summary.json",
+    "sha256": "e883f08567d7cf1b3179d3e36711c28e7775c78163661ea7cfd1425386907030",
+    "bytes": 2130,
+    "producer": {
+     "script": "scripts/driver.py",
+     "call": "summary of celltypist.annotate(sc.read(data/demo_2000_cells.h5ad), model=data/Immune_All_Low.pkl, majority_voting=True)",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_2000_cells.h5ad",
+      "notebooks/celltypist_tutorial/data/Immune_All_Low.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/annotate_demo2000_ImmuneAllLow_mv/summary_frequency_majority_voting.csv",
+    "sha256": "24ef0674e2695601a2758b9a04354ae4a3e6de428583b45ea1eb918d0b23f219",
+    "bytes": 210,
+    "producer": {
+     "script": "scripts/driver.py",
+     "call": "celltypist.annotate(sc.read(data/demo_2000_cells.h5ad), model=data/Immune_All_Low.pkl, majority_voting=True) -> AnnotationResult.summary_frequency(by='majority_voting')",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_2000_cells.h5ad",
+      "notebooks/celltypist_tutorial/data/Immune_All_Low.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/annotate_demo2000_ImmuneAllLow_mv/summary_frequency_predicted_labels.csv",
+    "sha256": "21d984ba03b3060b324370dd06cd0fff8531e687e7ef622df803d5952d71dac3",
+    "bytes": 486,
+    "producer": {
+     "script": "scripts/driver.py",
+     "call": "celltypist.annotate(sc.read(data/demo_2000_cells.h5ad), model=data/Immune_All_Low.pkl, majority_voting=True) -> AnnotationResult.summary_frequency(by='predicted_labels')",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_2000_cells.h5ad",
+      "notebooks/celltypist_tutorial/data/Immune_All_Low.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/annotate_demo2000_ImmuneAllLow_nomv/decision_matrix.csv",
+    "sha256": "7f6d303f6ddc5aaa66d63f421eacbd16b21549934ae1be57d6a70374683583af",
+    "bytes": 3813709,
+    "producer": {
+     "script": "scripts/driver.py",
+     "call": "celltypist.annotate(sc.read(data/demo_2000_cells.h5ad), model=data/Immune_All_Low.pkl, majority_voting=False) -> AnnotationResult.to_table(folder)",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_2000_cells.h5ad",
+      "notebooks/celltypist_tutorial/data/Immune_All_Low.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/annotate_demo2000_ImmuneAllLow_nomv/log.txt",
+    "sha256": "3578dae92d2d9ab977801ee103b9a9611e6331083bf12f4e21bbafd6fa64c4fa",
+    "bytes": 202,
+    "producer": {
+     "script": "scripts/driver.py",
+     "call": "celltypist logger output of celltypist.annotate(sc.read(data/demo_2000_cells.h5ad), model=data/Immune_All_Low.pkl, majority_voting=False)",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_2000_cells.h5ad",
+      "notebooks/celltypist_tutorial/data/Immune_All_Low.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/annotate_demo2000_ImmuneAllLow_nomv/matrices.npz",
+    "sha256": "447e05920371e74cdb707f6bdf373c7339d2ebbbb5ad1f579fd0882fb34b2138",
+    "bytes": 3218260,
+    "producer": {
+     "script": "scripts/driver.py",
+     "call": "celltypist.annotate(sc.read(data/demo_2000_cells.h5ad), model=data/Immune_All_Low.pkl, majority_voting=False) -> decision_matrix / probability_matrix (numpy float64, bit-exact)",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_2000_cells.h5ad",
+      "notebooks/celltypist_tutorial/data/Immune_All_Low.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/annotate_demo2000_ImmuneAllLow_nomv/obs_after_to_adata.csv",
+    "sha256": "52c28ac2e0489b941803f50483e12db3a4375dd118c1ae2d7a4b7ee8ae276ee2",
+    "bytes": 112730,
+    "producer": {
+     "script": "scripts/driver.py",
+     "call": "celltypist.annotate(sc.read(data/demo_2000_cells.h5ad), model=data/Immune_All_Low.pkl, majority_voting=False) -> AnnotationResult.to_adata() .obs (conf_score = max probability)",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_2000_cells.h5ad",
+      "notebooks/celltypist_tutorial/data/Immune_All_Low.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/annotate_demo2000_ImmuneAllLow_nomv/predicted_labels.csv",
+    "sha256": "7df3331b27bd9c5d8fd918bff8e14557b48bb2f177d0b7083ec07cb1e1add434",
+    "bytes": 47433,
+    "producer": {
+     "script": "scripts/driver.py",
+     "call": "celltypist.annotate(sc.read(data/demo_2000_cells.h5ad), model=data/Immune_All_Low.pkl, majority_voting=False) -> AnnotationResult.to_table(folder)",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_2000_cells.h5ad",
+      "notebooks/celltypist_tutorial/data/Immune_All_Low.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/annotate_demo2000_ImmuneAllLow_nomv/probability_matrix.csv",
+    "sha256": "22855b9b8abc036c712c9090da9daea30e81f00404c652854fd83a509bf127d2",
+    "bytes": 4369766,
+    "producer": {
+     "script": "scripts/driver.py",
+     "call": "celltypist.annotate(sc.read(data/demo_2000_cells.h5ad), model=data/Immune_All_Low.pkl, majority_voting=False) -> AnnotationResult.to_table(folder)",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_2000_cells.h5ad",
+      "notebooks/celltypist_tutorial/data/Immune_All_Low.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/annotate_demo2000_ImmuneAllLow_nomv/summary.json",
+    "sha256": "74e16b1413f927460a97cd3c8a127ed81d7a5e031fb6db7d3506d71d78ef055d",
+    "bytes": 1430,
+    "producer": {
+     "script": "scripts/driver.py",
+     "call": "summary of celltypist.annotate(sc.read(data/demo_2000_cells.h5ad), model=data/Immune_All_Low.pkl, majority_voting=False)",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_2000_cells.h5ad",
+      "notebooks/celltypist_tutorial/data/Immune_All_Low.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/annotate_demo2000_ImmuneAllLow_nomv/summary_frequency_predicted_labels.csv",
+    "sha256": "21d984ba03b3060b324370dd06cd0fff8531e687e7ef622df803d5952d71dac3",
+    "bytes": 486,
+    "producer": {
+     "script": "scripts/driver.py",
+     "call": "celltypist.annotate(sc.read(data/demo_2000_cells.h5ad), model=data/Immune_All_Low.pkl, majority_voting=False) -> AnnotationResult.summary_frequency(by='predicted_labels')",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_2000_cells.h5ad",
+      "notebooks/celltypist_tutorial/data/Immune_All_Low.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/annotate_demo400_seeded_rs0_mv/crosstab_cell_type_vs_majority_voting.csv",
+    "sha256": "06866db0bcbd2e25c075627a0873fbfc973e21962c429a55ee78ca868c435d3b",
+    "bytes": 510,
+    "producer": {
+     "script": "scripts/driver.py",
+     "call": "pandas.crosstab(obs['cell_type'], obs['majority_voting']) (analysis of upstream labels)",
+     "inputs": []
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/annotate_demo400_seeded_rs0_mv/decision_matrix.csv",
+    "sha256": "47919fcc7e9e95d4bfd391b3822728eeeb0520751eef48312a331bb3ef5b7eff",
+    "bytes": 79853,
+    "producer": {
+     "script": "scripts/driver.py",
+     "call": "celltypist.annotate(sc.read(data/demo_400_cells.h5ad), model=data/model_seeded_rs0_run1.pkl, majority_voting=True) -> AnnotationResult.to_table(folder)",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_400_cells.h5ad",
+      "notebooks/celltypist_tutorial/data/model_seeded_rs0_run1.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/annotate_demo400_seeded_rs0_mv/dotplot_majority_voting.png",
+    "sha256": "d454ca7e8ac56595640bb53c614d0d280df94ee9417b6bc8b1070f38f0cb7195",
+    "bytes": 52259,
+    "producer": {
+     "script": "scripts/driver.py",
+     "call": "celltypist.dotplot(celltypist.annotate(sc.read(data/demo_400_cells.h5ad), model=data/model_seeded_rs0_run1.pkl, majority_voting=True), use_as_reference='cell_type', use_as_prediction='majority_voting', return_fig=True).savefig()",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_400_cells.h5ad",
+      "notebooks/celltypist_tutorial/data/model_seeded_rs0_run1.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/annotate_demo400_seeded_rs0_mv/dotplot_majority_voting_fraction.csv",
+    "sha256": "2f22e5602ff507d41347a6916dc613aeccdc071bf7b6fc217a2c5bcd3045e2b1",
+    "bytes": 701,
+    "producer": {
+     "script": "scripts/driver.py",
+     "call": "celltypist.dotplot(celltypist.annotate(sc.read(data/demo_400_cells.h5ad), model=data/model_seeded_rs0_run1.pkl, majority_voting=True), use_as_reference='cell_type', use_as_prediction='majority_voting', return_fig=True).dot_size_df",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_400_cells.h5ad",
+      "notebooks/celltypist_tutorial/data/model_seeded_rs0_run1.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/annotate_demo400_seeded_rs0_mv/dotplot_majority_voting_mean_probability.csv",
+    "sha256": "75479eb05453e74902bb3f7bfe164d6143f5b154b70e9124eaddf932c9cbc0ab",
+    "bytes": 877,
+    "producer": {
+     "script": "scripts/driver.py",
+     "call": "celltypist.dotplot(celltypist.annotate(sc.read(data/demo_400_cells.h5ad), model=data/model_seeded_rs0_run1.pkl, majority_voting=True), use_as_reference='cell_type', use_as_prediction='majority_voting', return_fig=True).dot_color_df",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_400_cells.h5ad",
+      "notebooks/celltypist_tutorial/data/model_seeded_rs0_run1.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/annotate_demo400_seeded_rs0_mv/log.txt",
+    "sha256": "9efec6773e5ca98f2632b99a5f98cf20aa018ad7e8f3bafd3ae23047795373ae",
+    "bytes": 414,
+    "producer": {
+     "script": "scripts/driver.py",
+     "call": "celltypist logger output of celltypist.annotate(sc.read(data/demo_400_cells.h5ad), model=data/model_seeded_rs0_run1.pkl, majority_voting=True)",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_400_cells.h5ad",
+      "notebooks/celltypist_tutorial/data/model_seeded_rs0_run1.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/annotate_demo400_seeded_rs0_mv/matrices.npz",
+    "sha256": "02995ce5b0eb3c2c57552f99b554c8519fa8ed591e5e7db5827dcbab730463dc",
+    "bytes": 77372,
+    "producer": {
+     "script": "scripts/driver.py",
+     "call": "celltypist.annotate(sc.read(data/demo_400_cells.h5ad), model=data/model_seeded_rs0_run1.pkl, majority_voting=True) -> decision_matrix / probability_matrix (numpy float64, bit-exact)",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_400_cells.h5ad",
+      "notebooks/celltypist_tutorial/data/model_seeded_rs0_run1.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/annotate_demo400_seeded_rs0_mv/obs_after_to_adata.csv",
+    "sha256": "b42dfc91a75dab21117abdd34574f48a9a1ec7ec0f31bec380754c2eb4b41caf",
+    "bytes": 29095,
+    "producer": {
+     "script": "scripts/driver.py",
+     "call": "celltypist.annotate(sc.read(data/demo_400_cells.h5ad), model=data/model_seeded_rs0_run1.pkl, majority_voting=True) -> AnnotationResult.to_adata() .obs (conf_score = max probability)",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_400_cells.h5ad",
+      "notebooks/celltypist_tutorial/data/model_seeded_rs0_run1.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/annotate_demo400_seeded_rs0_mv/predicted_labels.csv",
+    "sha256": "58f1ede0533069697fd72993fac46bc6f443837cf5b87798f13046183caf68d2",
+    "bytes": 15729,
+    "producer": {
+     "script": "scripts/driver.py",
+     "call": "celltypist.annotate(sc.read(data/demo_400_cells.h5ad), model=data/model_seeded_rs0_run1.pkl, majority_voting=True) -> AnnotationResult.to_table(folder)",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_400_cells.h5ad",
+      "notebooks/celltypist_tutorial/data/model_seeded_rs0_run1.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/annotate_demo400_seeded_rs0_mv/probability_matrix.csv",
+    "sha256": "cb474535259493e1dde3273272464ccbdc6adc9fe20b51a6af7539429481cf3c",
+    "bytes": 91238,
+    "producer": {
+     "script": "scripts/driver.py",
+     "call": "celltypist.annotate(sc.read(data/demo_400_cells.h5ad), model=data/model_seeded_rs0_run1.pkl, majority_voting=True) -> AnnotationResult.to_table(folder)",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_400_cells.h5ad",
+      "notebooks/celltypist_tutorial/data/model_seeded_rs0_run1.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/annotate_demo400_seeded_rs0_mv/summary.json",
+    "sha256": "1b6f95b759b3126fdb14fa502ab068ac2c1e10d62af0cf5a139b522526dea021",
+    "bytes": 2087,
+    "producer": {
+     "script": "scripts/driver.py",
+     "call": "summary of celltypist.annotate(sc.read(data/demo_400_cells.h5ad), model=data/model_seeded_rs0_run1.pkl, majority_voting=True)",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_400_cells.h5ad",
+      "notebooks/celltypist_tutorial/data/model_seeded_rs0_run1.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/annotate_demo400_seeded_rs0_mv/summary_frequency_majority_voting.csv",
+    "sha256": "b7b4693dac29de04044a9357248088a289b95c559e02481a0a19d8b2b1a79c84",
+    "bytes": 191,
+    "producer": {
+     "script": "scripts/driver.py",
+     "call": "celltypist.annotate(sc.read(data/demo_400_cells.h5ad), model=data/model_seeded_rs0_run1.pkl, majority_voting=True) -> AnnotationResult.summary_frequency(by='majority_voting')",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_400_cells.h5ad",
+      "notebooks/celltypist_tutorial/data/model_seeded_rs0_run1.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/annotate_demo400_seeded_rs0_mv/summary_frequency_predicted_labels.csv",
+    "sha256": "3ae1fe8e7bbc488aba764ee3f4c93695990334c365abba65f917a8566834efdd",
+    "bytes": 191,
+    "producer": {
+     "script": "scripts/driver.py",
+     "call": "celltypist.annotate(sc.read(data/demo_400_cells.h5ad), model=data/model_seeded_rs0_run1.pkl, majority_voting=True) -> AnnotationResult.summary_frequency(by='predicted_labels')",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_400_cells.h5ad",
+      "notebooks/celltypist_tutorial/data/model_seeded_rs0_run1.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/driver_report.json",
+    "sha256": "6c9525a714ffe0cd722f948b57c5956b1ba68fbd57bd6dc7abb8572a7a51e8c8",
+    "bytes": 14359,
+    "producer": {
+     "script": "scripts/driver.py",
+     "call": "per-step summary (logs, wall times, agreement, determinism) of the driver run",
+     "inputs": null
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/immune_all_low_model/cell_types.csv",
+    "sha256": "20eed3213f6060c697913425056539632836d5004fd23b1649f3d2e820ce72ac",
+    "bytes": 1616,
+    "producer": {
+     "script": "scripts/driver.py",
+     "call": "models.Model.load(data/Immune_All_Low.pkl) -> Model.cell_types / .features / .classifier.coef_ / .intercept_ / .scaler",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/Immune_All_Low.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/immune_all_low_model/coef.csv",
+    "sha256": "07347b017100a98f92ad49aca85dd299f8bb90b30bb411731504ecc3403db83c",
+    "bytes": 7904950,
+    "producer": {
+     "script": "scripts/driver.py",
+     "call": "models.Model.load(data/Immune_All_Low.pkl) -> Model.cell_types / .features / .classifier.coef_ / .intercept_ / .scaler",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/Immune_All_Low.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/immune_all_low_model/features.csv",
+    "sha256": "4f887493926c96223606edfb39cf518b7daeb878ef7c3a3a58b42314a3da3080",
+    "bytes": 45846,
+    "producer": {
+     "script": "scripts/driver.py",
+     "call": "models.Model.load(data/Immune_All_Low.pkl) -> Model.cell_types / .features / .classifier.coef_ / .intercept_ / .scaler",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/Immune_All_Low.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/immune_all_low_model/intercept.csv",
+    "sha256": "7fb9890db714207109c20b1401bc64ddfef800544aa04e47b0412e436638bac8",
+    "bytes": 2524,
+    "producer": {
+     "script": "scripts/driver.py",
+     "call": "models.Model.load(data/Immune_All_Low.pkl) -> Model.cell_types / .features / .classifier.coef_ / .intercept_ / .scaler",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/Immune_All_Low.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/immune_all_low_model/model_arrays.npz",
+    "sha256": "c1fd878ea999629ed141dc2e3cae148e1b42d6decc1380f48bc838654d66910a",
+    "bytes": 3312106,
+    "producer": {
+     "script": "scripts/driver.py",
+     "call": "models.Model.load(data/Immune_All_Low.pkl) -> Model.cell_types / .features / .classifier.coef_ / .intercept_ / .scaler",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/Immune_All_Low.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/immune_all_low_model/repr.txt",
+    "sha256": "ef5c92112ee2a6760b640ef614de10073dcb2ddce42bf02fd5e22474a8981f7d",
+    "bytes": 349,
+    "producer": {
+     "script": "scripts/driver.py",
+     "call": "repr(models.Model.load(data/Immune_All_Low.pkl))",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/Immune_All_Low.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/immune_all_low_model/scaler.csv",
+    "sha256": "ff503344775543dbb496fe5271a2c48691149c19eb60a7199a0eb8c76609cb84",
+    "bytes": 309907,
+    "producer": {
+     "script": "scripts/driver.py",
+     "call": "models.Model.load(data/Immune_All_Low.pkl) -> Model.cell_types / .features / .classifier.coef_ / .intercept_ / .scaler",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/Immune_All_Low.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/immune_all_low_model/summary.json",
+    "sha256": "e8c53ddf7b1bd0fc74bda738dd7ba5e0fa4d41a38fdd9716b4f1abd0071a3766",
+    "bytes": 1476,
+    "producer": {
+     "script": "scripts/driver.py",
+     "call": "models.Model.load(data/Immune_All_Low.pkl) -> Model.cell_types / .features / .classifier.coef_ / .intercept_ / .scaler",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/Immune_All_Low.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/manifest_driver.json",
+    "sha256": "2df03dd2d5d624882e85d8517dc6f2c8fa33bf70742c825e3dc2b6cd0156408a",
+    "bytes": 36525,
+    "producer": {
+     "script": "scripts/driver.py",
+     "call": "file -> upstream call map for driver outputs",
+     "inputs": null
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/manifest_replay.json",
+    "sha256": "5794f8c89227f5bcf1f08a99c3720f6fc86e916ce8f1d2a6dde6c8972431dd76",
+    "bytes": 23274,
+    "producer": {
+     "script": "scripts/replay.py",
+     "call": "file -> upstream call map for replay outputs",
+     "inputs": null
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/models_description.csv",
+    "sha256": "eb52cd990a9e2e37dc054e765b968a3b58b306cd63bf085d195cd912a3cb8fec",
+    "bytes": 6179,
+    "producer": {
+     "script": "scripts/driver.py",
+     "call": "models.models_description() (reads cached celltypist_home/data/models/models.json; on_the_fly=False)",
+     "inputs": [
+      "notebooks/celltypist_tutorial/celltypist_home/data/models/models.json"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/notebook_run/capture_status.json",
+    "sha256": "9bc45e77ee38df9576711dae982243806a434b4986f641883ea8804c432b4d74",
+    "bytes": 530,
+    "producer": {
+     "script": "appended capture cell 70 of celltypist_tutorial_execution_final.ipynb",
+     "call": "status of the appended capture cell",
+     "inputs": null
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/notebook_run/custom_model_asrun/cell_types.csv",
+    "sha256": "757f247983853a51e1890b9a8cc776c45894e5a51363d2b2e53c7d710105ce36",
+    "bytes": 155,
+    "producer": {
+     "script": "appended capture cell 70 of celltypist_tutorial_execution_final.ipynb",
+     "call": "Model attributes of `model` (cell 63 models.Model.load('celltypist_demo_folder/model_from_immune2000.pkl'), trained by cell 49 celltypist.train(adata_2000, labels='cell_type', n_jobs=10, feature_selection=True), unseeded)",
+     "inputs": null
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/notebook_run/custom_model_asrun/coef.csv",
+    "sha256": "10b83fdde65e18dcaba584691602cb0e3be5c8e936c7c532d8f688da35b8ce52",
+    "bytes": 572977,
+    "producer": {
+     "script": "appended capture cell 70 of celltypist_tutorial_execution_final.ipynb",
+     "call": "Model attributes of `model` (cell 63 models.Model.load('celltypist_demo_folder/model_from_immune2000.pkl'), trained by cell 49 celltypist.train(adata_2000, labels='cell_type', n_jobs=10, feature_selection=True), unseeded)",
+     "inputs": null
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/notebook_run/custom_model_asrun/features.csv",
+    "sha256": "8d2c2015f0bf36da59619445cad15c174a20c5c5763c303b673ab3cc17f7f4d5",
+    "bytes": 17051,
+    "producer": {
+     "script": "appended capture cell 70 of celltypist_tutorial_execution_final.ipynb",
+     "call": "Model attributes of `model` (cell 63 models.Model.load('celltypist_demo_folder/model_from_immune2000.pkl'), trained by cell 49 celltypist.train(adata_2000, labels='cell_type', n_jobs=10, feature_selection=True), unseeded)",
+     "inputs": null
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/notebook_run/custom_model_asrun/intercept.csv",
+    "sha256": "996b323be3857a5b5aaf5b53debe7926c29ad707d76f23f9a1da847c87b8724a",
+    "bytes": 346,
+    "producer": {
+     "script": "appended capture cell 70 of celltypist_tutorial_execution_final.ipynb",
+     "call": "Model attributes of `model` (cell 63 models.Model.load('celltypist_demo_folder/model_from_immune2000.pkl'), trained by cell 49 celltypist.train(adata_2000, labels='cell_type', n_jobs=10, feature_selection=True), unseeded)",
+     "inputs": null
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/notebook_run/custom_model_asrun/model_arrays.npz",
+    "sha256": "d2a218eed6ba57b3d8a4e0ebea8082b1415666073aa7b0b85bf68dea9d981688",
+    "bytes": 397202,
+    "producer": {
+     "script": "appended capture cell 70 of celltypist_tutorial_execution_final.ipynb",
+     "call": "Model attributes of `model` (cell 63 models.Model.load('celltypist_demo_folder/model_from_immune2000.pkl'), trained by cell 49 celltypist.train(adata_2000, labels='cell_type', n_jobs=10, feature_selection=True), unseeded)",
+     "inputs": null
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/notebook_run/custom_model_asrun/scaler.csv",
+    "sha256": "b921409d250a3d52c576920f88ea90b7c06acf2eb8a9bd80138c0caff803bbcd",
+    "bytes": 118833,
+    "producer": {
+     "script": "appended capture cell 70 of celltypist_tutorial_execution_final.ipynb",
+     "call": "Model attributes of `model` (cell 63 models.Model.load('celltypist_demo_folder/model_from_immune2000.pkl'), trained by cell 49 celltypist.train(adata_2000, labels='cell_type', n_jobs=10, feature_selection=True), unseeded)",
+     "inputs": null
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/notebook_run/custom_model_asrun/summary.json",
+    "sha256": "e437d786dbfd345ed01ca5d87cc170febe2cba20d1d853b4c1906ebd9afc10f3",
+    "bytes": 589,
+    "producer": {
+     "script": "appended capture cell 70 of celltypist_tutorial_execution_final.ipynb",
+     "call": "Model attributes of `model` (cell 63 models.Model.load('celltypist_demo_folder/model_from_immune2000.pkl'), trained by cell 49 celltypist.train(adata_2000, labels='cell_type', n_jobs=10, feature_selection=True), unseeded)",
+     "inputs": null
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/notebook_run/demo2000_ImmuneAllLow_mv/obs_after_to_adata.csv",
+    "sha256": "f663c197fe77a8550a2ae169b595effde8187077c2efd5ce0a4f94f0d176439f",
+    "bytes": 149346,
+    "producer": {
+     "script": "appended capture cell 70 of celltypist_tutorial_execution_final.ipynb",
+     "call": "IPython Out cache of cell 35 `adata.obs`, adata = predictions.to_adata() (cell 33; adds conf_score = max probability)",
+     "inputs": null
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/notebook_run/demo2000_ImmuneAllLow_mv/predicted_labels.csv",
+    "sha256": "d885e8ea72e710aa9198767e76a175105c49ed4ca8fe59f411beda6ce88cebe0",
+    "bytes": 84049,
+    "producer": {
+     "script": "appended capture cell 70 of celltypist_tutorial_execution_final.ipynb",
+     "call": "IPython Out cache of cell 31 `predictions.predicted_labels`, where predictions = celltypist.annotate(adata_2000, model='Immune_All_Low.pkl', majority_voting=True) (cell 28)",
+     "inputs": null
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/notebook_run/demo400_custom_asrun_mv/decision_matrix.csv",
+    "sha256": "017530e5f2e235fc448d03cf4e307854b4079017146fb7d6f22d2369f5a24f8a",
+    "bytes": 80016,
+    "producer": {
+     "script": "appended capture cell 70 of celltypist_tutorial_execution_final.ipynb",
+     "call": "same AnnotationResult.to_table()",
+     "inputs": null
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/notebook_run/demo400_custom_asrun_mv/obs_after_to_adata.csv",
+    "sha256": "fbe9682bcd88d7bb65ee17d807283a474d6971b06b4e1546f53c74f8d71e68ee",
+    "bytes": 29094,
+    "producer": {
+     "script": "appended capture cell 70 of celltypist_tutorial_execution_final.ipynb",
+     "call": "adata.obs after cell 57 adata = predictions.to_adata()",
+     "inputs": null
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/notebook_run/demo400_custom_asrun_mv/predicted_labels.csv",
+    "sha256": "58f1ede0533069697fd72993fac46bc6f443837cf5b87798f13046183caf68d2",
+    "bytes": 15729,
+    "producer": {
+     "script": "appended capture cell 70 of celltypist_tutorial_execution_final.ipynb",
+     "call": "predictions.to_table() of cell 56 celltypist.annotate(adata_400, model='celltypist_demo_folder/model_from_immune2000.pkl', majority_voting=True)",
+     "inputs": null
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/notebook_run/demo400_custom_asrun_mv/probability_matrix.csv",
+    "sha256": "62f92bdd608e401c688a2ff814b9a61396761d2c913a1116a1142aae8f5a2194",
+    "bytes": 91212,
+    "producer": {
+     "script": "appended capture cell 70 of celltypist_tutorial_execution_final.ipynb",
+     "call": "same AnnotationResult.to_table()",
+     "inputs": null
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/notebook_run/immune_all_low_model/cell_types.csv",
+    "sha256": "20eed3213f6060c697913425056539632836d5004fd23b1649f3d2e820ce72ac",
+    "bytes": 1616,
+    "producer": {
+     "script": "appended capture cell 70 of celltypist_tutorial_execution_final.ipynb",
+     "call": "IPython Out cache of cell 26 `model.cell_types` (model = models.Model.load(model='Immune_All_Low.pkl'), cell 22)",
+     "inputs": null
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/notebook_run/immune_all_low_model/summary.json",
+    "sha256": "e8d76fd39b34aee30d145dffa5a450dc8f823bc6b324dcce64ba88aad55310aa",
+    "bytes": 751,
+    "producer": {
+     "script": "appended capture cell 70 of celltypist_tutorial_execution_final.ipynb",
+     "call": "IPython Out cache of cell 24 `model` (repr, description)",
+     "inputs": null
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/notebook_run/models_description.csv",
+    "sha256": "eb52cd990a9e2e37dc054e765b968a3b58b306cd63bf085d195cd912a3cb8fec",
+    "bytes": 6179,
+    "producer": {
+     "script": "appended capture cell 70 of celltypist_tutorial_execution_final.ipynb",
+     "call": "IPython Out cache of cell 20 `models.models_description()`",
+     "inputs": null
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/notebook_run/notebook_stream_logs.txt",
+    "sha256": "32aac19751ba79086218cf99c0e5d9fdab214dc22f7d59f02ba0b86a2b58a297",
+    "bytes": 12738,
+    "producer": {
+     "script": "scripts/extract_notebook_logs.py",
+     "call": "parsed from the executed notebook outputs (and upstream stored outputs)",
+     "inputs": null
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/notebook_run/notebook_vs_upstream_outputs.json",
+    "sha256": "16fdda6a79fd194e6e5ad7a30f6a27482eec23ef4221b7cd179be7c0ca933e07",
+    "bytes": 9250,
+    "producer": {
+     "script": "scripts/extract_notebook_logs.py",
+     "call": "parsed from the executed notebook outputs (and upstream stored outputs)",
+     "inputs": null
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/notebook_run/runtime.json",
+    "sha256": "080391c472c13fe67180ec6fdaa1370e69f8c436bbd774e9c3fbaedbc4da140d",
+    "bytes": 2821,
+    "producer": {
+     "script": "appended capture cell 70 of celltypist_tutorial_execution_final.ipynb",
+     "call": "versions/threads inside the notebook kernel",
+     "inputs": null
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/notebook_run/top_markers_mast_cells_3.json",
+    "sha256": "8570d33dbd773769fa95416e6c2e835014ee9e889513f76a45cc832282a6df61",
+    "bytes": 171,
+    "producer": {
+     "script": "appended capture cell 70 of celltypist_tutorial_execution_final.ipynb",
+     "call": "top_3_genes = model.extract_top_markers('Mast cells', 3) (cell 66)",
+     "inputs": null
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/replay/annotate_demo2000_ImmuneAllLow_mv/decision_matrix.csv",
+    "sha256": "7f6d303f6ddc5aaa66d63f421eacbd16b21549934ae1be57d6a70374683583af",
+    "bytes": 3813709,
+    "producer": {
+     "script": "scripts/replay.py",
+     "call": "celltypist.annotate(sc.read(notebooks/celltypist_tutorial/data/demo_2000_cells.h5ad), model=notebooks/celltypist_tutorial/data/Immune_All_Low.pkl, majority_voting=True)  [replay, fresh process] -> AnnotationResult.to_table(folder)",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_2000_cells.h5ad",
+      "notebooks/celltypist_tutorial/data/Immune_All_Low.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/replay/annotate_demo2000_ImmuneAllLow_mv/log.txt",
+    "sha256": "5a77a6741e29a22647db8debf0f438467c343283290bb197786d63837045df96",
+    "bytes": 415,
+    "producer": {
+     "script": "scripts/replay.py",
+     "call": "celltypist logger output of celltypist.annotate(sc.read(notebooks/celltypist_tutorial/data/demo_2000_cells.h5ad), model=notebooks/celltypist_tutorial/data/Immune_All_Low.pkl, majority_voting=True)  [replay, fresh process]",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_2000_cells.h5ad",
+      "notebooks/celltypist_tutorial/data/Immune_All_Low.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/replay/annotate_demo2000_ImmuneAllLow_mv/matrices.npz",
+    "sha256": "447e05920371e74cdb707f6bdf373c7339d2ebbbb5ad1f579fd0882fb34b2138",
+    "bytes": 3218260,
+    "producer": {
+     "script": "scripts/replay.py",
+     "call": "celltypist.annotate(sc.read(notebooks/celltypist_tutorial/data/demo_2000_cells.h5ad), model=notebooks/celltypist_tutorial/data/Immune_All_Low.pkl, majority_voting=True)  [replay, fresh process] -> decision_matrix / probability_matrix (numpy float64, bit-exact)",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_2000_cells.h5ad",
+      "notebooks/celltypist_tutorial/data/Immune_All_Low.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/replay/annotate_demo2000_ImmuneAllLow_mv/obs_after_to_adata.csv",
+    "sha256": "f663c197fe77a8550a2ae169b595effde8187077c2efd5ce0a4f94f0d176439f",
+    "bytes": 149346,
+    "producer": {
+     "script": "scripts/replay.py",
+     "call": "celltypist.annotate(sc.read(notebooks/celltypist_tutorial/data/demo_2000_cells.h5ad), model=notebooks/celltypist_tutorial/data/Immune_All_Low.pkl, majority_voting=True)  [replay, fresh process] -> AnnotationResult.to_adata() .obs (conf_score = max probability)",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_2000_cells.h5ad",
+      "notebooks/celltypist_tutorial/data/Immune_All_Low.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/replay/annotate_demo2000_ImmuneAllLow_mv/predicted_labels.csv",
+    "sha256": "d885e8ea72e710aa9198767e76a175105c49ed4ca8fe59f411beda6ce88cebe0",
+    "bytes": 84049,
+    "producer": {
+     "script": "scripts/replay.py",
+     "call": "celltypist.annotate(sc.read(notebooks/celltypist_tutorial/data/demo_2000_cells.h5ad), model=notebooks/celltypist_tutorial/data/Immune_All_Low.pkl, majority_voting=True)  [replay, fresh process] -> AnnotationResult.to_table(folder)",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_2000_cells.h5ad",
+      "notebooks/celltypist_tutorial/data/Immune_All_Low.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/replay/annotate_demo2000_ImmuneAllLow_mv/probability_matrix.csv",
+    "sha256": "22855b9b8abc036c712c9090da9daea30e81f00404c652854fd83a509bf127d2",
+    "bytes": 4369766,
+    "producer": {
+     "script": "scripts/replay.py",
+     "call": "celltypist.annotate(sc.read(notebooks/celltypist_tutorial/data/demo_2000_cells.h5ad), model=notebooks/celltypist_tutorial/data/Immune_All_Low.pkl, majority_voting=True)  [replay, fresh process] -> AnnotationResult.to_table(folder)",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_2000_cells.h5ad",
+      "notebooks/celltypist_tutorial/data/Immune_All_Low.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/replay/annotate_demo2000_ImmuneAllLow_mv/summary.json",
+    "sha256": "775a30a111dc6ead4e45ea432054d635eaab57b7e01ac844c10d128061c5e33e",
+    "bytes": 1074,
+    "producer": {
+     "script": "scripts/replay.py",
+     "call": "summary of celltypist.annotate(sc.read(notebooks/celltypist_tutorial/data/demo_2000_cells.h5ad), model=notebooks/celltypist_tutorial/data/Immune_All_Low.pkl, majority_voting=True)  [replay, fresh process]",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_2000_cells.h5ad",
+      "notebooks/celltypist_tutorial/data/Immune_All_Low.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/replay/annotate_demo2000_ImmuneAllLow_mv/summary_frequency_majority_voting.csv",
+    "sha256": "24ef0674e2695601a2758b9a04354ae4a3e6de428583b45ea1eb918d0b23f219",
+    "bytes": 210,
+    "producer": {
+     "script": "scripts/replay.py",
+     "call": "celltypist.annotate(sc.read(notebooks/celltypist_tutorial/data/demo_2000_cells.h5ad), model=notebooks/celltypist_tutorial/data/Immune_All_Low.pkl, majority_voting=True)  [replay, fresh process] -> AnnotationResult.summary_frequency(by='majority_voting')",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_2000_cells.h5ad",
+      "notebooks/celltypist_tutorial/data/Immune_All_Low.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/replay/annotate_demo2000_ImmuneAllLow_mv/summary_frequency_predicted_labels.csv",
+    "sha256": "21d984ba03b3060b324370dd06cd0fff8531e687e7ef622df803d5952d71dac3",
+    "bytes": 486,
+    "producer": {
+     "script": "scripts/replay.py",
+     "call": "celltypist.annotate(sc.read(notebooks/celltypist_tutorial/data/demo_2000_cells.h5ad), model=notebooks/celltypist_tutorial/data/Immune_All_Low.pkl, majority_voting=True)  [replay, fresh process] -> AnnotationResult.summary_frequency(by='predicted_labels')",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_2000_cells.h5ad",
+      "notebooks/celltypist_tutorial/data/Immune_All_Low.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/replay/annotate_demo2000_ImmuneAllLow_nomv/decision_matrix.csv",
+    "sha256": "7f6d303f6ddc5aaa66d63f421eacbd16b21549934ae1be57d6a70374683583af",
+    "bytes": 3813709,
+    "producer": {
+     "script": "scripts/replay.py",
+     "call": "celltypist.annotate(sc.read(notebooks/celltypist_tutorial/data/demo_2000_cells.h5ad), model=notebooks/celltypist_tutorial/data/Immune_All_Low.pkl, majority_voting=False)  [replay, fresh process] -> AnnotationResult.to_table(folder)",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_2000_cells.h5ad",
+      "notebooks/celltypist_tutorial/data/Immune_All_Low.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/replay/annotate_demo2000_ImmuneAllLow_nomv/log.txt",
+    "sha256": "3578dae92d2d9ab977801ee103b9a9611e6331083bf12f4e21bbafd6fa64c4fa",
+    "bytes": 202,
+    "producer": {
+     "script": "scripts/replay.py",
+     "call": "celltypist logger output of celltypist.annotate(sc.read(notebooks/celltypist_tutorial/data/demo_2000_cells.h5ad), model=notebooks/celltypist_tutorial/data/Immune_All_Low.pkl, majority_voting=False)  [replay, fresh process]",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_2000_cells.h5ad",
+      "notebooks/celltypist_tutorial/data/Immune_All_Low.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/replay/annotate_demo2000_ImmuneAllLow_nomv/matrices.npz",
+    "sha256": "447e05920371e74cdb707f6bdf373c7339d2ebbbb5ad1f579fd0882fb34b2138",
+    "bytes": 3218260,
+    "producer": {
+     "script": "scripts/replay.py",
+     "call": "celltypist.annotate(sc.read(notebooks/celltypist_tutorial/data/demo_2000_cells.h5ad), model=notebooks/celltypist_tutorial/data/Immune_All_Low.pkl, majority_voting=False)  [replay, fresh process] -> decision_matrix / probability_matrix (numpy float64, bit-exact)",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_2000_cells.h5ad",
+      "notebooks/celltypist_tutorial/data/Immune_All_Low.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/replay/annotate_demo2000_ImmuneAllLow_nomv/obs_after_to_adata.csv",
+    "sha256": "52c28ac2e0489b941803f50483e12db3a4375dd118c1ae2d7a4b7ee8ae276ee2",
+    "bytes": 112730,
+    "producer": {
+     "script": "scripts/replay.py",
+     "call": "celltypist.annotate(sc.read(notebooks/celltypist_tutorial/data/demo_2000_cells.h5ad), model=notebooks/celltypist_tutorial/data/Immune_All_Low.pkl, majority_voting=False)  [replay, fresh process] -> AnnotationResult.to_adata() .obs (conf_score = max probability)",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_2000_cells.h5ad",
+      "notebooks/celltypist_tutorial/data/Immune_All_Low.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/replay/annotate_demo2000_ImmuneAllLow_nomv/predicted_labels.csv",
+    "sha256": "7df3331b27bd9c5d8fd918bff8e14557b48bb2f177d0b7083ec07cb1e1add434",
+    "bytes": 47433,
+    "producer": {
+     "script": "scripts/replay.py",
+     "call": "celltypist.annotate(sc.read(notebooks/celltypist_tutorial/data/demo_2000_cells.h5ad), model=notebooks/celltypist_tutorial/data/Immune_All_Low.pkl, majority_voting=False)  [replay, fresh process] -> AnnotationResult.to_table(folder)",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_2000_cells.h5ad",
+      "notebooks/celltypist_tutorial/data/Immune_All_Low.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/replay/annotate_demo2000_ImmuneAllLow_nomv/probability_matrix.csv",
+    "sha256": "22855b9b8abc036c712c9090da9daea30e81f00404c652854fd83a509bf127d2",
+    "bytes": 4369766,
+    "producer": {
+     "script": "scripts/replay.py",
+     "call": "celltypist.annotate(sc.read(notebooks/celltypist_tutorial/data/demo_2000_cells.h5ad), model=notebooks/celltypist_tutorial/data/Immune_All_Low.pkl, majority_voting=False)  [replay, fresh process] -> AnnotationResult.to_table(folder)",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_2000_cells.h5ad",
+      "notebooks/celltypist_tutorial/data/Immune_All_Low.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/replay/annotate_demo2000_ImmuneAllLow_nomv/summary.json",
+    "sha256": "cd6468eb74bebf0d4bf285905f71e1cdd4b96381e84c0aae28e9166db8d4cb63",
+    "bytes": 969,
+    "producer": {
+     "script": "scripts/replay.py",
+     "call": "summary of celltypist.annotate(sc.read(notebooks/celltypist_tutorial/data/demo_2000_cells.h5ad), model=notebooks/celltypist_tutorial/data/Immune_All_Low.pkl, majority_voting=False)  [replay, fresh process]",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_2000_cells.h5ad",
+      "notebooks/celltypist_tutorial/data/Immune_All_Low.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/replay/annotate_demo2000_ImmuneAllLow_nomv/summary_frequency_predicted_labels.csv",
+    "sha256": "21d984ba03b3060b324370dd06cd0fff8531e687e7ef622df803d5952d71dac3",
+    "bytes": 486,
+    "producer": {
+     "script": "scripts/replay.py",
+     "call": "celltypist.annotate(sc.read(notebooks/celltypist_tutorial/data/demo_2000_cells.h5ad), model=notebooks/celltypist_tutorial/data/Immune_All_Low.pkl, majority_voting=False)  [replay, fresh process] -> AnnotationResult.summary_frequency(by='predicted_labels')",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_2000_cells.h5ad",
+      "notebooks/celltypist_tutorial/data/Immune_All_Low.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/replay/annotate_demo400_custom_asrun_mv/decision_matrix.csv",
+    "sha256": "017530e5f2e235fc448d03cf4e307854b4079017146fb7d6f22d2369f5a24f8a",
+    "bytes": 80016,
+    "producer": {
+     "script": "scripts/replay.py",
+     "call": "celltypist.annotate(sc.read(notebooks/celltypist_tutorial/data/demo_400_cells.h5ad), model=notebooks/celltypist_tutorial/data/model_from_immune2000.pkl, majority_voting=True)  [replay, fresh process] -> AnnotationResult.to_table(folder)",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_400_cells.h5ad",
+      "notebooks/celltypist_tutorial/data/model_from_immune2000.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/replay/annotate_demo400_custom_asrun_mv/log.txt",
+    "sha256": "46fc1ce16f867294af2aa6e3d14dabb3d95562e5d7f5e3d5367d774973e46ec4",
+    "bytes": 414,
+    "producer": {
+     "script": "scripts/replay.py",
+     "call": "celltypist logger output of celltypist.annotate(sc.read(notebooks/celltypist_tutorial/data/demo_400_cells.h5ad), model=notebooks/celltypist_tutorial/data/model_from_immune2000.pkl, majority_voting=True)  [replay, fresh process]",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_400_cells.h5ad",
+      "notebooks/celltypist_tutorial/data/model_from_immune2000.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/replay/annotate_demo400_custom_asrun_mv/matrices.npz",
+    "sha256": "0d1d7767569ea498b76df43d9e5cb786dd34b519c00ba94655b5fda6722f8435",
+    "bytes": 77372,
+    "producer": {
+     "script": "scripts/replay.py",
+     "call": "celltypist.annotate(sc.read(notebooks/celltypist_tutorial/data/demo_400_cells.h5ad), model=notebooks/celltypist_tutorial/data/model_from_immune2000.pkl, majority_voting=True)  [replay, fresh process] -> decision_matrix / probability_matrix (numpy float64, bit-exact)",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_400_cells.h5ad",
+      "notebooks/celltypist_tutorial/data/model_from_immune2000.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/replay/annotate_demo400_custom_asrun_mv/obs_after_to_adata.csv",
+    "sha256": "fbe9682bcd88d7bb65ee17d807283a474d6971b06b4e1546f53c74f8d71e68ee",
+    "bytes": 29094,
+    "producer": {
+     "script": "scripts/replay.py",
+     "call": "celltypist.annotate(sc.read(notebooks/celltypist_tutorial/data/demo_400_cells.h5ad), model=notebooks/celltypist_tutorial/data/model_from_immune2000.pkl, majority_voting=True)  [replay, fresh process] -> AnnotationResult.to_adata() .obs (conf_score = max probability)",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_400_cells.h5ad",
+      "notebooks/celltypist_tutorial/data/model_from_immune2000.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/replay/annotate_demo400_custom_asrun_mv/predicted_labels.csv",
+    "sha256": "58f1ede0533069697fd72993fac46bc6f443837cf5b87798f13046183caf68d2",
+    "bytes": 15729,
+    "producer": {
+     "script": "scripts/replay.py",
+     "call": "celltypist.annotate(sc.read(notebooks/celltypist_tutorial/data/demo_400_cells.h5ad), model=notebooks/celltypist_tutorial/data/model_from_immune2000.pkl, majority_voting=True)  [replay, fresh process] -> AnnotationResult.to_table(folder)",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_400_cells.h5ad",
+      "notebooks/celltypist_tutorial/data/model_from_immune2000.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/replay/annotate_demo400_custom_asrun_mv/probability_matrix.csv",
+    "sha256": "62f92bdd608e401c688a2ff814b9a61396761d2c913a1116a1142aae8f5a2194",
+    "bytes": 91212,
+    "producer": {
+     "script": "scripts/replay.py",
+     "call": "celltypist.annotate(sc.read(notebooks/celltypist_tutorial/data/demo_400_cells.h5ad), model=notebooks/celltypist_tutorial/data/model_from_immune2000.pkl, majority_voting=True)  [replay, fresh process] -> AnnotationResult.to_table(folder)",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_400_cells.h5ad",
+      "notebooks/celltypist_tutorial/data/model_from_immune2000.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/replay/annotate_demo400_custom_asrun_mv/summary.json",
+    "sha256": "10a1c27cfd3638b9acf078d2d23588e800829b5d28ad2f99e759d016d9b5e3ab",
+    "bytes": 1082,
+    "producer": {
+     "script": "scripts/replay.py",
+     "call": "summary of celltypist.annotate(sc.read(notebooks/celltypist_tutorial/data/demo_400_cells.h5ad), model=notebooks/celltypist_tutorial/data/model_from_immune2000.pkl, majority_voting=True)  [replay, fresh process]",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_400_cells.h5ad",
+      "notebooks/celltypist_tutorial/data/model_from_immune2000.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/replay/annotate_demo400_custom_asrun_mv/summary_frequency_majority_voting.csv",
+    "sha256": "b7b4693dac29de04044a9357248088a289b95c559e02481a0a19d8b2b1a79c84",
+    "bytes": 191,
+    "producer": {
+     "script": "scripts/replay.py",
+     "call": "celltypist.annotate(sc.read(notebooks/celltypist_tutorial/data/demo_400_cells.h5ad), model=notebooks/celltypist_tutorial/data/model_from_immune2000.pkl, majority_voting=True)  [replay, fresh process] -> AnnotationResult.summary_frequency(by='majority_voting')",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_400_cells.h5ad",
+      "notebooks/celltypist_tutorial/data/model_from_immune2000.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/replay/annotate_demo400_custom_asrun_mv/summary_frequency_predicted_labels.csv",
+    "sha256": "3ae1fe8e7bbc488aba764ee3f4c93695990334c365abba65f917a8566834efdd",
+    "bytes": 191,
+    "producer": {
+     "script": "scripts/replay.py",
+     "call": "celltypist.annotate(sc.read(notebooks/celltypist_tutorial/data/demo_400_cells.h5ad), model=notebooks/celltypist_tutorial/data/model_from_immune2000.pkl, majority_voting=True)  [replay, fresh process] -> AnnotationResult.summary_frequency(by='predicted_labels')",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_400_cells.h5ad",
+      "notebooks/celltypist_tutorial/data/model_from_immune2000.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/replay/annotate_demo400_seeded_rs0_mv/decision_matrix.csv",
+    "sha256": "47919fcc7e9e95d4bfd391b3822728eeeb0520751eef48312a331bb3ef5b7eff",
+    "bytes": 79853,
+    "producer": {
+     "script": "scripts/replay.py",
+     "call": "celltypist.annotate(sc.read(notebooks/celltypist_tutorial/data/demo_400_cells.h5ad), model=notebooks/celltypist_tutorial/data/model_seeded_rs0_run1.pkl, majority_voting=True)  [replay, fresh process] -> AnnotationResult.to_table(folder)",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_400_cells.h5ad",
+      "notebooks/celltypist_tutorial/data/model_seeded_rs0_run1.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/replay/annotate_demo400_seeded_rs0_mv/log.txt",
+    "sha256": "9efec6773e5ca98f2632b99a5f98cf20aa018ad7e8f3bafd3ae23047795373ae",
+    "bytes": 414,
+    "producer": {
+     "script": "scripts/replay.py",
+     "call": "celltypist logger output of celltypist.annotate(sc.read(notebooks/celltypist_tutorial/data/demo_400_cells.h5ad), model=notebooks/celltypist_tutorial/data/model_seeded_rs0_run1.pkl, majority_voting=True)  [replay, fresh process]",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_400_cells.h5ad",
+      "notebooks/celltypist_tutorial/data/model_seeded_rs0_run1.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/replay/annotate_demo400_seeded_rs0_mv/matrices.npz",
+    "sha256": "02995ce5b0eb3c2c57552f99b554c8519fa8ed591e5e7db5827dcbab730463dc",
+    "bytes": 77372,
+    "producer": {
+     "script": "scripts/replay.py",
+     "call": "celltypist.annotate(sc.read(notebooks/celltypist_tutorial/data/demo_400_cells.h5ad), model=notebooks/celltypist_tutorial/data/model_seeded_rs0_run1.pkl, majority_voting=True)  [replay, fresh process] -> decision_matrix / probability_matrix (numpy float64, bit-exact)",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_400_cells.h5ad",
+      "notebooks/celltypist_tutorial/data/model_seeded_rs0_run1.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/replay/annotate_demo400_seeded_rs0_mv/obs_after_to_adata.csv",
+    "sha256": "b42dfc91a75dab21117abdd34574f48a9a1ec7ec0f31bec380754c2eb4b41caf",
+    "bytes": 29095,
+    "producer": {
+     "script": "scripts/replay.py",
+     "call": "celltypist.annotate(sc.read(notebooks/celltypist_tutorial/data/demo_400_cells.h5ad), model=notebooks/celltypist_tutorial/data/model_seeded_rs0_run1.pkl, majority_voting=True)  [replay, fresh process] -> AnnotationResult.to_adata() .obs (conf_score = max probability)",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_400_cells.h5ad",
+      "notebooks/celltypist_tutorial/data/model_seeded_rs0_run1.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/replay/annotate_demo400_seeded_rs0_mv/predicted_labels.csv",
+    "sha256": "58f1ede0533069697fd72993fac46bc6f443837cf5b87798f13046183caf68d2",
+    "bytes": 15729,
+    "producer": {
+     "script": "scripts/replay.py",
+     "call": "celltypist.annotate(sc.read(notebooks/celltypist_tutorial/data/demo_400_cells.h5ad), model=notebooks/celltypist_tutorial/data/model_seeded_rs0_run1.pkl, majority_voting=True)  [replay, fresh process] -> AnnotationResult.to_table(folder)",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_400_cells.h5ad",
+      "notebooks/celltypist_tutorial/data/model_seeded_rs0_run1.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/replay/annotate_demo400_seeded_rs0_mv/probability_matrix.csv",
+    "sha256": "cb474535259493e1dde3273272464ccbdc6adc9fe20b51a6af7539429481cf3c",
+    "bytes": 91238,
+    "producer": {
+     "script": "scripts/replay.py",
+     "call": "celltypist.annotate(sc.read(notebooks/celltypist_tutorial/data/demo_400_cells.h5ad), model=notebooks/celltypist_tutorial/data/model_seeded_rs0_run1.pkl, majority_voting=True)  [replay, fresh process] -> AnnotationResult.to_table(folder)",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_400_cells.h5ad",
+      "notebooks/celltypist_tutorial/data/model_seeded_rs0_run1.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/replay/annotate_demo400_seeded_rs0_mv/summary.json",
+    "sha256": "9f17d589285ec75e4860db89465a5bf2e33b7f918aa83f01e221bd8c53a63158",
+    "bytes": 1081,
+    "producer": {
+     "script": "scripts/replay.py",
+     "call": "summary of celltypist.annotate(sc.read(notebooks/celltypist_tutorial/data/demo_400_cells.h5ad), model=notebooks/celltypist_tutorial/data/model_seeded_rs0_run1.pkl, majority_voting=True)  [replay, fresh process]",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_400_cells.h5ad",
+      "notebooks/celltypist_tutorial/data/model_seeded_rs0_run1.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/replay/annotate_demo400_seeded_rs0_mv/summary_frequency_majority_voting.csv",
+    "sha256": "b7b4693dac29de04044a9357248088a289b95c559e02481a0a19d8b2b1a79c84",
+    "bytes": 191,
+    "producer": {
+     "script": "scripts/replay.py",
+     "call": "celltypist.annotate(sc.read(notebooks/celltypist_tutorial/data/demo_400_cells.h5ad), model=notebooks/celltypist_tutorial/data/model_seeded_rs0_run1.pkl, majority_voting=True)  [replay, fresh process] -> AnnotationResult.summary_frequency(by='majority_voting')",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_400_cells.h5ad",
+      "notebooks/celltypist_tutorial/data/model_seeded_rs0_run1.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/replay/annotate_demo400_seeded_rs0_mv/summary_frequency_predicted_labels.csv",
+    "sha256": "3ae1fe8e7bbc488aba764ee3f4c93695990334c365abba65f917a8566834efdd",
+    "bytes": 191,
+    "producer": {
+     "script": "scripts/replay.py",
+     "call": "celltypist.annotate(sc.read(notebooks/celltypist_tutorial/data/demo_400_cells.h5ad), model=notebooks/celltypist_tutorial/data/model_seeded_rs0_run1.pkl, majority_voting=True)  [replay, fresh process] -> AnnotationResult.summary_frequency(by='predicted_labels')",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_400_cells.h5ad",
+      "notebooks/celltypist_tutorial/data/model_seeded_rs0_run1.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/replay/replay_comparison.json",
+    "sha256": "604286e528cec7f05004b6f8b8094fce790b4ac3c73a583d6126db2df3a9df95",
+    "bytes": 12445,
+    "producer": {
+     "script": "scripts/replay.py",
+     "call": "comparison of replayed upstream calls with the first runs (this script)",
+     "inputs": []
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/top_markers.json",
+    "sha256": "b7806cff47deffd0a7c346d84bbf906106389013bc1109944379871e56144d6a",
+    "bytes": 1839,
+    "producer": {
+     "script": "scripts/driver.py",
+     "call": "models.Model.load(<pkl>).extract_top_markers(cell_type, 3) for the as-run and seeded models",
+     "inputs": []
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/train_custom_asrun/cell_types.csv",
+    "sha256": "757f247983853a51e1890b9a8cc776c45894e5a51363d2b2e53c7d710105ce36",
+    "bytes": 155,
+    "producer": {
+     "script": "scripts/driver.py",
+     "call": "models.Model.load(data/model_from_immune2000.pkl) -> Model.cell_types / .features / .classifier.coef_ / .intercept_ / .scaler",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/model_from_immune2000.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/train_custom_asrun/coef.csv",
+    "sha256": "10b83fdde65e18dcaba584691602cb0e3be5c8e936c7c532d8f688da35b8ce52",
+    "bytes": 572977,
+    "producer": {
+     "script": "scripts/driver.py",
+     "call": "models.Model.load(data/model_from_immune2000.pkl) -> Model.cell_types / .features / .classifier.coef_ / .intercept_ / .scaler",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/model_from_immune2000.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/train_custom_asrun/features.csv",
+    "sha256": "8d2c2015f0bf36da59619445cad15c174a20c5c5763c303b673ab3cc17f7f4d5",
+    "bytes": 17051,
+    "producer": {
+     "script": "scripts/driver.py",
+     "call": "models.Model.load(data/model_from_immune2000.pkl) -> Model.cell_types / .features / .classifier.coef_ / .intercept_ / .scaler",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/model_from_immune2000.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/train_custom_asrun/intercept.csv",
+    "sha256": "996b323be3857a5b5aaf5b53debe7926c29ad707d76f23f9a1da847c87b8724a",
+    "bytes": 346,
+    "producer": {
+     "script": "scripts/driver.py",
+     "call": "models.Model.load(data/model_from_immune2000.pkl) -> Model.cell_types / .features / .classifier.coef_ / .intercept_ / .scaler",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/model_from_immune2000.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/train_custom_asrun/model_arrays.npz",
+    "sha256": "d2a218eed6ba57b3d8a4e0ebea8082b1415666073aa7b0b85bf68dea9d981688",
+    "bytes": 397202,
+    "producer": {
+     "script": "scripts/driver.py",
+     "call": "models.Model.load(data/model_from_immune2000.pkl) -> Model.cell_types / .features / .classifier.coef_ / .intercept_ / .scaler",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/model_from_immune2000.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/train_custom_asrun/scaler.csv",
+    "sha256": "b921409d250a3d52c576920f88ea90b7c06acf2eb8a9bd80138c0caff803bbcd",
+    "bytes": 118833,
+    "producer": {
+     "script": "scripts/driver.py",
+     "call": "models.Model.load(data/model_from_immune2000.pkl) -> Model.cell_types / .features / .classifier.coef_ / .intercept_ / .scaler",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/model_from_immune2000.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/train_custom_asrun/summary.json",
+    "sha256": "6a11d0a5bb3d89168e190fae769f41475c48931d7840139941507c75fb51ccce",
+    "bytes": 668,
+    "producer": {
+     "script": "scripts/driver.py",
+     "call": "models.Model.load(data/model_from_immune2000.pkl) -> Model.cell_types / .features / .classifier.coef_ / .intercept_ / .scaler",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/model_from_immune2000.pkl"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/train_seeded_rs0/determinism.json",
+    "sha256": "4ed76227a76b1a3ad6d6d066b44e1aad438e7c3c1908339b3bc52ef27c757c3e",
+    "bytes": 1058,
+    "producer": {
+     "script": "scripts/driver.py",
+     "call": "comparison of the two seeded celltypist.train results (and as-run model)",
+     "inputs": []
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/train_seeded_rs0/run1/cell_types.csv",
+    "sha256": "757f247983853a51e1890b9a8cc776c45894e5a51363d2b2e53c7d710105ce36",
+    "bytes": 155,
+    "producer": {
+     "script": "scripts/driver.py",
+     "call": "celltypist.train(sc.read(data/demo_2000_cells.h5ad), labels='cell_type', n_jobs=10, feature_selection=True, random_state=0) -> Model.cell_types / .features / .classifier.coef_ / .intercept_ / .scaler",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_2000_cells.h5ad"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/train_seeded_rs0/run1/coef.csv",
+    "sha256": "47527ae0da9ada50a0ca65c411fb8939b98185714659e5f0c66970851ff88954",
+    "bytes": 584945,
+    "producer": {
+     "script": "scripts/driver.py",
+     "call": "celltypist.train(sc.read(data/demo_2000_cells.h5ad), labels='cell_type', n_jobs=10, feature_selection=True, random_state=0) -> Model.cell_types / .features / .classifier.coef_ / .intercept_ / .scaler",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_2000_cells.h5ad"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/train_seeded_rs0/run1/features.csv",
+    "sha256": "c03715e0811dea0a48f1373f5582612b7c981cc823bee4b3e46cb3b4c260644f",
+    "bytes": 17373,
+    "producer": {
+     "script": "scripts/driver.py",
+     "call": "celltypist.train(sc.read(data/demo_2000_cells.h5ad), labels='cell_type', n_jobs=10, feature_selection=True, random_state=0) -> Model.cell_types / .features / .classifier.coef_ / .intercept_ / .scaler",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_2000_cells.h5ad"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/train_seeded_rs0/run1/intercept.csv",
+    "sha256": "551cbdc2e51261762feebe207b7409daaf171bfcc6cef42b78b07160f7dc833a",
+    "bytes": 340,
+    "producer": {
+     "script": "scripts/driver.py",
+     "call": "celltypist.train(sc.read(data/demo_2000_cells.h5ad), labels='cell_type', n_jobs=10, feature_selection=True, random_state=0) -> Model.cell_types / .features / .classifier.coef_ / .intercept_ / .scaler",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_2000_cells.h5ad"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/train_seeded_rs0/run1/log.txt",
+    "sha256": "735b080b6f836f5e669bf47f550405919190c225d4bf61b48ab0722a53124dc7",
+    "bytes": 385,
+    "producer": {
+     "script": "scripts/driver.py",
+     "call": "celltypist logger output of celltypist.train(sc.read(data/demo_2000_cells.h5ad), labels='cell_type', n_jobs=10, feature_selection=True, random_state=0)",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_2000_cells.h5ad"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/train_seeded_rs0/run1/model_arrays.npz",
+    "sha256": "3e64afd896e80c1cb43e97b77dc772fcdf4b51f40ff86b20eff9ad6dd36bdbbf",
+    "bytes": 416474,
+    "producer": {
+     "script": "scripts/driver.py",
+     "call": "celltypist.train(sc.read(data/demo_2000_cells.h5ad), labels='cell_type', n_jobs=10, feature_selection=True, random_state=0) -> Model.cell_types / .features / .classifier.coef_ / .intercept_ / .scaler",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_2000_cells.h5ad"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/train_seeded_rs0/run1/scaler.csv",
+    "sha256": "b04b9f6a10818685d86bbec1366ff96385b7876f24b407defdaf9351ec101f15",
+    "bytes": 121407,
+    "producer": {
+     "script": "scripts/driver.py",
+     "call": "celltypist.train(sc.read(data/demo_2000_cells.h5ad), labels='cell_type', n_jobs=10, feature_selection=True, random_state=0) -> Model.cell_types / .features / .classifier.coef_ / .intercept_ / .scaler",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_2000_cells.h5ad"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/train_seeded_rs0/run1/summary.json",
+    "sha256": "ea6e5b666b5bd7103677a79c6cbd9ece5dd4e63c3a2020aa31917d1eb7623f43",
+    "bytes": 665,
+    "producer": {
+     "script": "scripts/driver.py",
+     "call": "celltypist.train(sc.read(data/demo_2000_cells.h5ad), labels='cell_type', n_jobs=10, feature_selection=True, random_state=0) -> Model.cell_types / .features / .classifier.coef_ / .intercept_ / .scaler",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_2000_cells.h5ad"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/train_seeded_rs0/run2/cell_types.csv",
+    "sha256": "757f247983853a51e1890b9a8cc776c45894e5a51363d2b2e53c7d710105ce36",
+    "bytes": 155,
+    "producer": {
+     "script": "scripts/driver.py",
+     "call": "celltypist.train(sc.read(data/demo_2000_cells.h5ad), labels='cell_type', n_jobs=10, feature_selection=True, random_state=0) -> Model.cell_types / .features / .classifier.coef_ / .intercept_ / .scaler",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_2000_cells.h5ad"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/train_seeded_rs0/run2/coef.csv",
+    "sha256": "47527ae0da9ada50a0ca65c411fb8939b98185714659e5f0c66970851ff88954",
+    "bytes": 584945,
+    "producer": {
+     "script": "scripts/driver.py",
+     "call": "celltypist.train(sc.read(data/demo_2000_cells.h5ad), labels='cell_type', n_jobs=10, feature_selection=True, random_state=0) -> Model.cell_types / .features / .classifier.coef_ / .intercept_ / .scaler",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_2000_cells.h5ad"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/train_seeded_rs0/run2/features.csv",
+    "sha256": "c03715e0811dea0a48f1373f5582612b7c981cc823bee4b3e46cb3b4c260644f",
+    "bytes": 17373,
+    "producer": {
+     "script": "scripts/driver.py",
+     "call": "celltypist.train(sc.read(data/demo_2000_cells.h5ad), labels='cell_type', n_jobs=10, feature_selection=True, random_state=0) -> Model.cell_types / .features / .classifier.coef_ / .intercept_ / .scaler",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_2000_cells.h5ad"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/train_seeded_rs0/run2/intercept.csv",
+    "sha256": "551cbdc2e51261762feebe207b7409daaf171bfcc6cef42b78b07160f7dc833a",
+    "bytes": 340,
+    "producer": {
+     "script": "scripts/driver.py",
+     "call": "celltypist.train(sc.read(data/demo_2000_cells.h5ad), labels='cell_type', n_jobs=10, feature_selection=True, random_state=0) -> Model.cell_types / .features / .classifier.coef_ / .intercept_ / .scaler",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_2000_cells.h5ad"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/train_seeded_rs0/run2/log.txt",
+    "sha256": "735b080b6f836f5e669bf47f550405919190c225d4bf61b48ab0722a53124dc7",
+    "bytes": 385,
+    "producer": {
+     "script": "scripts/driver.py",
+     "call": "celltypist logger output of celltypist.train(sc.read(data/demo_2000_cells.h5ad), labels='cell_type', n_jobs=10, feature_selection=True, random_state=0)",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_2000_cells.h5ad"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/train_seeded_rs0/run2/model_arrays.npz",
+    "sha256": "3e64afd896e80c1cb43e97b77dc772fcdf4b51f40ff86b20eff9ad6dd36bdbbf",
+    "bytes": 416474,
+    "producer": {
+     "script": "scripts/driver.py",
+     "call": "celltypist.train(sc.read(data/demo_2000_cells.h5ad), labels='cell_type', n_jobs=10, feature_selection=True, random_state=0) -> Model.cell_types / .features / .classifier.coef_ / .intercept_ / .scaler",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_2000_cells.h5ad"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/train_seeded_rs0/run2/scaler.csv",
+    "sha256": "b04b9f6a10818685d86bbec1366ff96385b7876f24b407defdaf9351ec101f15",
+    "bytes": 121407,
+    "producer": {
+     "script": "scripts/driver.py",
+     "call": "celltypist.train(sc.read(data/demo_2000_cells.h5ad), labels='cell_type', n_jobs=10, feature_selection=True, random_state=0) -> Model.cell_types / .features / .classifier.coef_ / .intercept_ / .scaler",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_2000_cells.h5ad"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/reference/train_seeded_rs0/run2/summary.json",
+    "sha256": "1a891d70494ac494b407a666156dbc8f27b18de56cab5e23039a6e1ebe87d030",
+    "bytes": 665,
+    "producer": {
+     "script": "scripts/driver.py",
+     "call": "celltypist.train(sc.read(data/demo_2000_cells.h5ad), labels='cell_type', n_jobs=10, feature_selection=True, random_state=0) -> Model.cell_types / .features / .classifier.coef_ / .intercept_ / .scaler",
+     "inputs": [
+      "notebooks/celltypist_tutorial/data/demo_2000_cells.h5ad"
+     ]
+    }
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/images/figure_1.png",
+    "sha256": "467514d7716977f61004e99eec5ede30d4bb492b2301047aa441ae1b3f7dda30",
+    "bytes": 161429,
+    "producer": null
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/images/figure_2.png",
+    "sha256": "8673057f0b6d4b57fe976639379bd89413557b68a607532250173276f70c95c0",
+    "bytes": 53114,
+    "producer": null
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/images/figure_3.png",
+    "sha256": "0f3dfb0bb33f3350e0381aeb2815d70883720d3b932046e079f979a0bed80411",
+    "bytes": 94485,
+    "producer": null
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/images/figure_4.png",
+    "sha256": "209dd2d83c59d4285de48a7caa717c5921f569d758e60cb6787e657db70e04c9",
+    "bytes": 52261,
+    "producer": null
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/images/figure_5.png",
+    "sha256": "4c5d7ee4bb094b2c6d8afa353c942a158485a11fafef7e6f14f77748e98cc286",
+    "bytes": 86953,
+    "producer": null
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/images/figure_6.png",
+    "sha256": "2a5e2150d02fe26c65b3cdc94e1d1cc3c861fa9c71f74dacb5d722d9982b83ba",
+    "bytes": 80957,
+    "producer": null
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/images/image-manifest.json",
+    "sha256": "e0a50fb68978bb06c428108287bb81836b29067ac4d60d31b25b8705d57c5ac5",
+    "bytes": 1779,
+    "producer": null
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/celltypist_tutorial_execution_final.ipynb",
+    "sha256": "40938e8c006ab20808eed972b0107be2458c57f76454b02f50f2d4cdf9f109c6",
+    "bytes": 1007972
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/celltypist_tutorial_inspection.ipynb",
+    "sha256": "ba728f771bf6d0b21248c77f8d50bbb28a2b9e705f1155e8b0207a64786acd58",
+    "bytes": 326942
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/celltypist_tutorial_input.ipynb",
+    "sha256": "3cdcff89f44fc7dbce94cde24030431273dc3ffe2540a037cbd3ccc565062686",
+    "bytes": 377302
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/source/celltypist_tutorial.ipynb",
+    "sha256": "4b5473ccbf3c4e6257ae8c2b6449d998827a8ce3caabf334dafb12bb48450870",
+    "bytes": 376236
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/scripts/build_report.py",
+    "sha256": "7f3c263bc28c9210abba45a21c174e349ddf95c111a29065b2ce7240473df339",
+    "bytes": 19165
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/scripts/common.py",
+    "sha256": "8b1071ac6a38a7ea489c4e7a0450378963d20ba053a29d968138e7bbc1d72e3e",
+    "bytes": 9740
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/scripts/driver.py",
+    "sha256": "e331017e1b030f691978d3feac9d81b7d61c147130191ff2ba1c0c5935073f3e",
+    "bytes": 11516
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/scripts/extract_notebook_logs.py",
+    "sha256": "c9d6f1b645a364f1eb12f2c07460f3e47f52f6f7bdb440c90fc8850cfb859dd7",
+    "bytes": 4198
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/scripts/prepare_notebook.py",
+    "sha256": "2e2454f40836dcf359f8b81e4f2c7069613e6613c99a64d7f45dc27ddfac3366",
+    "bytes": 12138
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/scripts/replay.py",
+    "sha256": "f385639193b26c46f9213b7bf13546392b655ed23bc710a98ea436db1e382eae",
+    "bytes": 11833
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/scripts/stage_inputs.py",
+    "sha256": "39247ea9cb1177d370380bc8ebbc12e733b7099e21ea52458c61624b68cfc242",
+    "bytes": 5547
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/scripts/env.sh",
+    "sha256": "febb8b6643c135917a48186b9827c0745275539aaf2d4ebcdaf5492c9555f959",
+    "bytes": 510
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/logs/commands.json",
+    "sha256": "5e75c5dd3a028c3f031e5fb5e5515d906b8c59926b16a375fa0db3ae64063706",
+    "bytes": 4893
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/logs/driver_attempt1.log",
+    "sha256": "4ecfd0679ca02a9bb2c055d2b5edf03d9fa4db53c4528d53972b61a093856ad4",
+    "bytes": 3663
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/logs/driver_attempt2.log",
+    "sha256": "2e0b624278a555f071a331fa169e2668c08b2b785c6b16bd3f5b7f6cf0b62a72",
+    "bytes": 2411
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/logs/driver_attempt2_vs_attempt3.txt",
+    "sha256": "453861df4dc9200adb51cb1eef17c38f48b523f12acd14540b15b92957b0bd1e",
+    "bytes": 476
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/logs/driver_attempt3.log",
+    "sha256": "5e61a7f4a29106c5438f76adab41c0363f68d0d9ee4189a962d3b119877d8374",
+    "bytes": 2408
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/logs/notebook_changes.json",
+    "sha256": "ca8730ee6cf57bff2542dd5fd2bd512373da65c56aeae31137f5ff5bf3b2b36b",
+    "bytes": 9667
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/logs/papermill_attempt1.log",
+    "sha256": "8287445dd001f35a31ae281f7220b4df602ee07bf7b2e54c293821421149001f",
+    "bytes": 101403
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/logs/replay_attempt1.log",
+    "sha256": "93af8166231ae961e2f29ab3ba1a2f6a518ff8f960bc4db084e0d9140ac3c230",
+    "bytes": 2759
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/logs/replay_attempt2.log",
+    "sha256": "f5c0ec191267fe56ff53471fc580604e11668ad74fd15db3d4b75548c28cd145",
+    "bytes": 2840
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/logs/stage_inputs.log",
+    "sha256": "952f51d8781432e664a68bd38975de18e21068516e0e4186613157acb942a845",
+    "bytes": 4282
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/celltypist_home/data/models/Immune_All_Low.pkl",
+    "sha256": "290874d35dac039d4c9218c343fde4aac1077709b72a331ce7266f6828c36502",
+    "bytes": 2824990
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/celltypist_home/data/models/models.json",
+    "sha256": "f617fcd7863b08e6ba2dca1db959d60d6f82f06a0833897e8968c9164a18b132",
+    "bytes": 25568
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/celltypist_demo_folder/demo_2000_cells.h5ad",
+    "sha256": "167d038d57bc7aee2854f12c3337cc1f58846f4ae7382745639a0957831bae9b",
+    "bytes": 35730948
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/celltypist_demo_folder/demo_400_cells.h5ad",
+    "sha256": "7f1efb7242cf043b6e91b6fdeb99ad025cba152887c5a4567d54f6a748a6a119",
+    "bytes": 7990288
+   },
+   {
+    "path": "notebooks/celltypist_tutorial/celltypist_demo_folder/model_from_immune2000.pkl",
+    "sha256": "b791a0bcbb0653f97cf5ebd122d0b5f6ea649799258bce670be2f05d2f866350",
+    "bytes": 293616
+   }
+  ],
+  "limitations": [
+   "The tutorial's own train() call is unseeded: this run selected 2595 features (upstream stored output 2607; ml tutorial 2619) and Mast-cell top-3 markers ['TPSB2','SLC45A3','CPA3'] vs upstream ['TPSB2','TPSAB1','CPA3']. Use the seeded (random_state=0) model and its outputs as the deterministic test reference; treat the as-run model as one draw.",
+   "The demo_2000 decision/probability matrices of the notebook's own cell-28 call are not retrievable after cell 56 overwrites `predictions`; the full-precision matrices come from the driver's identical call on the same saved inputs. The notebook's own labels, over_clustering, majority_voting and conf_score (all 2000 cells) were captured from the IPython Out cache and match the replay exactly.",
+   "over_clustering IDs differ from the upstream stored notebook (scanpy 1.12.4 leiden flavor='igraph' vs the tutorial's scanpy 1.7-era leiden), although the visible predicted_labels, majority_voting and conf_score rows match. Compare over_clustering only within this environment.",
+   "models.json now lists 61 models (upstream stored output: 12); models_description() row count is index-dependent.",
+   "Immune_All_Low.pkl was pickled with scikit-learn 0.24.1 and is loaded under 1.7.2; celltypist silences the InconsistentVersionWarning. Outputs match the upstream stored values shown (5645 features, conf_score head/tail rows).",
+   "Author labels and Immune_All_Low labels are compared by exact string; e.g. author 'Macrophages' is predicted 'Alveolar macrophages', which counts as disagreement.",
+   "Notebook data downloads were slow (~100-200 kB/s; 158 s for demo_2000) but complete; sizes match the server Content-Length and files carry the HDF5 signature."
+  ],
+  "flakiness_risks": [
+   "Unseeded celltypist.train(feature_selection=True): feature set, coefficients, markers and custom-model predictions vary run to run. Always pass random_state in tests.",
+   "Majority voting / over-clustering depend on scanpy, igraph, leidenalg, numpy/BLAS versions; identical within this environment across processes (see replay), not guaranteed elsewhere.",
+   "BLAS threading (OpenBLAS 20 threads): decision scores were bit-identical across processes here; tests on other machines should use atol ~1e-6 on decision/probability rather than bitwise equality.",
+   "Network: celltypist.cog.sanger.ac.uk downloads are slow; tests should use the saved data/ copies and CELLTYPIST_FOLDER pointing at a populated cache to avoid download_if_required() fetching all models.",
+   "models.json is live: models_description() and download URLs can change; use the saved snapshot for comparisons.",
+   "Model.description['date'] is datetime.now() for trained models, so .pkl hashes differ between identical seeded trainings; compare arrays, not file hashes.",
+   "anndata/pandas FutureWarnings (scanpy __version__ deprecation) are emitted on import; do not run tests with -W error."
+  ]
+ }
+}

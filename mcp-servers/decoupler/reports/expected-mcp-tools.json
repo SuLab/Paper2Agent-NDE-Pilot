@@ -1,0 +1,7 @@
+[
+  "decoupler_filter_genes_by_expression",
+  "decoupler_rank_pcs_by_metadata",
+  "pydeseq2_test_differential_expression",
+  "decoupler_score_activities_ulm",
+  "decoupler_inspect_source_targets"
+]

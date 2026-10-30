@@ -1,0 +1,4 @@
+[
+ {"name":"models","tool":"celltypist_list_models","arguments":{"output_dir":"/home/asu/Science/paper2agent-runs/new-data/pbmc3k/mcp_runs"}},
+ {"name":"inspect_high","tool":"celltypist_inspect_model","arguments":{"model":"Immune_All_High.pkl","top_n":3,"output_dir":"/home/asu/Science/paper2agent-runs/new-data/pbmc3k/mcp_runs"}}
+]

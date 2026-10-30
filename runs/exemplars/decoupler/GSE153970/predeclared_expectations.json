@@ -1,0 +1,19 @@
+{
+  "declared_at": "2026-10-29T23:39:03Z",
+  "declared_before": "building the AnnData or running any decoupler MCP tool on GSE153970 (only the GEO sample sheet, the count-matrix header and the PubMed abstract had been read)",
+  "design": "~condition, contrast SARS-CoV-2 vs mock (3 vs 3, unpaired), primary human airway epithelial cultures, MOI 0.25, 48 h",
+  "sources": {
+    "Vanderheiden et al. 2020 J Virol, doi:10.1128/JVI.00985-20 (PubMed 32699094), the study that generated GSE153970": "infected cultures had a signature dominated by IL-6, TNF-a and CXCL8 induction; NF-kB and ATF-4 identified as key drivers; 'a complete lack of a type I or III interferon (IFN) response'"
+  },
+  "superseded_hypothesis": {
+    "text": "NDE exemplar table (2026-10-28): 'Interferon (STAT/IRF) and inflammatory signalling'",
+    "why": "the abstract of the generating study reports the opposite for interferon: no type I or III IFN response. The inflammatory half is kept (E1-E3); the interferon half is replaced by the expected absence (E4). The original hypothesis is reported, not scored."
+  },
+  "expectations": [
+    {"id": "E1", "claim": "CollecTRI ulm: NFKB1 and RELA each have score > 0 and padj < 0.05", "source": "Vanderheiden 2020 abstract (NF-kB as key driver)"},
+    {"id": "E2", "claim": "CollecTRI ulm: ATF4 has score > 0 and padj < 0.05", "source": "Vanderheiden 2020 abstract (ATF-4 as key driver)"},
+    {"id": "E3", "claim": "IL6, TNF and CXCL8 each have log2FoldChange > 0 and padj < 0.05", "source": "Vanderheiden 2020 abstract"},
+    {"id": "E4", "claim": "No interferon response: Hallmark INTERFERON_ALPHA_RESPONSE, CollecTRI STAT2 and CollecTRI IRF9 are each NOT (score > 0 and padj < 0.05); IFNB1 and IFNL1 are each NOT (log2FoldChange > 0 and padj < 0.05), counting a gene removed by expression filtering as not induced", "source": "Vanderheiden 2020 abstract (complete lack of type I/III IFN response)"},
+    {"id": "R1", "claim": "Report only: genes kept; PCA; DE gene count at padj<0.05; top 10 TFs, PROGENy pathways and Hallmark sets; outcome of the superseded NDE interferon hypothesis"}
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "declared_at": "2026-10-29T23:39:03Z",
+  "declared_before": "building the AnnData or running any decoupler MCP tool on GSE198542 (only the GEO sample sheet, the count-matrix header and the PubMed abstract had been read)",
+  "design": "two separate contrasts, each ~condition, ZIKV vs MOCK (3 vs 3, unpaired): WT = IFNAR2-positive iPSC-macrophages (2 healthy-control lines), MUT = IFNAR2-deficient patient iPSC-macrophages. The full chain (filter, PCA, DE, scoring) is run on each genotype subset separately.",
+  "sources": {
+    "NDE exemplar table (2026-10-28)": "Interferon/STAT activity in control cells, absent or much weaker in IFNAR2-deficient cells (built-in negative control)",
+    "Hanrath et al. 2022 Front Immunol, doi:10.3389/fimmu.2022.1035532 (PubMed 36439115), the study that generated GSE198542": "ZIKV infection of macrophages triggers an IFN-I response; IFNAR2-deficient iPS-macrophages show a profound defect of IFN-I signalling, with enhanced ZIKV replication and cell death",
+    "IFN-I signalling biology (independent of this dataset)": "STAT1, STAT2 and IRF9 form ISGF3 downstream of IFNAR; MX1 and OAS1 are classical ISGF3-dependent genes. Virus-sensing (IRF3) can still induce some ISGs and IFNB1 without IFNAR, so only ISGF3 readouts are expected to collapse."
+  },
+  "expectations": [
+    {"id": "E1", "claim": "WT: Hallmark INTERFERON_ALPHA_RESPONSE has score > 0 and padj < 0.05", "source": "Hanrath 2022 + NDE exemplar table"},
+    {"id": "E2", "claim": "WT: CollecTRI STAT1, STAT2 and IRF9 each have score > 0 and padj < 0.05", "source": "NDE exemplar table + ISGF3 biology"},
+    {"id": "E3", "claim": "WT: MX1 and OAS1 each have log2FoldChange > 0 and padj < 0.05", "source": "ISGF3 biology"},
+    {"id": "E4", "claim": "Negative control, much weaker in MUT: (a) MUT Hallmark INTERFERON_ALPHA_RESPONSE score < 0.5 x WT score; (b) mean of MUT CollecTRI scores for STAT1, STAT2, IRF9 < 0.5 x the WT mean; (c) MX1 and OAS1 MUT log2FoldChange < 0.5 x WT log2FoldChange (a gene removed by filtering in MUT counts as log2FoldChange 0)", "source": "Hanrath 2022 (profound IFN-I signalling defect) + NDE exemplar table"},
+    {"id": "R1", "claim": "Report only: genes kept and PCA per genotype, including whether extraction date tracks a top PC; DE gene counts; top 10 TFs, PROGENy and Hallmark sets per genotype; IFNB1 and IRF3-target behaviour in MUT; NF-kB and cell-death signals in MUT"}
+  ]
+}

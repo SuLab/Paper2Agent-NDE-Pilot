@@ -1,0 +1,86 @@
+/home/asu/Science/paper2agent-runs/celltypist/celltypist-env/lib/python3.12/site-packages/celltypist/classifier.py:11: FutureWarning: `__version__` is deprecated, use `importlib.metadata.version('scanpy')` instead
+  from scanpy import __version__ as scv
+🔬 Input data has 500 cells and 18950 genes
+🔗 Matching reference genes in the model
+🧬 5645 features used for prediction
+⚖️ Scaling input data
+🖋️ Predicting labels
+✅ Prediction done!
+👀 Can not detect a neighborhood graph, will construct one before the over-clustering
+⛓️ Over-clustering input data with resolution set to 5
+🗳️ Majority voting the predictions
+✅ Majority voting done!
+🔬 Input data has 500 cells and 18950 genes
+🔗 Matching reference genes in the model
+🧬 5645 features used for prediction
+⚖️ Scaling input data
+🖋️ Predicting labels
+✅ Prediction done!
+🔬 Input data has 500 cells and 18950 genes
+🔗 Matching reference genes in the model
+🧬 5645 features used for prediction
+⚖️ Scaling input data
+🖋️ Predicting labels
+✅ Prediction done!
+👀 Can not detect a neighborhood graph, will construct one before the over-clustering
+⛓️ Over-clustering input data with resolution set to 5
+🗳️ Majority voting the predictions
+✅ Majority voting done!
+🔬 Input data has 500 cells and 18950 genes
+🔗 Matching reference genes in the model
+🧬 2652 features used for prediction
+⚖️ Scaling input data
+🖋️ Predicting labels
+✅ Prediction done!
+👀 Can not detect a neighborhood graph, will construct one before the over-clustering
+⛓️ Over-clustering input data with resolution set to 5
+🗳️ Majority voting the predictions
+✅ Majority voting done!
+🔬 Input data has 2000 cells and 18950 genes
+🔗 Matching reference genes in the model
+🧬 5645 features used for prediction
+⚖️ Scaling input data
+🖋️ Predicting labels
+✅ Prediction done!
+👀 Can not detect a neighborhood graph, will construct one before the over-clustering
+⛓️ Over-clustering input data with resolution set to 5
+🗳️ Majority voting the predictions
+✅ Majority voting done!
+{
+ "builtin_bestmatch": {
+  "annotated.h5ad": "3e866a77dd73b4cc5093c2eece03cf4d91388c03432553321df5d71a8f6df03c",
+  "decision_matrix.csv": "e6a75a24270c1072deb1a7dfd5d164b3eedd4a9f2786e399064821e79c0cb65d",
+  "predicted_labels.csv": "b1414a3203f318d2e20b6188f5e421f594cf3d7b8800ef16c87ea62f7fcab4d0",
+  "probability_matrix.csv": "58d3c3da7144dcd48cdd31974725b1c341786c9b4725a68ae705b9779ddf15b3"
+ },
+ "builtin_bestmatch_no_mv": {
+  "annotated.h5ad": "393b113f483b7c8958a166711d0d2119ca791aa2ffa56118821eee91382cbd83",
+  "decision_matrix.csv": "e6a75a24270c1072deb1a7dfd5d164b3eedd4a9f2786e399064821e79c0cb65d",
+  "predicted_labels.csv": "67810ee0bfe93828db7c5c20f0bf9193ad3cd7c4125f68c671734fbc1494a173",
+  "probability_matrix.csv": "58d3c3da7144dcd48cdd31974725b1c341786c9b4725a68ae705b9779ddf15b3"
+ },
+ "builtin_probmatch_p07": {
+  "annotated.h5ad": "0a4e0c8d5d21afbaec0c1586ad1b900f02fd0845c69fbcd6db4d39404c200c82",
+  "decision_matrix.csv": "e6a75a24270c1072deb1a7dfd5d164b3eedd4a9f2786e399064821e79c0cb65d",
+  "predicted_labels.csv": "041e5a65ba879d077824fdbd71ce376e74711e56ca44c5d72f500d0c30bae560",
+  "probability_matrix.csv": "58d3c3da7144dcd48cdd31974725b1c341786c9b4725a68ae705b9779ddf15b3"
+ },
+ "custom_seed0_probmatch": {
+  "annotated.h5ad": "72e72046953b8acdeb29b8afab1b2fe19c02656d6c963eb5f9f79e3f9f09f5d9",
+  "decision_matrix.csv": "c4c8f6fbf3e0e6ab46b0ae62175e4331b24b9a7664fc67067112b97e7b737b2d",
+  "predicted_labels.csv": "9994567c6d42e6003ec7d95bbb0bf34d12a9adab0fcf8e70075cdbe245224cbb",
+  "probability_matrix.csv": "a3d32f998b3f53ebc22b5e9eb9ea1ae06ff553888e77eefd9fe88e463d047f98"
+ },
+ "main_demo2000_bestmatch": {
+  "annotated.h5ad": "8f564db574ac87c3a1b6e96848a8cc016747fa3d99497d1bda5fd24167a5d10c",
+  "decision_matrix.csv": "7f6d303f6ddc5aaa66d63f421eacbd16b21549934ae1be57d6a70374683583af",
+  "predicted_labels.csv": "d885e8ea72e710aa9198767e76a175105c49ed4ca8fe59f411beda6ce88cebe0",
+  "probability_matrix.csv": "22855b9b8abc036c712c9090da9daea30e81f00404c652854fd83a509bf127d2"
+ },
+ "relabelled_reference": {
+  "annotated.h5ad": "ce1e9617b864184a3258c6eed2e50aaad4bc2d1205d7e8d95121990847a21d2e",
+  "decision_matrix.csv": "e6a75a24270c1072deb1a7dfd5d164b3eedd4a9f2786e399064821e79c0cb65d",
+  "predicted_labels.csv": "b1414a3203f318d2e20b6188f5e421f594cf3d7b8800ef16c87ea62f7fcab4d0",
+  "probability_matrix.csv": "58d3c3da7144dcd48cdd31974725b1c341786c9b4725a68ae705b9779ddf15b3"
+ }
+}

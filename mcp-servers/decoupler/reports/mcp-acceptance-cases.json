@@ -1,0 +1,722 @@
+[
+  {
+    "name": "filter-tutorial-reference",
+    "tool": "decoupler_filter_genes_by_expression",
+    "arguments": {
+      "data_path": "/home/asu/Science/paper2agent-runs/decoupler/tests/data/bulk_enrichment/inputs/hsctgfb_raw.h5ad",
+      "group_key": "condition",
+      "output_dir": "/home/asu/Science/paper2agent-runs/decoupler/tmp/acceptance/outputs"
+    },
+    "required_inputs": [
+      "data_path",
+      "group_key"
+    ],
+    "expected_subset": {
+      "n_genes_before": 58674,
+      "n_genes_after": 19510,
+      "n_genes_removed": 39164,
+      "n_samples": 6,
+      "group_sizes": {
+        "control": 3,
+        "treatment": 3
+      }
+    },
+    "min_artifacts": 2,
+    "artifact_root": "/home/asu/Science/paper2agent-runs/decoupler/tmp/acceptance/outputs",
+    "unique_artifacts": true
+  },
+  {
+    "name": "filter-tutorial-reference-repeat",
+    "tool": "decoupler_filter_genes_by_expression",
+    "arguments": {
+      "data_path": "/home/asu/Science/paper2agent-runs/decoupler/tests/data/bulk_enrichment/inputs/hsctgfb_raw.h5ad",
+      "group_key": "condition",
+      "output_dir": "/home/asu/Science/paper2agent-runs/decoupler/tmp/acceptance/outputs"
+    },
+    "required_inputs": [
+      "data_path",
+      "group_key"
+    ],
+    "expected_subset": {
+      "n_genes_before": 58674,
+      "n_genes_after": 19510,
+      "n_genes_removed": 39164,
+      "n_samples": 6,
+      "group_sizes": {
+        "control": 3,
+        "treatment": 3
+      }
+    },
+    "min_artifacts": 2,
+    "artifact_root": "/home/asu/Science/paper2agent-runs/decoupler/tmp/acceptance/outputs",
+    "unique_artifacts": true
+  },
+  {
+    "name": "filter-relabelled-metadata",
+    "tool": "decoupler_filter_genes_by_expression",
+    "arguments": {
+      "data_path": "/home/asu/Science/paper2agent-runs/decoupler/tests/data/bulk_enrichment/derived/relabelled_permuted_raw.h5ad",
+      "group_key": "treatment_status",
+      "output_dir": "/home/asu/Science/paper2agent-runs/decoupler/tmp/acceptance/outputs"
+    },
+    "required_inputs": [
+      "data_path",
+      "group_key"
+    ],
+    "expected_subset": {
+      "n_genes_after": 19510,
+      "group_sizes": {
+        "TGFb_treated": 3,
+        "vehicle": 3
+      }
+    },
+    "min_artifacts": 2,
+    "artifact_root": "/home/asu/Science/paper2agent-runs/decoupler/tmp/acceptance/outputs",
+    "unique_artifacts": true
+  },
+  {
+    "name": "filter-error-missing-group-column",
+    "tool": "decoupler_filter_genes_by_expression",
+    "arguments": {
+      "data_path": "/home/asu/Science/paper2agent-runs/decoupler/tests/data/bulk_enrichment/inputs/hsctgfb_raw.h5ad",
+      "group_key": "treatment_status",
+      "output_dir": "/home/asu/Science/paper2agent-runs/decoupler/tmp/acceptance/outputs"
+    },
+    "required_inputs": [
+      "data_path",
+      "group_key"
+    ],
+    "error_contains": "not found in adata.obs columns"
+  },
+  {
+    "name": "filter-error-missing-file",
+    "tool": "decoupler_filter_genes_by_expression",
+    "arguments": {
+      "data_path": "/home/asu/Science/paper2agent-runs/decoupler/tests/data/bulk_enrichment/missing.h5ad",
+      "group_key": "condition",
+      "output_dir": "/home/asu/Science/paper2agent-runs/decoupler/tmp/acceptance/outputs"
+    },
+    "required_inputs": [
+      "data_path",
+      "group_key"
+    ],
+    "error_contains": "does not exist"
+  },
+  {
+    "name": "rank-pcs-tutorial-reference",
+    "tool": "decoupler_rank_pcs_by_metadata",
+    "arguments": {
+      "data_path": "/home/asu/Science/paper2agent-runs/decoupler/tests/data/bulk_enrichment/inputs/hsctgfb_filtered_reference.h5ad",
+      "output_dir": "/home/asu/Science/paper2agent-runs/decoupler/tmp/acceptance/outputs"
+    },
+    "required_inputs": [
+      "data_path"
+    ],
+    "expected_subset": {
+      "n_samples": 6,
+      "n_genes": 19510,
+      "n_pcs": 5,
+      "n_tests": 10,
+      "tested_obs_keys": [
+        "condition",
+        "sample_id"
+      ],
+      "color_keys": [
+        "condition",
+        "sample_id"
+      ],
+      "significant_associations": [
+        {
+          "obsm": "PC1",
+          "obs": "condition"
+        }
+      ]
+    },
+    "min_artifacts": 6,
+    "artifact_root": "/home/asu/Science/paper2agent-runs/decoupler/tmp/acceptance/outputs",
+    "unique_artifacts": true
+  },
+  {
+    "name": "rank-pcs-tutorial-reference-repeat",
+    "tool": "decoupler_rank_pcs_by_metadata",
+    "arguments": {
+      "data_path": "/home/asu/Science/paper2agent-runs/decoupler/tests/data/bulk_enrichment/inputs/hsctgfb_filtered_reference.h5ad",
+      "output_dir": "/home/asu/Science/paper2agent-runs/decoupler/tmp/acceptance/outputs"
+    },
+    "required_inputs": [
+      "data_path"
+    ],
+    "expected_subset": {
+      "n_samples": 6,
+      "n_genes": 19510,
+      "n_pcs": 5,
+      "n_tests": 10,
+      "tested_obs_keys": [
+        "condition",
+        "sample_id"
+      ],
+      "color_keys": [
+        "condition",
+        "sample_id"
+      ],
+      "significant_associations": [
+        {
+          "obsm": "PC1",
+          "obs": "condition"
+        }
+      ]
+    },
+    "min_artifacts": 6,
+    "artifact_root": "/home/asu/Science/paper2agent-runs/decoupler/tmp/acceptance/outputs",
+    "unique_artifacts": true
+  },
+  {
+    "name": "rank-pcs-error-missing-obs-key",
+    "tool": "decoupler_rank_pcs_by_metadata",
+    "arguments": {
+      "data_path": "/home/asu/Science/paper2agent-runs/decoupler/tests/data/bulk_enrichment/inputs/hsctgfb_filtered_reference.h5ad",
+      "obs_keys": [
+        "batch"
+      ],
+      "output_dir": "/home/asu/Science/paper2agent-runs/decoupler/tmp/acceptance/outputs"
+    },
+    "required_inputs": [
+      "data_path"
+    ],
+    "error_contains": "not found in adata.obs columns"
+  },
+  {
+    "name": "deseq2-tutorial-reference",
+    "tool": "pydeseq2_test_differential_expression",
+    "arguments": {
+      "data_path": "/home/asu/Science/paper2agent-runs/decoupler/tests/data/bulk_enrichment/inputs/hsctgfb_filtered_reference.h5ad",
+      "condition_key": "condition",
+      "group": "treatment",
+      "reference": "control",
+      "n_cpus": 8,
+      "output_dir": "/home/asu/Science/paper2agent-runs/decoupler/tmp/acceptance/outputs"
+    },
+    "required_inputs": [
+      "data_path",
+      "condition_key",
+      "group",
+      "reference"
+    ],
+    "expected_subset": {
+      "n_genes": 19510,
+      "n_samples": 6,
+      "design": "~condition",
+      "contrast": [
+        "condition",
+        "treatment",
+        "control"
+      ],
+      "samples_per_level": {
+        "control": 3,
+        "treatment": 3
+      },
+      "n_padj_lt_0.05": 8517,
+      "n_padj_lt_0.05_up": 4328,
+      "n_padj_lt_0.05_down": 4189,
+      "top_up": [
+        {
+          "gene": "NOX4"
+        },
+        {
+          "gene": "ACTC1"
+        },
+        {
+          "gene": "SERPINE2"
+        },
+        {
+          "gene": "ADAM19"
+        },
+        {
+          "gene": "IL11"
+        }
+      ],
+      "top_down": [
+        {
+          "gene": "ADAMTS1"
+        },
+        {
+          "gene": "SMAD3"
+        },
+        {
+          "gene": "GALNT15"
+        },
+        {
+          "gene": "HGF"
+        },
+        {
+          "gene": "NID2"
+        }
+      ]
+    },
+    "min_artifacts": 2,
+    "artifact_root": "/home/asu/Science/paper2agent-runs/decoupler/tmp/acceptance/outputs",
+    "unique_artifacts": true
+  },
+  {
+    "name": "deseq2-small-subset",
+    "tool": "pydeseq2_test_differential_expression",
+    "arguments": {
+      "data_path": "/home/asu/Science/paper2agent-runs/decoupler/tests/data/bulk_enrichment/derived/filtered_small_2000genes.h5ad",
+      "condition_key": "condition",
+      "group": "treatment",
+      "reference": "control",
+      "output_dir": "/home/asu/Science/paper2agent-runs/decoupler/tmp/acceptance/outputs"
+    },
+    "required_inputs": [
+      "data_path",
+      "condition_key",
+      "group",
+      "reference"
+    ],
+    "expected_subset": {
+      "n_genes": 2000,
+      "n_padj_lt_0.05": 935,
+      "n_padj_lt_0.05_up": 491,
+      "n_padj_lt_0.05_down": 444
+    },
+    "min_artifacts": 2,
+    "artifact_root": "/home/asu/Science/paper2agent-runs/decoupler/tmp/acceptance/outputs",
+    "unique_artifacts": true
+  },
+  {
+    "name": "deseq2-small-subset-repeat",
+    "tool": "pydeseq2_test_differential_expression",
+    "arguments": {
+      "data_path": "/home/asu/Science/paper2agent-runs/decoupler/tests/data/bulk_enrichment/derived/filtered_small_2000genes.h5ad",
+      "condition_key": "condition",
+      "group": "treatment",
+      "reference": "control",
+      "output_dir": "/home/asu/Science/paper2agent-runs/decoupler/tmp/acceptance/outputs"
+    },
+    "required_inputs": [
+      "data_path",
+      "condition_key",
+      "group",
+      "reference"
+    ],
+    "expected_subset": {
+      "n_genes": 2000,
+      "n_padj_lt_0.05": 935,
+      "n_padj_lt_0.05_up": 491,
+      "n_padj_lt_0.05_down": 444
+    },
+    "min_artifacts": 2,
+    "artifact_root": "/home/asu/Science/paper2agent-runs/decoupler/tmp/acceptance/outputs",
+    "unique_artifacts": true
+  },
+  {
+    "name": "deseq2-error-missing-group-level",
+    "tool": "pydeseq2_test_differential_expression",
+    "arguments": {
+      "data_path": "/home/asu/Science/paper2agent-runs/decoupler/tests/data/bulk_enrichment/inputs/hsctgfb_filtered_reference.h5ad",
+      "condition_key": "condition",
+      "group": "TGFb",
+      "reference": "control",
+      "output_dir": "/home/asu/Science/paper2agent-runs/decoupler/tmp/acceptance/outputs"
+    },
+    "required_inputs": [
+      "data_path",
+      "condition_key",
+      "group",
+      "reference"
+    ],
+    "error_contains": "level(s) ['TGFb'] not found"
+  },
+  {
+    "name": "deseq2-error-missing-condition-column",
+    "tool": "pydeseq2_test_differential_expression",
+    "arguments": {
+      "data_path": "/home/asu/Science/paper2agent-runs/decoupler/tests/data/bulk_enrichment/inputs/hsctgfb_filtered_reference.h5ad",
+      "condition_key": "treatment_status",
+      "group": "treatment",
+      "reference": "control",
+      "output_dir": "/home/asu/Science/paper2agent-runs/decoupler/tmp/acceptance/outputs"
+    },
+    "required_inputs": [
+      "data_path",
+      "condition_key",
+      "group",
+      "reference"
+    ],
+    "error_contains": "not found in adata.obs columns"
+  },
+  {
+    "name": "deseq2-error-non-integer-counts",
+    "tool": "pydeseq2_test_differential_expression",
+    "arguments": {
+      "data_path": "/home/asu/Science/paper2agent-runs/decoupler/tests/data/bulk_enrichment/derived/non_integer_counts.h5ad",
+      "condition_key": "condition",
+      "group": "treatment",
+      "reference": "control",
+      "output_dir": "/home/asu/Science/paper2agent-runs/decoupler/tmp/acceptance/outputs"
+    },
+    "required_inputs": [
+      "data_path",
+      "condition_key",
+      "group",
+      "reference"
+    ],
+    "error_contains": "non-negative integers"
+  },
+  {
+    "name": "ulm-collectri-tutorial-reference",
+    "tool": "decoupler_score_activities_ulm",
+    "arguments": {
+      "de_results_path": "/home/asu/Science/paper2agent-runs/decoupler/tests/data/bulk_enrichment/inputs/deseq2_results_reference.csv",
+      "network": "collectri",
+      "network_path": "/home/asu/Science/paper2agent-runs/decoupler/tests/data/bulk_enrichment/inputs/networks/collectri.parquet",
+      "contrast_name": "treatment.vs.control",
+      "output_dir": "/home/asu/Science/paper2agent-runs/decoupler/tmp/acceptance/outputs"
+    },
+    "required_inputs": [
+      "de_results_path",
+      "network"
+    ],
+    "expected_subset": {
+      "network": "collectri",
+      "network_rows": 42990,
+      "n_sources_scored": 655,
+      "n_significant": 143,
+      "n_significant_positive": 64,
+      "n_significant_negative": 79,
+      "n_genes": 19510,
+      "contrast_row": "treatment.vs.control"
+    },
+    "min_artifacts": 6,
+    "artifact_root": "/home/asu/Science/paper2agent-runs/decoupler/tmp/acceptance/outputs",
+    "unique_artifacts": true
+  },
+  {
+    "name": "ulm-progeny-tutorial-reference",
+    "tool": "decoupler_score_activities_ulm",
+    "arguments": {
+      "de_results_path": "/home/asu/Science/paper2agent-runs/decoupler/tests/data/bulk_enrichment/inputs/deseq2_results_reference.csv",
+      "network": "progeny",
+      "network_path": "/home/asu/Science/paper2agent-runs/decoupler/tests/data/bulk_enrichment/inputs/networks/progeny.parquet",
+      "contrast_name": "treatment.vs.control",
+      "output_dir": "/home/asu/Science/paper2agent-runs/decoupler/tmp/acceptance/outputs"
+    },
+    "required_inputs": [
+      "de_results_path",
+      "network"
+    ],
+    "expected_subset": {
+      "network": "progeny",
+      "network_rows": 62421,
+      "n_sources_scored": 14,
+      "n_significant": 12,
+      "n_significant_positive": 8,
+      "n_significant_negative": 4,
+      "n_genes": 19510,
+      "contrast_row": "treatment.vs.control"
+    },
+    "min_artifacts": 6,
+    "artifact_root": "/home/asu/Science/paper2agent-runs/decoupler/tmp/acceptance/outputs",
+    "unique_artifacts": true
+  },
+  {
+    "name": "ulm-hallmark-tutorial-reference",
+    "tool": "decoupler_score_activities_ulm",
+    "arguments": {
+      "de_results_path": "/home/asu/Science/paper2agent-runs/decoupler/tests/data/bulk_enrichment/inputs/deseq2_results_reference.csv",
+      "network": "hallmark",
+      "network_path": "/home/asu/Science/paper2agent-runs/decoupler/tests/data/bulk_enrichment/inputs/networks/hallmark.parquet",
+      "contrast_name": "treatment.vs.control",
+      "output_dir": "/home/asu/Science/paper2agent-runs/decoupler/tmp/acceptance/outputs"
+    },
+    "required_inputs": [
+      "de_results_path",
+      "network"
+    ],
+    "expected_subset": {
+      "network": "hallmark",
+      "network_rows": 7318,
+      "n_sources_scored": 50,
+      "n_significant": 30,
+      "n_significant_positive": 13,
+      "n_significant_negative": 17,
+      "n_genes": 19510,
+      "contrast_row": "treatment.vs.control"
+    },
+    "min_artifacts": 6,
+    "artifact_root": "/home/asu/Science/paper2agent-runs/decoupler/tmp/acceptance/outputs",
+    "unique_artifacts": true
+  },
+  {
+    "name": "ulm-progeny-repeat",
+    "tool": "decoupler_score_activities_ulm",
+    "arguments": {
+      "de_results_path": "/home/asu/Science/paper2agent-runs/decoupler/tests/data/bulk_enrichment/inputs/deseq2_results_reference.csv",
+      "network": "progeny",
+      "network_path": "/home/asu/Science/paper2agent-runs/decoupler/tests/data/bulk_enrichment/inputs/networks/progeny.parquet",
+      "contrast_name": "treatment.vs.control",
+      "output_dir": "/home/asu/Science/paper2agent-runs/decoupler/tmp/acceptance/outputs"
+    },
+    "required_inputs": [
+      "de_results_path",
+      "network"
+    ],
+    "expected_subset": {
+      "n_significant": 12
+    },
+    "min_artifacts": 6,
+    "artifact_root": "/home/asu/Science/paper2agent-runs/decoupler/tmp/acceptance/outputs",
+    "unique_artifacts": true
+  },
+  {
+    "name": "ulm-error-missing-stat-column",
+    "tool": "decoupler_score_activities_ulm",
+    "arguments": {
+      "de_results_path": "/home/asu/Science/paper2agent-runs/decoupler/tests/data/bulk_enrichment/derived/deseq2_results_no_stat.csv",
+      "network": "hallmark",
+      "network_path": "/home/asu/Science/paper2agent-runs/decoupler/tests/data/bulk_enrichment/inputs/networks/hallmark.parquet",
+      "output_dir": "/home/asu/Science/paper2agent-runs/decoupler/tmp/acceptance/outputs"
+    },
+    "required_inputs": [
+      "de_results_path",
+      "network"
+    ],
+    "error_contains": "lack column(s) ['stat']"
+  },
+  {
+    "name": "ulm-error-network-without-source-target",
+    "tool": "decoupler_score_activities_ulm",
+    "arguments": {
+      "de_results_path": "/home/asu/Science/paper2agent-runs/decoupler/tests/data/bulk_enrichment/inputs/deseq2_results_reference.csv",
+      "network": "hallmark",
+      "network_path": "/home/asu/Science/paper2agent-runs/decoupler/tests/data/bulk_enrichment/derived/network_bad_columns.csv",
+      "output_dir": "/home/asu/Science/paper2agent-runs/decoupler/tmp/acceptance/outputs"
+    },
+    "required_inputs": [
+      "de_results_path",
+      "network"
+    ],
+    "error_contains": "needs 'source' and 'target' columns"
+  },
+  {
+    "name": "ulm-error-missing-network-file",
+    "tool": "decoupler_score_activities_ulm",
+    "arguments": {
+      "de_results_path": "/home/asu/Science/paper2agent-runs/decoupler/tests/data/bulk_enrichment/inputs/deseq2_results_reference.csv",
+      "network": "hallmark",
+      "network_path": "/home/asu/Science/paper2agent-runs/decoupler/tests/data/bulk_enrichment/missing.parquet",
+      "output_dir": "/home/asu/Science/paper2agent-runs/decoupler/tmp/acceptance/outputs"
+    },
+    "required_inputs": [
+      "de_results_path",
+      "network"
+    ],
+    "error_contains": "does not exist"
+  },
+  {
+    "name": "inspect-progeny-TGFb-tutorial-reference",
+    "tool": "decoupler_inspect_source_targets",
+    "arguments": {
+      "de_results_path": "/home/asu/Science/paper2agent-runs/decoupler/tests/data/bulk_enrichment/inputs/deseq2_results_reference.csv",
+      "network": "progeny",
+      "source": "TGFb",
+      "network_path": "/home/asu/Science/paper2agent-runs/decoupler/tests/data/bulk_enrichment/inputs/networks/progeny.parquet",
+      "output_dir": "/home/asu/Science/paper2agent-runs/decoupler/tmp/acceptance/outputs"
+    },
+    "required_inputs": [
+      "de_results_path",
+      "network",
+      "source"
+    ],
+    "expected_subset": {
+      "source": "TGFb",
+      "weighted_network": true,
+      "leading_edges": {
+        "positive_weights": {
+          "n_genes": 581,
+          "first_genes": [
+            "IL11",
+            "AMIGO2",
+            "SERPINE2",
+            "ACTC1",
+            "NOX4",
+            "ADAM19",
+            "PMEPA1",
+            "NUAK1",
+            "TSPAN2",
+            "CRLF1"
+          ]
+        },
+        "negative_weights": {
+          "n_genes": 292,
+          "first_genes": [
+            "SMAD3",
+            "ADAMTS1",
+            "GALNT15",
+            "HGF",
+            "NID2",
+            "NTN4",
+            "LPAR1",
+            "STOM",
+            "PDE5A",
+            "SFRP1"
+          ]
+        }
+      }
+    },
+    "min_artifacts": 6,
+    "artifact_root": "/home/asu/Science/paper2agent-runs/decoupler/tmp/acceptance/outputs",
+    "unique_artifacts": true
+  },
+  {
+    "name": "inspect-hallmark-TGF_BETA-tutorial-reference",
+    "tool": "decoupler_inspect_source_targets",
+    "arguments": {
+      "de_results_path": "/home/asu/Science/paper2agent-runs/decoupler/tests/data/bulk_enrichment/inputs/deseq2_results_reference.csv",
+      "network": "hallmark",
+      "source": "TGF_BETA_SIGNALING",
+      "network_path": "/home/asu/Science/paper2agent-runs/decoupler/tests/data/bulk_enrichment/inputs/networks/hallmark.parquet",
+      "output_dir": "/home/asu/Science/paper2agent-runs/decoupler/tmp/acceptance/outputs"
+    },
+    "required_inputs": [
+      "de_results_path",
+      "network",
+      "source"
+    ],
+    "expected_subset": {
+      "source": "TGF_BETA_SIGNALING",
+      "weighted_network": false,
+      "leading_edges": {
+        "all_targets": {
+          "n_genes": 19,
+          "first_genes": [
+            "PMEPA1",
+            "JUNB",
+            "SKIL",
+            "LTBP2",
+            "KLF10",
+            "THBS1",
+            "SERPINE1",
+            "TGFB1",
+            "SMAD7",
+            "ACVR1"
+          ]
+        }
+      }
+    },
+    "min_artifacts": 4,
+    "artifact_root": "/home/asu/Science/paper2agent-runs/decoupler/tmp/acceptance/outputs",
+    "unique_artifacts": true
+  },
+  {
+    "name": "inspect-hallmark-TGF_BETA-repeat",
+    "tool": "decoupler_inspect_source_targets",
+    "arguments": {
+      "de_results_path": "/home/asu/Science/paper2agent-runs/decoupler/tests/data/bulk_enrichment/inputs/deseq2_results_reference.csv",
+      "network": "hallmark",
+      "source": "TGF_BETA_SIGNALING",
+      "network_path": "/home/asu/Science/paper2agent-runs/decoupler/tests/data/bulk_enrichment/inputs/networks/hallmark.parquet",
+      "output_dir": "/home/asu/Science/paper2agent-runs/decoupler/tmp/acceptance/outputs"
+    },
+    "required_inputs": [
+      "de_results_path",
+      "network",
+      "source"
+    ],
+    "expected_subset": {
+      "source": "TGF_BETA_SIGNALING",
+      "weighted_network": false,
+      "leading_edges": {
+        "all_targets": {
+          "n_genes": 19,
+          "first_genes": [
+            "PMEPA1",
+            "JUNB",
+            "SKIL",
+            "LTBP2",
+            "KLF10",
+            "THBS1",
+            "SERPINE1",
+            "TGFB1",
+            "SMAD7",
+            "ACVR1"
+          ]
+        }
+      }
+    },
+    "min_artifacts": 4,
+    "artifact_root": "/home/asu/Science/paper2agent-runs/decoupler/tmp/acceptance/outputs",
+    "unique_artifacts": true
+  },
+  {
+    "name": "inspect-collectri-SRF-network-plot",
+    "tool": "decoupler_inspect_source_targets",
+    "arguments": {
+      "de_results_path": "/home/asu/Science/paper2agent-runs/decoupler/tests/data/bulk_enrichment/inputs/deseq2_results_reference.csv",
+      "network": "collectri",
+      "source": "SRF",
+      "scores_path": "/home/asu/Science/paper2agent-runs/decoupler/tests/data/bulk_enrichment/inputs/collectri_scores_significant_reference.csv",
+      "network_sources": [
+        "SRF",
+        "MYOCD",
+        "IRF1",
+        "SKIL"
+      ],
+      "network_path": "/home/asu/Science/paper2agent-runs/decoupler/tests/data/bulk_enrichment/inputs/networks/collectri.parquet",
+      "output_dir": "/home/asu/Science/paper2agent-runs/decoupler/tmp/acceptance/outputs"
+    },
+    "required_inputs": [
+      "de_results_path",
+      "network",
+      "source"
+    ],
+    "expected_subset": {
+      "source": "SRF",
+      "weighted_network": true,
+      "skipped": [],
+      "network_plot_sources": [
+        "SRF",
+        "MYOCD",
+        "IRF1",
+        "SKIL"
+      ]
+    },
+    "min_artifacts": 8,
+    "artifact_root": "/home/asu/Science/paper2agent-runs/decoupler/tmp/acceptance/outputs",
+    "unique_artifacts": true
+  },
+  {
+    "name": "inspect-error-unknown-source",
+    "tool": "decoupler_inspect_source_targets",
+    "arguments": {
+      "de_results_path": "/home/asu/Science/paper2agent-runs/decoupler/tests/data/bulk_enrichment/inputs/deseq2_results_reference.csv",
+      "network": "progeny",
+      "source": "NOT_A_PATHWAY",
+      "network_path": "/home/asu/Science/paper2agent-runs/decoupler/tests/data/bulk_enrichment/inputs/networks/progeny.parquet",
+      "output_dir": "/home/asu/Science/paper2agent-runs/decoupler/tmp/acceptance/outputs"
+    },
+    "required_inputs": [
+      "de_results_path",
+      "network",
+      "source"
+    ],
+    "error_contains": "source 'NOT_A_PATHWAY' not found in the progeny network"
+  },
+  {
+    "name": "inspect-error-missing-de-file",
+    "tool": "decoupler_inspect_source_targets",
+    "arguments": {
+      "de_results_path": "/home/asu/Science/paper2agent-runs/decoupler/tests/data/bulk_enrichment/missing.csv",
+      "network": "progeny",
+      "source": "TGFb",
+      "network_path": "/home/asu/Science/paper2agent-runs/decoupler/tests/data/bulk_enrichment/inputs/networks/progeny.parquet",
+      "output_dir": "/home/asu/Science/paper2agent-runs/decoupler/tmp/acceptance/outputs"
+    },
+    "required_inputs": [
+      "de_results_path",
+      "network",
+      "source"
+    ],
+    "error_contains": "does not exist"
+  }
+]

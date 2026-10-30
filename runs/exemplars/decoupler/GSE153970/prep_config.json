@@ -1,0 +1,1 @@
+{"gse": "GSE153970", "condition": {"field": "agent", "levels": {"Mock infection": "mock", "SARS-CoV-2": "SARS_CoV_2"}}}

@@ -1,0 +1,16 @@
+{
+  "declared_at": "2026-10-28T01:29:20Z",
+  "declared_before": "any CellTypist annotation of PBMC 3k was run (only the model's 32 cell-type names had been listed)",
+  "metric": "fraction of cells in each author louvain group whose Immune_All_High majority-voting label is in the accepted set; overall = cell-weighted mean",
+  "accepted_high_labels": {
+    "CD4 T cells": ["T cells"],
+    "CD8 T cells": ["T cells"],
+    "NK cells": ["ILC"],
+    "B cells": ["B cells"],
+    "CD14+ Monocytes": ["Monocytes"],
+    "FCGR3A+ Monocytes": ["Monocytes"],
+    "Dendritic cells": ["DC"],
+    "Megakaryocytes": ["Megakaryocytes/platelets"]
+  },
+  "notes": "NK cells are grouped under the high-level 'ILC' category in CellTypist's Immune_All hierarchy (assumption stated in advance; checked against Immune_All_Low below). Low-resolution (Immune_All_Low) results are reported descriptively via the crosstab, not scored."
+}

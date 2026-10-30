@@ -1,0 +1,196 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.13, pytest-9.2.0, pluggy-1.7.0 -- /home/asu/Science/paper2agent-runs/celltypist/celltypist-env/bin/python
+rootdir: /home/asu/Science/paper2agent-runs/celltypist
+configfile: pytest.ini
+plugins: zarr-3.4.2, asyncio-1.4.1, platformdirs-4.13.6, fast-array-utils-1.5.1, anyio-4.15.1
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=function, asyncio_default_test_loop_scope=function
+collecting ... collected 40 items
+
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_fixtures_are_byte_identical_to_executor_reference[builtin_bestmatch-ref_dir0] PASSED [  2%]
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_fixtures_are_byte_identical_to_executor_reference[custom_seed0_probmatch-ref_dir1] PASSED [  5%]
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_fixtures_are_byte_identical_to_executor_reference[main_demo2000_bestmatch-ref_dir2] PASSED [  7%]
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_ml_cell47_rows_exact PASSED [ 10%]
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_full_crosstab_and_dotplot_tables[builtin_bestmatch-cell_type-majority_voting] PASSED [ 12%]
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_full_crosstab_and_dotplot_tables[builtin_bestmatch-cell_type-predicted_labels] PASSED [ 15%]
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_full_crosstab_and_dotplot_tables[builtin_probmatch_p07-cell_type-majority_voting] PASSED [ 17%]
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_full_crosstab_and_dotplot_tables[builtin_probmatch_p07-cell_type-predicted_labels] PASSED [ 20%]
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_full_crosstab_and_dotplot_tables[custom_seed0_probmatch-cell_type-majority_voting] PASSED [ 22%]
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_full_crosstab_and_dotplot_tables[custom_seed0_probmatch-cell_type-predicted_labels] PASSED [ 25%]
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_full_crosstab_and_dotplot_tables[builtin_bestmatch_no_mv-cell_type-predicted_labels] PASSED [ 27%]
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_full_crosstab_and_dotplot_tables[main_demo2000_bestmatch-cell_type-majority_voting] PASSED [ 30%]
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_full_crosstab_and_dotplot_tables[main_demo2000_bestmatch-cell_type-predicted_labels] PASSED [ 32%]
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_full_crosstab_and_dotplot_tables[relabelled_reference-expert_annotation-majority_voting] PASSED [ 35%]
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_full_crosstab_and_dotplot_tables[relabelled_reference-expert_annotation-predicted_labels] PASSED [ 37%]
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_full_crosstab_and_dotplot_tables[relabelled_reference-leiden_int-majority_voting] PASSED [ 40%]
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_full_crosstab_and_dotplot_tables[relabelled_reference-leiden_int-predicted_labels] PASSED [ 42%]
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_boxplot_values_custom_model_cell82 PASSED [ 45%]
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_boxplot_values_builtin_model_other_groups PASSED [ 47%]
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_plot_group_probabilities_false PASSED [ 50%]
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_relabelled_reference_column_and_groups PASSED [ 52%]
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_integer_cluster_reference PASSED [ 55%]
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_prob_match_p07_selected_groups PASSED [ 57%]
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_without_majority_voting PASSED [ 60%]
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_misaligned_or_incomplete_annotation_dir[reverse_probability_rows] PASSED [ 62%]
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_misaligned_or_incomplete_annotation_dir[permute_h5ad_obs] PASSED [ 65%]
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_misaligned_or_incomplete_annotation_dir[drop_decision_row] PASSED [ 67%]
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_misaligned_or_incomplete_annotation_dir[duplicate_label_id] PASSED [ 70%]
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_misaligned_or_incomplete_annotation_dir[drop_decision_column] PASSED [ 72%]
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_misaligned_or_incomplete_annotation_dir[remove_probability_file] PASSED [ 75%]
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_misaligned_or_incomplete_annotation_dir[remove_predicted_labels_column] PASSED [ 77%]
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_input_errors[missing_reference_column] PASSED [ 80%]
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_input_errors[missing_group] PASSED [ 82%]
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_input_errors[unsupported_prediction_column] PASSED [ 85%]
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_missing_directory PASSED [ 87%]
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_inputs_unchanged_and_repeated_calls_isolated PASSED [ 90%]
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_default_output_base PASSED [ 92%]
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_tool_schema_and_format PASSED [ 95%]
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_no_stdout_output PASSED [ 97%]
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_composition_with_celltypist_annotate_cells PASSED [100%]
+
+=============================== warnings summary ===============================
+celltypist-env/lib/python3.12/site-packages/celltypist/classifier.py:11
+  /home/asu/Science/paper2agent-runs/celltypist/celltypist-env/lib/python3.12/site-packages/celltypist/classifier.py:11: FutureWarning: `__version__` is deprecated, use `importlib.metadata.version('scanpy')` instead
+    from scanpy import __version__ as scv
+
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py: 38 warnings
+  /home/asu/Science/paper2agent-runs/celltypist/celltypist-env/lib/python3.12/site-packages/anndata/compat/__init__.py:249: Pandas4Warning: The 'future.infer_string' option is deprecated and will be removed in pandas 4.0. Inferring str dtype for string data has been the default since pandas 3.0, and it will no longer be possible to disable it.
+    return a if pd.options.future.infer_string else a.astype(object)
+
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py: 11 warnings
+  /home/asu/Science/paper2agent-runs/celltypist/celltypist-env/lib/python3.12/site-packages/celltypist/plot.py:173: UserWarning: 
+  AnnData expects .obs.index to contain strings, but got values like:
+      ['Alveolar macrophages', 'DC1', 'Endothelial cells', 'Follicular B cells', 'Kupffer cells']
+  
+      Inferred to be: categorical
+  
+    _adata.obs_names = dot_size_df.index
+
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_full_crosstab_and_dotplot_tables[builtin_bestmatch-cell_type-predicted_labels]
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_full_crosstab_and_dotplot_tables[builtin_bestmatch_no_mv-cell_type-predicted_labels]
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_full_crosstab_and_dotplot_tables[relabelled_reference-expert_annotation-predicted_labels]
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_full_crosstab_and_dotplot_tables[relabelled_reference-leiden_int-predicted_labels]
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_boxplot_values_builtin_model_other_groups
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_integer_cluster_reference
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_without_majority_voting
+  /home/asu/Science/paper2agent-runs/celltypist/celltypist-env/lib/python3.12/site-packages/celltypist/plot.py:173: UserWarning: 
+  AnnData expects .obs.index to contain strings, but got values like:
+      ['Alveolar macrophages', 'CD16- NK cells', 'Classical monocytes', 'DC', 'DC1']
+  
+      Inferred to be: categorical
+  
+    _adata.obs_names = dot_size_df.index
+
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_full_crosstab_and_dotplot_tables[builtin_probmatch_p07-cell_type-predicted_labels]
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_prob_match_p07_selected_groups
+  /home/asu/Science/paper2agent-runs/celltypist/celltypist-env/lib/python3.12/site-packages/celltypist/plot.py:173: UserWarning: 
+  AnnData expects .obs.index to contain strings, but got values like:
+      ['Alveolar macrophages', 'Alveolar macrophages|pDC', 'B cells|Follicular B cells', 'DC1', 'Endothelial cells']
+  
+      Inferred to be: categorical
+  
+    _adata.obs_names = dot_size_df.index
+
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_full_crosstab_and_dotplot_tables[custom_seed0_probmatch-cell_type-majority_voting]
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_boxplot_values_custom_model_cell82
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_inputs_unchanged_and_repeated_calls_isolated
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_inputs_unchanged_and_repeated_calls_isolated
+  /home/asu/Science/paper2agent-runs/celltypist/celltypist-env/lib/python3.12/site-packages/celltypist/plot.py:173: UserWarning: 
+  AnnData expects .obs.index to contain strings, but got values like:
+      ['DC1', 'Endothelial cells', 'Follicular B cells', 'Kupffer cells', 'Macrophages']
+  
+      Inferred to be: categorical
+  
+    _adata.obs_names = dot_size_df.index
+
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_full_crosstab_and_dotplot_tables[custom_seed0_probmatch-cell_type-predicted_labels]
+  /home/asu/Science/paper2agent-runs/celltypist/celltypist-env/lib/python3.12/site-packages/celltypist/plot.py:173: UserWarning: 
+  AnnData expects .obs.index to contain strings, but got values like:
+      ['DC1', 'Endothelial cells', 'Follicular B cells', 'Follicular B cells|Plasma cells', 'Kupffer cells']
+  
+      Inferred to be: categorical
+  
+    _adata.obs_names = dot_size_df.index
+
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_full_crosstab_and_dotplot_tables[main_demo2000_bestmatch-cell_type-predicted_labels]
+  /home/asu/Science/paper2agent-runs/celltypist/celltypist-env/lib/python3.12/site-packages/celltypist/plot.py:173: UserWarning: 
+  AnnData expects .obs.index to contain strings, but got values like:
+      ['Alveolar macrophages', 'CD16+ NK cells', 'CD16- NK cells', 'Classical monocytes', 'DC1']
+  
+      Inferred to be: categorical
+  
+    _adata.obs_names = dot_size_df.index
+
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_misaligned_or_incomplete_annotation_dir[permute_h5ad_obs]
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_misaligned_or_incomplete_annotation_dir[permute_h5ad_obs]
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_misaligned_or_incomplete_annotation_dir[permute_h5ad_obs]
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_misaligned_or_incomplete_annotation_dir[permute_h5ad_obs]
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_composition_with_celltypist_annotate_cells
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_composition_with_celltypist_annotate_cells
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_composition_with_celltypist_annotate_cells
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_composition_with_celltypist_annotate_cells
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_composition_with_celltypist_annotate_cells
+  /home/asu/Science/paper2agent-runs/celltypist/celltypist-env/lib/python3.12/site-packages/anndata/_core/anndata.py:1101: Pandas4Warning: The 'mode.chained_assignment' option is deprecated. It has had no effect since pandas 3.0, which removed the SettingWithCopyWarning it controlled. Chained assignment now emits a ChainedAssignmentError warning instead; use warnings.filterwarnings with category=ChainedAssignmentError to silence or escalate it. This option will be removed in pandas 4.0.
+    with pd.option_context("mode.chained_assignment", None):
+
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_misaligned_or_incomplete_annotation_dir[permute_h5ad_obs]
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_misaligned_or_incomplete_annotation_dir[permute_h5ad_obs]
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_misaligned_or_incomplete_annotation_dir[permute_h5ad_obs]
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_misaligned_or_incomplete_annotation_dir[permute_h5ad_obs]
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_composition_with_celltypist_annotate_cells
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_composition_with_celltypist_annotate_cells
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_composition_with_celltypist_annotate_cells
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_composition_with_celltypist_annotate_cells
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_composition_with_celltypist_annotate_cells
+  /home/asu/Science/paper2agent-runs/celltypist/celltypist-env/lib/python3.12/site-packages/anndata/_core/views.py:327: Pandas4Warning: The 'mode.chained_assignment' option is deprecated. It has had no effect since pandas 3.0, which removed the SettingWithCopyWarning it controlled. Chained assignment now emits a ChainedAssignmentError warning instead; use warnings.filterwarnings with category=ChainedAssignmentError to silence or escalate it. This option will be removed in pandas 4.0.
+    with pd.option_context("mode.chained_assignment", None):
+
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_misaligned_or_incomplete_annotation_dir[permute_h5ad_obs]
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_misaligned_or_incomplete_annotation_dir[permute_h5ad_obs]
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_composition_with_celltypist_annotate_cells
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_composition_with_celltypist_annotate_cells
+  /home/asu/Science/paper2agent-runs/celltypist/celltypist-env/lib/python3.12/site-packages/anndata/_io/specs/methods.py:1269: Pandas4Warning: The 'future.infer_string' option is deprecated and will be removed in pandas 4.0. Inferring str dtype for string data has been the default since pandas 3.0, and it will no longer be possible to disable it.
+    and not pd.options.future.infer_string
+
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_composition_with_celltypist_annotate_cells
+  /home/asu/Science/paper2agent-runs/celltypist/celltypist-env/lib/python3.12/site-packages/scanpy/readwrite.py:836: OldFormatWarning: Element '/obs/__categories/cell_type' was written without encoding metadata.
+    return read_h5ad(filename, backed=backed)
+
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_composition_with_celltypist_annotate_cells
+  /home/asu/Science/paper2agent-runs/celltypist/celltypist-env/lib/python3.12/site-packages/scanpy/readwrite.py:836: OldFormatWarning: Element '/obs/cell_type' was written without encoding metadata.
+    return read_h5ad(filename, backed=backed)
+
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_composition_with_celltypist_annotate_cells
+  /home/asu/Science/paper2agent-runs/celltypist/celltypist-env/lib/python3.12/site-packages/scanpy/readwrite.py:836: OldFormatWarning: Element '/obs/_index' was written without encoding metadata.
+    return read_h5ad(filename, backed=backed)
+
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_composition_with_celltypist_annotate_cells
+  /home/asu/Science/paper2agent-runs/celltypist/celltypist-env/lib/python3.12/site-packages/scanpy/readwrite.py:836: OldFormatWarning: Element '/var/_index' was written without encoding metadata.
+    return read_h5ad(filename, backed=backed)
+
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_composition_with_celltypist_annotate_cells
+  /home/asu/Science/paper2agent-runs/celltypist/celltypist-env/lib/python3.12/site-packages/sklearn/base.py:442: InconsistentVersionWarning: Trying to unpickle estimator LogisticRegression from version 0.24.1 when using version 1.7.2. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+  https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+    warnings.warn(
+
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_composition_with_celltypist_annotate_cells
+  /home/asu/Science/paper2agent-runs/celltypist/celltypist-env/lib/python3.12/site-packages/sklearn/base.py:442: InconsistentVersionWarning: Trying to unpickle estimator StandardScaler from version 0.24.1 when using version 1.7.2. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+  https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+    warnings.warn(
+
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_composition_with_celltypist_annotate_cells
+  /home/asu/.local/share/uv/python/cpython-3.12.13-linux-x86_64-gnu/lib/python3.12/functools.py:912: UserWarning: Received a view of an AnnData. Making a copy.
+    return dispatch(args[0].__class__)(*args, **kw)
+
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_composition_with_celltypist_annotate_cells
+  /home/asu/.local/share/uv/python/cpython-3.12.13-linux-x86_64-gnu/lib/python3.12/functools.py:912: UserWarning: zero-centering a sparse array/matrix densifies it.
+    return dispatch(args[0].__class__)(*args, **kw)
+
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_composition_with_celltypist_annotate_cells
+tests/code/celltypist_tutorial_ml/test_celltypist_compare_with_reference.py::test_composition_with_celltypist_annotate_cells
+  /home/asu/Science/paper2agent-runs/celltypist/celltypist-env/lib/python3.12/site-packages/celltypist/classifier.py:75: Pandas4Warning: The inplace keyword in DataFrame.sort_values is deprecated and will be removed in a future version (PDEP-8).
+  See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+    df.sort_values(['counts'], ascending=False, inplace=True)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+- generated xml file: /home/asu/Science/paper2agent-runs/celltypist/tests/logs/celltypist_tutorial_ml/pytest_final.xml -
+================= 40 passed, 97 warnings in 110.00s (0:01:49) ==================

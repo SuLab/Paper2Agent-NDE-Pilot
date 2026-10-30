@@ -1,0 +1,15 @@
+{
+  "declared_at": "2026-10-28T01:30:30Z",
+  "declared_before": "any analysis of the airway data through the decoupler MCP tools",
+  "design": "~cell_line + condition, contrast dexamethasone vs untreated (4 paired airway smooth-muscle cell lines)",
+  "sources": {
+    "Himes et al. 2014 PLoS One, doi:10.1371/journal.pone.0099625 (PubMed 24926665), the study that generated GSE52778": "316 DE genes (BH p<0.05) including well-known glucocorticoid-responsive DUSP1, KLF15, PER1, TSC22D3 and less-investigated C7, CCDC69, CRISPLD2; dexamethasone increased CRISPLD2 mRNA",
+    "Glucocorticoid-receptor biology (independent of this dataset)": "FKBP5 and ZBTB16 are canonical GR-induced genes; NR3C1 is the glucocorticoid receptor"
+  },
+  "expectations": [
+    {"id": "E1", "claim": "DUSP1, KLF15, PER1, TSC22D3, CRISPLD2, C7, CCDC69 have padj < 0.05", "source": "Himes 2014 abstract"},
+    {"id": "E2", "claim": "DUSP1, KLF15, PER1, TSC22D3, CRISPLD2, FKBP5, ZBTB16 have log2FoldChange > 0 (induced by dexamethasone)", "source": "Himes 2014 abstract (CRISPLD2 increase) + GR biology"},
+    {"id": "E3", "claim": "NR3C1 has a positive CollecTRI ulm activity score with padj < 0.05", "source": "dexamethasone is a GR agonist; target-based activity should rise even though NR3C1 mRNA itself falls in the raw counts"},
+    {"id": "R1", "claim": "Report only (no pass/fail): number of DE genes at padj<0.05 vs the paper's 316 (different aligner/annotation/test), NR3C1 rank among TFs, PROGENy/Hallmark top terms, whether cell_line explains a major PC"}
+  ]
+}

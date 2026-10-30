@@ -1,0 +1,48 @@
+{
+  "validator": "paper2agent-workflow",
+  "schema_version": 1,
+  "success": true,
+  "through": "execution",
+  "errors": [],
+  "passed_assignments": [
+    {
+      "role": "environment",
+      "task": "project",
+      "run_id": "environment-attempt-2"
+    },
+    {
+      "role": "executor",
+      "task": "bulk_rna",
+      "run_id": "executor-bulk_rna-attempt-1"
+    },
+    {
+      "role": "scanner",
+      "task": "project",
+      "run_id": "scanner-attempt-1"
+    }
+  ],
+  "exclusions": [],
+  "scope": "Validates recorded state and artifact consistency; does not authenticate host identities or establish numerical/scientific correctness.",
+  "expected_assignments": [
+    {
+      "role": "environment",
+      "task": "project"
+    },
+    {
+      "role": "executor",
+      "task": "bulk_rna"
+    },
+    {
+      "role": "scanner",
+      "task": "project"
+    }
+  ],
+  "active_tutorials": [
+    "bulk_rna"
+  ],
+  "active_modules": [
+    "bulk_enrichment"
+  ],
+  "project_root": "/home/asu/Science/paper2agent-runs/decoupler",
+  "state": "/home/asu/Science/paper2agent-runs/decoupler/reports/agent-runs.json"
+}

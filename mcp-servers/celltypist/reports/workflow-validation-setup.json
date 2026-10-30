@@ -1,0 +1,41 @@
+{
+  "validator": "paper2agent-workflow",
+  "schema_version": 1,
+  "success": true,
+  "through": "setup",
+  "errors": [],
+  "passed_assignments": [
+    {
+      "role": "environment",
+      "task": "project",
+      "run_id": "environment-attempt-1"
+    },
+    {
+      "role": "scanner",
+      "task": "project",
+      "run_id": "scanner-attempt-1"
+    }
+  ],
+  "exclusions": [],
+  "scope": "Validates recorded state and artifact consistency; does not authenticate host identities or establish numerical/scientific correctness.",
+  "expected_assignments": [
+    {
+      "role": "environment",
+      "task": "project"
+    },
+    {
+      "role": "scanner",
+      "task": "project"
+    }
+  ],
+  "active_tutorials": [
+    "celltypist_tutorial",
+    "celltypist_tutorial_ml"
+  ],
+  "active_modules": [
+    "celltypist_tutorial",
+    "celltypist_tutorial_ml"
+  ],
+  "project_root": "/home/asu/Science/paper2agent-runs/celltypist",
+  "state": "/home/asu/Science/paper2agent-runs/celltypist/reports/agent-runs.json"
+}

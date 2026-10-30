@@ -1,0 +1,10 @@
+[10/29/26 16:40:33] INFO     Starting MCP server 'decoupler'    transport.py:242
+                             with transport 'stdio'                             
+tools: ['decoupler_filter_genes_by_expression', 'decoupler_inspect_source_targets', 'decoupler_rank_pcs_by_metadata', 'decoupler_score_activities_ulm', 'pydeseq2_test_differential_expression']
+filter: decoupler_filter_genes_by_expression ok in 0.8s
+pcs: decoupler_rank_pcs_by_metadata ok in 3.7s
+de: pydeseq2_test_differential_expression ok in 74.6s
+ulm_collectri: decoupler_score_activities_ulm ok in 12.4s
+ulm_progeny: decoupler_score_activities_ulm ok in 18.3s
+ulm_hallmark: decoupler_score_activities_ulm ok in 1.7s
+inspect_rela: decoupler_inspect_source_targets ok in 6.5s

@@ -1,0 +1,97 @@
+cell_type,rank,gene
+B cells,1,NIBAN3
+B cells,2,LINC00926
+B cells,3,CD74
+B-cell lineage,1,IGLL1
+B-cell lineage,2,VPREB1
+B-cell lineage,3,NPY
+Cycling cells,1,IGKC
+Cycling cells,2,PCLAF
+Cycling cells,3,STMN1
+DC,1,CST3
+DC,2,HLA-DQA1
+DC,3,GPX1
+DC precursor,1,PCLAF
+DC precursor,2,RNASE2
+DC precursor,3,RP11-1275H24.3
+Double-negative thymocytes,1,PTCRA
+Double-negative thymocytes,2,IGLL1
+Double-negative thymocytes,3,CD99
+Double-positive thymocytes,1,SMPD3
+Double-positive thymocytes,2,SH3TC1
+Double-positive thymocytes,3,CD1B
+ETP,1,ACY3
+ETP,2,LINC01644
+ETP,3,AL512306.2
+Early MK,1,AC098614.1
+Early MK,2,PCP2
+Early MK,3,CIB3
+Endothelial cells,1,SELE
+Endothelial cells,2,RAMP3
+Endothelial cells,3,ACKR1
+Epithelial cells,1,PSMB11
+Epithelial cells,2,FOXN1
+Epithelial cells,3,ASCL1
+Erythrocytes,1,CTA-363E6.6
+Erythrocytes,2,RP11-797H7.5
+Erythrocytes,3,CTA-392E5.1
+Erythroid,1,FAM178B
+Erythroid,2,KLF1
+Erythroid,3,ANKRD34B
+Fibroblasts,1,NTRK2
+Fibroblasts,2,SMOC2
+Fibroblasts,3,DPT
+Granulocytes,1,AC104809.2
+Granulocytes,2,CTAG2
+Granulocytes,3,AC006115.2
+HSC/MPP,1,HBA2
+HSC/MPP,2,HBG2
+HSC/MPP,3,HBA1
+ILC,1,NKG7
+ILC,2,TYROBP
+ILC,3,GNLY
+ILC precursor,1,RBM24
+ILC precursor,2,KIAA0087
+ILC precursor,3,HPN
+MNP,1,MTRNR2L10
+MNP,2,AL109914.1
+MNP,3,AC008040.1
+Macrophages,1,AC026369.3
+Macrophages,2,GNLY
+Macrophages,3,LPL
+Mast cells,1,AL157895.1
+Mast cells,2,TPSAB1
+Mast cells,3,IL1RL1
+Megakaryocyte precursor,1,FCER1A
+Megakaryocyte precursor,2,AC022126.1
+Megakaryocyte precursor,3,ADRA2A
+Megakaryocytes/platelets,1,AL157895.1
+Megakaryocytes/platelets,2,AC103858.3
+Megakaryocytes/platelets,3,AL512306.2
+Mono-mac,1,NKG7
+Mono-mac,2,KLRB1
+Mono-mac,3,HLA-DRA
+Monocyte precursor,1,RETN
+Monocyte precursor,2,FCN1
+Monocyte precursor,3,AC018754.1
+Monocytes,1,MARC1
+Monocytes,2,AC020656.1
+Monocytes,3,S100A9
+Myelocytes,1,LYZ
+Myelocytes,2,FTH1
+Myelocytes,3,MT-RNR2
+Plasma cells,1,TXNDC5
+Plasma cells,2,IGHA2
+Plasma cells,3,MZB1
+Promyelocytes,1,PRTN3
+Promyelocytes,2,AL136456.1
+Promyelocytes,3,AC092068.2
+T cells,1,CD3E
+T cells,2,PRKCQ-AS1
+T cells,3,MALAT1
+pDC,1,SCT
+pDC,2,LRRC26
+pDC,3,RP11-1070N10.3
+pDC precursor,1,MYBPH
+pDC precursor,2,AC125437.1
+pDC precursor,3,AP002026.1

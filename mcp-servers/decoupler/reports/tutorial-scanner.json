@@ -1,0 +1,373 @@
+{
+  "scan_metadata": {
+    "repository": "scverse/decoupler",
+    "repository_version": "2.3.1",
+    "repository_commit": "27a1be7c75d88306bf3c2e4d0e7fb4b42d48f78a",
+    "tutorials_submodule": {
+      "path": "docs/notebooks",
+      "commit": "306be6673a5df5baf780e44ea929391616dbe5d8"
+    },
+    "paper": "Badia-i-Mompel et al., decoupleR: ensemble of computational methods to infer biological activities from omics data, Bioinformatics Advances 2022, doi:10.1093/bioadv/vbac016",
+    "scan_date": "2026-10-27",
+    "route": "python",
+    "requested_filter": "docs/notebooks/bulk/rna.ipynb",
+    "filter_match": "exact path match (case-insensitive substring) to 1 notebook; title 'Bulk Enrichment Analysis'",
+    "evaluated_source_files": 11,
+    "included_source_files": 1,
+    "proposed_exposed_tools": 5,
+    "success": true,
+    "explanation": "Filter matched exactly one notebook (docs/notebooks/bulk/rna.ipynb, sha256 17b5e32e241626da72800125b6ae979c179ddf6e35be83892e5c75013e12fe2b, 61 cells, 30 code cells, 17 executed PNG figures, kernel Python 3.12.3). Tools were selected only from operations executed in that notebook; implementations were confirmed in src/decoupler/** and the PyDESeq2 API (dependency), and verification sources were matched to tests/**. Duplicate basename rna.ipynb (bulk/ vs bench/) is resolved by tutorial id 'bulk_rna'. Five tools proposed in one owning module 'bulk_enrichment'; loading/format steps kept internal; three ulm demonstrations merged into one scoring tool; one demonstration-only plot (obsbar) omitted."
+  },
+  "tutorials": [
+    {
+      "path": "docs/notebooks/bulk/rna.ipynb",
+      "tutorial_id": "bulk_rna",
+      "sha256": "17b5e32e241626da72800125b6ae979c179ddf6e35be83892e5c75013e12fe2b",
+      "title": "Bulk Enrichment Analysis",
+      "description": "Bulk RNA-seq workflow on GSE151251 (dc.ds.hsctgfb: 6 hepatic stellate cell samples, 3 control vs 3 TGF-beta): edgeR-style gene filtering, PCA/metadata association QC, PyDESeq2 Wald test (treatment vs control), and ulm activity scoring with CollecTRI TFs, PROGENy pathways and MSigDB Hallmark gene sets, with volcano, bar, dot, network, source-target scatter and leading-edge plots.",
+      "type": "notebook",
+      "include_in_tools": true,
+      "reason_for_include_or_exclude": "Matches the exact requested filter; contains complete, executed user tasks applicable to a new bulk count matrix with treatment/control metadata."
+    },
+    {
+      "path": "docs/notebooks/bench/rna.ipynb",
+      "title": "Benchmarking pipeline",
+      "description": "Benchmark of enrichment methods/networks on perturbation data (dc.bm). Same basename rna.ipynb as the selected tutorial; distinct source.",
+      "type": "notebook",
+      "include_in_tools": false,
+      "reason_for_include_or_exclude": "outside requested filter"
+    },
+    {
+      "path": "docs/notebooks/example.ipynb",
+      "title": "Usage",
+      "description": "General package usage example.",
+      "type": "notebook",
+      "include_in_tools": false,
+      "reason_for_include_or_exclude": "outside requested filter"
+    },
+    {
+      "path": "docs/notebooks/omnipath/licenses.ipynb",
+      "title": "Licenses in OmniPath databases",
+      "description": "OmniPath resource licensing.",
+      "type": "notebook",
+      "include_in_tools": false,
+      "reason_for_include_or_exclude": "outside requested filter"
+    },
+    {
+      "path": "docs/notebooks/omnipath/orthologs.ipynb",
+      "title": "Cross-Species Gene Symbol Mapping",
+      "description": "Ortholog translation of prior-knowledge networks (dc.op.translate).",
+      "type": "notebook",
+      "include_in_tools": false,
+      "reason_for_include_or_exclude": "outside requested filter (also why non-human organism support is deferred)"
+    },
+    {
+      "path": "docs/notebooks/scell/rna_psbk.ipynb",
+      "title": "Pseudobulk Enrichment Analysis",
+      "description": "Pseudobulk aggregation of single-cell data followed by DE and enrichment.",
+      "type": "notebook",
+      "include_in_tools": false,
+      "reason_for_include_or_exclude": "outside requested filter"
+    },
+    {
+      "path": "docs/notebooks/scell/rna_pstime.ipynb",
+      "title": "Pseudotime Enrichment Analysis",
+      "description": "Enrichment along pseudotime trajectories.",
+      "type": "notebook",
+      "include_in_tools": false,
+      "reason_for_include_or_exclude": "outside requested filter"
+    },
+    {
+      "path": "docs/notebooks/scell/rna_sc.ipynb",
+      "title": "Single-cell Enrichment Analysis",
+      "description": "Per-cell enrichment scoring of scRNA-seq.",
+      "type": "notebook",
+      "include_in_tools": false,
+      "reason_for_include_or_exclude": "outside requested filter"
+    },
+    {
+      "path": "docs/notebooks/spatial/rna_visium.ipynb",
+      "title": "Spatial Enrichment Analysis",
+      "description": "Enrichment on Visium spatial transcriptomics.",
+      "type": "notebook",
+      "include_in_tools": false,
+      "reason_for_include_or_exclude": "outside requested filter"
+    },
+    {
+      "path": "README.md",
+      "title": "decoupler - Ensemble of methods to infer enrichment scores",
+      "description": "Package overview and installation (decoupler[full] extra provides pydeseq2, scanpy, igraph).",
+      "type": "documentation",
+      "include_in_tools": false,
+      "reason_for_include_or_exclude": "Supporting documentation only; no additional operations within the requested filter."
+    },
+    {
+      "path": "src/decoupler/_skills/data/references/contrast.md",
+      "title": "Contrast-level activity (bulk and pseudobulk)",
+      "description": "Package-shipped guidance restating the bulk route: raw counts -> filter_by_expr -> PyDESeq2 Wald stat -> ulm with CollecTRI/PROGENy/Hallmark; documents design formula '~<condition> + <covariate>' and contrast [column, numerator, denominator] as user choices.",
+      "type": "documentation",
+      "include_in_tools": false,
+      "reason_for_include_or_exclude": "Supporting documentation corroborating the selected tutorial's DE/enrichment contract and metadata parameterisation; tools are owned by the bulk tutorial, not this file."
+    }
+  ],
+  "tool_review": {
+    "tutorial_id": "bulk_rna",
+    "owning_module": "bulk_enrichment",
+    "module_note": "One owning module for all five exposed tools (single source tutorial). Tutorial id 'bulk_rna' disambiguates from docs/notebooks/bench/rna.ipynb.",
+    "user_input_contract": {
+      "counts": "Raw integer counts (samples x genes AnnData .h5ad with obs, or a counts table plus a sample-metadata table). Orientation must be resolved by matching sample IDs to the metadata index and failing clearly on mismatch; no silent transposition guessing beyond that check.",
+      "gene_identifiers": "Gene symbols matching CollecTRI/PROGENy/Hallmark targets (HGNC for human). Duplicate gene names must fail clearly (dc.pp.extract asserts unique features). Ensembl->symbol conversion is outside the filtered tutorial (e.g. GEO GSE52778 airway counts are Ensembl-keyed and need user-side mapping).",
+      "metadata": "Sample metadata with a condition column; the column name and the two group labels are parameters (condition_key, group, reference). Tutorial values condition/treatment/control come from dc.ds.hsctgfb's loader, which derives them from sample names; that construction belongs to test fixture preparation only.",
+      "example_new_data": "GSE52778 airway: condition_key='dex', group='trt', reference='untrt', design='~cell + dex' (labels as in the user's metadata)."
+    },
+    "exposed_tools": [
+      {
+        "tool_name": "decoupler_filter_genes_by_expression",
+        "owning_module": "bulk_enrichment",
+        "task_and_io": {
+          "task": "Remove lowly profiled genes from a raw bulk count matrix (edgeR filterByExpr logic) and inspect threshold choice.",
+          "inputs": "raw counts + sample metadata; group_key (metadata column, optional, tutorial 'condition'); min_count=10, min_total_count=15, large_n=10, min_prop=0.7 (tutorial values = API defaults); lib_size optional (API param, None).",
+          "outputs": "filtered counts (h5ad keeping obs) for downstream DE; kept-gene list/count; threshold diagnostic PNG (log10 total counts vs number of samples with dashed cutoffs)."
+        },
+        "implementation": [
+          "src/decoupler/pp/anndata.py::filter_by_expr (L546; inplace subset, or inplace=False returns kept genes)",
+          "src/decoupler/pl/_filter_by_expr.py::filter_by_expr (L13; diagnostic plot, same helper _min_sample_size/_ssize_tcount)"
+        ],
+        "tutorial_cells": [
+          "cell 11 (exec 5): dc.pl.filter_by_expr",
+          "cell 13 (exec 6): dc.pp.filter_by_expr"
+        ],
+        "demonstration_values_to_parameterise": {
+          "group": "'condition' -> group_key"
+        },
+        "verification_source": {
+          "tutorial": "hsctgfb 6 x 58674 -> 19510 genes retained (inferred from DESeq2 results_df 19510 rows in cell 23/24, which runs on the filtered object); cell 11 figure.",
+          "repo_tests": [
+            "tests/pp/test_anndata.py::test_filter_by_expr (kept-gene sets checked against edgeR filterByExpr output, incl. sparse input)",
+            "tests/pl/test_filter_by_expr.py::test_filter_by_expr (returns Figure)"
+          ],
+          "changed_input": "relabelled/renamed group column must give identical kept genes; group_key=None path (single group) via upstream direct call."
+        },
+        "decision": "expose",
+        "reason": "Distinct, reusable preprocessing task on new data with a meaningful artifact (filtered matrix) and a scientific diagnostic plot; the tutorial stresses dataset-specific manual threshold assessment, so it should not be hidden inside DE."
+      },
+      {
+        "tool_name": "decoupler_rank_pcs_by_metadata",
+        "owning_module": "bulk_enrichment",
+        "task_and_io": {
+          "task": "Explore sample variability: PCA on normalised counts and test association of each PC with each metadata column (ANOVA for categorical, Spearman for numeric, BH-adjusted) to identify covariates for the DE design.",
+          "inputs": "filtered (or raw) counts + metadata; obs_keys optional (rankby_obsm API param; default all metadata columns); color_keys for PCA scatter (tutorial ['condition','sample_id']); nvar=5 for association plot.",
+          "outputs": "PC x metadata association table (obsm, obs, stat, pval, padj); explained-variance ratios; PNGs: PCA variance ratio, dc.pl.obsm association heatmap, PCA scatter coloured by metadata."
+        },
+        "implementation": [
+          "tutorial cell 15 sequence: layers['counts']=X; scanpy sc.pp.normalize_total(target_sum=1e4), sc.pp.log1p, sc.pp.scale(max_value=10), sc.tl.pca; src/decoupler/pp/anndata.py::swap_layer (L62) to restore counts (internal; tool can operate on a copy)",
+          "src/decoupler/tl/_rankby_obsm.py::rankby_obsm (L33)",
+          "src/decoupler/pl/_obsm.py::obsm (L74)",
+          "scanpy sc.pl.pca_variance_ratio, sc.pl.pca (dependency plotting)"
+        ],
+        "tutorial_cells": [
+          "cell 15 (exec 7)",
+          "cell 17 (exec 8)",
+          "cell 19 (exec 9)",
+          "cell 21 (exec 10)"
+        ],
+        "demonstration_values_to_parameterise": {
+          "sc.pl.pca color": "['condition','sample_id'] -> color_keys from user metadata"
+        },
+        "verification_source": {
+          "tutorial": "Figures from cells 19 (2) and 21 (1); markdown claim that PC1 explains most variance and is associated with 'condition'. rank_obsm table is not printed, so expected values come from stage-2 re-execution of the tutorial (adata.uns['rank_obsm']).",
+          "repo_tests": [
+            "tests/tl/test_rankby_obsm.py::test_rankby_obsm",
+            "tests/pl/test_obsm.py"
+          ],
+          "changed_input": "renamed condition column must yield the same association stats; compare F/padj (sign-invariant) rather than raw PC scores."
+        },
+        "decision": "expose",
+        "reason": "Separate tutorial subsection with its own scientific output; the tutorial ties it to choosing DE covariates (e.g. cell line in airway), which the DE tool's design parameter consumes."
+      },
+      {
+        "tool_name": "pydeseq2_test_differential_expression",
+        "owning_module": "bulk_enrichment",
+        "task_and_io": {
+          "task": "Differential expression between two user-specified groups with PyDESeq2 (Wald test), giving the gene-level statistics used for enrichment.",
+          "inputs": "filtered counts + metadata (output of decoupler_filter_genes_by_expression); condition_key, group (numerator), reference (denominator); design formula optional (default '~{condition_key}', must contain condition_key; covariates must exist in metadata); n_cpus (runtime only). refit_cooks=True fixed as in tutorial.",
+          "outputs": "results table indexed by gene: baseMean, log2FoldChange, lfcSE, stat, pvalue, padj (CSV); volcano PNG (x=log2FoldChange, y=padj, top=10)."
+        },
+        "implementation": [
+          "tutorial cells 23-24 (exec 11-12): pydeseq2.dds.DefaultInference(n_cpus=8); DeseqDataSet(adata=..., design='~condition', refit_cooks=True, inference=...); dds.deseq2(); DeseqStats(dds, contrast=['condition','treatment','control'], inference=...); summary(); results_df",
+          "PyDESeq2 public API (dependency; decoupler 'full'/'test' extras, unpinned; project env currently has pydeseq2 0.5.4 whose DeseqDataSet accepts design formula strings)",
+          "src/decoupler/pl/_volcano.py::volcano (L12) for cell 26",
+          "corroborating doc: src/decoupler/_skills/data/references/contrast.md section 3"
+        ],
+        "tutorial_cells": [
+          "cell 23 (exec 11)",
+          "cell 24 (exec 12)",
+          "cell 26 (exec 13): dc.pl.volcano"
+        ],
+        "demonstration_values_to_parameterise": {
+          "design": "'~condition' -> design (default f'~{condition_key}')",
+          "contrast": "['condition','treatment','control'] -> [condition_key, group, reference]"
+        },
+        "verification_source": {
+          "tutorial": "19510 x 6 results; printed rows e.g. WASH7P baseMean 10.350605, log2FC -0.010706, lfcSE 0.650918, stat -0.016447, pvalue 0.986878, padj 0.991401; MT-TP stat -2.847430, pvalue 0.004407, padj 0.012197; full table from stage-2 re-execution; cell 26 volcano figure.",
+          "repo_tests": [
+            "tests/pl/test_volcano.py::test_volcano, ::test_volcano_top_genes (plot only)",
+            "No repo test exercises PyDESeq2 itself; reference is the tutorial cell plus a direct upstream PyDESeq2 call in tests."
+          ],
+          "changed_input": "relabelled groups/column (e.g. 'TGFb'/'Ctrl' under 'treatment_status') must reproduce the tutorial table; swapping group/reference must negate log2FoldChange and stat; missing column/label must fail clearly."
+        },
+        "decision": "expose (bound to the tutorial's existing DE code cell via the PyDESeq2 public API)",
+        "reason": "The DE table and volcano are primary requested outputs and are reused by both enrichment and target-inspection tools; DESeq2 is the costliest step, so hiding it inside scoring would force recomputation for every network and would hide the statistics. The computation is the tutorial's own existing cell (implementation order 1: call existing public API), not new science; only demonstration labels become parameters."
+      },
+      {
+        "tool_name": "decoupler_score_activities_ulm",
+        "owning_module": "bulk_enrichment",
+        "task_and_io": {
+          "task": "Infer TF / pathway / Hallmark activities for a contrast by running ulm on the gene-level DE statistic against a chosen prior-knowledge network.",
+          "inputs": "DE results table (gene index) with stat_column (default 'stat'); network in {collectri, progeny, hallmark} (organism fixed to human); contrast_name (default f'{group}.vs.{reference}' or user value; tutorial 'treatment.vs.control'); padj_threshold=0.05; barplot top (tutorial 25 for CollecTRI/PROGENy, 10 for Hallmark); dotplot top=10.",
+          "outputs": "full scores and BH-adjusted p-values for all sources (long table: source, score, padj, significant); significance-filtered subset; barplot PNG; dotplot PNG (score vs source, size -log10 padj clipped at 2.22e-16); network snapshot size (rows) for provenance."
+        },
+        "implementation": [
+          "cell 28 transform: results_df[[stat]].T.rename(index={'stat': contrast_name}) (internal)",
+          "src/decoupler/op/_collectri.py::collectri (L10) | src/decoupler/op/_progeny.py::progeny (L10; via op/_resource.py::resource) | src/decoupler/op/_hallmark.py::hallmark (L10)",
+          "src/decoupler/mt/_ulm.py::ulm (L125, Method around _func_ulm L24) -> src/decoupler/_Method.py::Method.__call__ -> src/decoupler/mt/_run.py::_run (L41; prune tmin=5, adjmat, BH FDR)",
+          "src/decoupler/pl/_barplot.py::barplot (L33)",
+          "src/decoupler/pl/_dotplot.py::dotplot (L12)"
+        ],
+        "tutorial_cells": [
+          "cell 28 (exec 14)",
+          "cells 30/32/34 (exec 15-17) CollecTRI",
+          "cells 40/42/44/46 (exec 20-23) PROGENy",
+          "cells 52/54/56/58 (exec 26-29) Hallmark"
+        ],
+        "merged_duplicates": "Three identical ulm demonstrations (cells 32, 42, 54), three barplots (34, 44, 56) and two dotplots (46, 58) merged into one tool with a network choice.",
+        "demonstration_values_to_parameterise": {
+          "row label": "'treatment.vs.control' -> contrast_name"
+        },
+        "verification_source": {
+          "tutorial": "CollecTRI: 143 TFs with padj<0.05 (e.g. APEX1 -2.659163, ARID1A -3.917493, TCF21 6.161999, ZEB2 5.789579, ZXDC -2.733644); markdown: SRF, MYOCD, SMAD3 most active, IRF1, SKIL, NR1H4 inactive. PROGENy: 12 significant (Androgen 4.709702, EGFR 17.26656, Estrogen 10.928969, Hypoxia 5.728908, JAK-STAT -14.310255, MAPK 25.607173, NFkB -10.118751, PI3K 24.523091, TGFb 59.359794, TNFa -9.053347, VEGF 11.351179, p53 -12.616978). Hallmark: 30 significant (e.g. EPITHELIAL_MESENCHYMAL_TRANSITION 13.67402, TGF_BETA_SIGNALING 5.380782, E2F_TARGETS 8.116301, REACTIVE_OXYGEN_SPECIES_PATHWAY -6.567071). Network sizes at tutorial execution: CollecTRI 42990 rows, PROGENy 62421, Hallmark 7318. Figures cells 34, 44, 46, 56, 58.",
+          "repo_tests": [
+            "tests/mt/test_ulm.py::test_cov, ::test_cor, ::test_tval, ::test_func_ulm (ulm vs scipy.stats.linregress)",
+            "tests/mt/test_run.py",
+            "tests/op/test_collectri.py::test_collectri, tests/op/test_progeny.py::test_progeny, tests/op/test_hallmark.py::test_hallmark (network access required)",
+            "tests/pl/test_barplot.py::test_barplot, tests/pl/test_dotplot.py::test_dotplot"
+          ],
+          "changed_input": "direct dc.mt.ulm on the same DE stat and same downloaded network snapshot; a different stat column (e.g. log2FoldChange) via direct upstream call; missing stat column / non-finite stats / no source passing tmin must fail clearly."
+        },
+        "decision": "expose",
+        "reason": "Core scientific task of the paper and tutorial; one tool covers all three demonstrated networks because the computation is identical and only the resource loader differs."
+      },
+      {
+        "tool_name": "decoupler_inspect_source_targets",
+        "owning_module": "bulk_enrichment",
+        "task_and_io": {
+          "task": "Explain an activity score by inspecting the target genes of selected TFs/pathways: target volcano, weight-vs-statistic scatter, leading-edge genes, and a regulator-target network graph.",
+          "inputs": "DE results table; network in {collectri, progeny, hallmark}; source name(s) chosen by the user from scoring results (tutorial SRF / TGFb / TGF_BETA_SIGNALING; network plot sources SRF, MYOCD, IRF1, SKIL); optional activity-score table from decoupler_score_activities_ulm for the network plot.",
+          "outputs": "leading-edge gene lists (split into positive/negative weight components when the network has signed weights, as in cell 50; single list for unweighted sets, as in cell 60); PNGs: target volcano (x=log2FoldChange, y=pvalue, top=10), source_targets scatter (x=weight, y=stat, top=15; weighted networks only), leading-edge plot(s), network plot (targets=10, by_abs=True, vcenter=True, size_node=10)."
+        },
+        "implementation": [
+          "src/decoupler/pl/_volcano.py::volcano (L12) with net/name",
+          "src/decoupler/pl/_source_targets.py::source_targets (L12)",
+          "src/decoupler/pl/_leading_edge.py::leading_edge (L14; returns (fig, leading-edge genes))",
+          "src/decoupler/pl/_network.py::network (L176; requires optional dependency igraph)",
+          "network loaders shared with decoupler_score_activities_ulm (internal helper)"
+        ],
+        "tutorial_cells": [
+          "cell 36 (exec 18) network",
+          "cell 38 (exec 19) volcano SRF",
+          "cell 48 (exec 24) source_targets TGFb",
+          "cell 50 (exec 25) leading_edge TGFb +/-",
+          "cell 60 (exec 30) leading_edge TGF_BETA_SIGNALING"
+        ],
+        "demonstration_values_to_parameterise": {
+          "sources": "SRF/MYOCD/IRF1/SKIL, TGFb, TGF_BETA_SIGNALING are analyst picks -> source/sources parameters"
+        },
+        "verification_source": {
+          "tutorial": "Leading edge PROGENy TGFb (+): IL11, AMIGO2, SERPINE2, ACTC1, NOX4 (first 5); (-): SMAD3, ADAMTS1, GALNT15, HGF, NID2; Hallmark TGF_BETA_SIGNALING: PMEPA1, JUNB, SKIL, LTBP2, KLF10. Figures cells 36, 38, 48, 50 (2), 60.",
+          "repo_tests": [
+            "tests/pl/test_leading_edge.py::test_leading_edge",
+            "tests/pl/test_source_targets.py::test_source_targets",
+            "tests/pl/test_volcano.py::test_volcano",
+            "tests/pl/test_network.py::test_network"
+          ],
+          "changed_input": "different source names; unknown source must fail clearly (upstream asserts name in net); source_targets requested for Hallmark (no weights) must be rejected or skipped explicitly."
+        },
+        "decision": "expose",
+        "reason": "Distinct follow-up task (why is X active, which genes drive it) whose inputs (source names) are chosen after scoring; leading-edge genes are a scientific result, not just a figure. Five demonstration cells merged into one tool."
+      }
+    ],
+    "internal_or_merged": [
+      {
+        "item": "dc.ds.hsctgfb() (cell 4; src/decoupler/ds/_bulk.py::hsctgfb L9)",
+        "decision": "internal: test/benchmark fixture only",
+        "reason": "Demonstration data download from NCBI GEO; its loader constructs the condition labels from sample names, which must stay in fixture preparation."
+      },
+      {
+        "item": "layers['counts'] copy + dc.pp.swap_layer (cell 15)",
+        "decision": "internal to decoupler_rank_pcs_by_metadata",
+        "reason": "Bookkeeping to keep raw counts for DE; not independently useful."
+      },
+      {
+        "item": "results_df[['stat']].T wide transform (cell 28)",
+        "decision": "internal to decoupler_score_activities_ulm",
+        "reason": "Format conversion."
+      },
+      {
+        "item": "dc.op.collectri / dc.op.progeny / dc.op.hallmark (cells 30, 40, 52)",
+        "decision": "internal (shared loader for scoring and inspection tools)",
+        "reason": "Resource loading is setup for the selected tasks; exposing raw network download adds no user task beyond what the two tools return."
+      },
+      {
+        "item": "padj<0.05 significance mask (cells 32, 42, 54)",
+        "decision": "merged into decoupler_score_activities_ulm outputs",
+        "reason": "Tutorial applies it for display; tool returns both full and filtered results."
+      },
+      {
+        "item": "dc.pl.volcano for DE (cell 26)",
+        "decision": "output of pydeseq2_test_differential_expression",
+        "reason": "Visualisation of the DE task."
+      }
+    ],
+    "omitted_or_deferred": [
+      {
+        "item": "dc.pl.obsbar (cell 8)",
+        "decision": "omit",
+        "reason": "Demonstration-only sample-count bar chart of metadata; not part of a selected scientific task."
+      },
+      {
+        "item": "organism != 'human' for networks",
+        "decision": "defer",
+        "reason": "Triggers dc.op.translate ortholog mapping, demonstrated only in omnipath/orthologs.ipynb (outside filter) and untested here."
+      },
+      {
+        "item": "user-supplied custom network (e.g. CellOracle/SCENIC GRN)",
+        "decision": "defer (optional extension)",
+        "reason": "Mentioned in a tutorial note but not executed; ulm accepts any source/target/weight table, so it can be added later with its own test."
+      },
+      {
+        "item": "dc.op.resource / dc.op.show_resources (MSigDB etc.)",
+        "decision": "omit",
+        "reason": "Mentioned in markdown only, not executed in the tutorial."
+      },
+      {
+        "item": "other enrichment methods (mlm, viper, gsea, consensus, decouple)",
+        "decision": "omit",
+        "reason": "Not demonstrated in the filtered tutorial."
+      },
+      {
+        "item": "Ensembl -> symbol mapping (dc.ds.ensmbl_to_symbol)",
+        "decision": "omit",
+        "reason": "Not used in any tutorial; documented as a user-side prerequisite in the input contract."
+      }
+    ],
+    "blockers_and_risks": [
+      "Network access at runtime and in tests: CollecTRI from zenodo.org (records/8192729), PROGENy via omnipathdb.org (resource() first calls show_resources() which hits omnipathdb.org/queries/annotations and /resources), Hallmark from static.omnipathdb.org, hsctgfb from NCBI GEO. Recommend a per-process network cache and saving downloaded network snapshots as test fixtures.",
+      "Remote resource drift: tutorial outputs reflect network versions at its execution time (CollecTRI 42990, PROGENy 62421, Hallmark 7318 rows). Exact score comparisons need the same snapshot; compare against stage-2 re-execution and treat the notebook's stored values as tolerance-based spot checks, recording row counts.",
+      "PyDESeq2 is unpinned by decoupler; env currently resolves 0.5.4. Tutorial-stored DE values may differ slightly across versions; record the version and compare with tolerance.",
+      "igraph (optional dependency, decoupler[full]) is required by dc.pl.network (src/decoupler/_odeps.py raises ImportError otherwise); it is absent from reports/environment-requirements.txt (pydeseq2 0.5.4 and scanpy 1.12.4 are present). Either install igraph or defer only the network-plot output of decoupler_inspect_source_targets.",
+      "scanpy (decoupler[full]/test) required for the PCA tool; PC signs can differ across versions, so compare sign-invariant statistics.",
+      "Randomness: none material. dc.pp.extract shuffles features with fixed seed 0 for tie-breaking; ulm, filter_by_expr and PyDESeq2 are deterministic; scanpy PCA uses random_state=0.",
+      "Input contract risks: ulm asserts on non-finite values in the stat vector; filter_by_expr/extract assert on duplicate gene names; PyDESeq2 requires non-negative integer counts. Wrappers should surface these as clear input errors rather than silently repairing."
+    ]
+  }
+}

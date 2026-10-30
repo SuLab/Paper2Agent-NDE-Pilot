@@ -1,0 +1,7 @@
+[
+  "celltypist_list_models",
+  "celltypist_annotate_cells",
+  "celltypist_train_model",
+  "celltypist_inspect_model",
+  "celltypist_compare_with_reference"
+]

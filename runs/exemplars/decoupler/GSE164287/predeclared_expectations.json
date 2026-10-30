@@ -1,0 +1,17 @@
+{
+  "declared_at": "2026-10-29T23:39:03Z",
+  "declared_before": "building the AnnData or running any decoupler MCP tool on GSE164287 (only the GEO sample sheet and the count-matrix header had been read)",
+  "design": "~donor + condition, contrast Mtb vs uninfected (4 donors, paired), primary human monocyte-derived macrophages, M. tuberculosis H37Rv MOI 10, 48 h",
+  "sources": {
+    "NDE exemplar table (Applying Paper2Agent tools to NIAID Data Ecosystem datasets, 2026-10-28)": "NF-kB transcription factors (NFKB1, RELA); PROGENy NFkB and TNFa; Hallmark TNFa-via-NF-kB and inflammatory response up",
+    "Looney et al. 2021 Front Immunol, doi:10.3389/fimmu.2021.685237 (PubMed 34140955), the study that generated GSE164287": "abstract names immune cell activation, macrophage metabolism and AMPK signalling; no specific genes named",
+    "Mtb-macrophage biology (independent of this dataset)": "TLR2/MyD88-driven NF-kB activation induces IL1B, IL6, CXCL8 and PTGS2 in infected macrophages"
+  },
+  "expectations": [
+    {"id": "E1", "claim": "CollecTRI ulm: NFKB1 and RELA each have score > 0 and padj < 0.05", "source": "NDE exemplar table"},
+    {"id": "E2", "claim": "PROGENy ulm: NFkB and TNFa each have score > 0 and padj < 0.05", "source": "NDE exemplar table"},
+    {"id": "E3", "claim": "Hallmark ulm: TNFA_SIGNALING_VIA_NFKB and INFLAMMATORY_RESPONSE each have score > 0 and padj < 0.05", "source": "NDE exemplar table"},
+    {"id": "E4", "claim": "IL1B, IL6, CXCL8 and PTGS2 each have log2FoldChange > 0 and padj < 0.05", "source": "Mtb-macrophage biology"},
+    {"id": "R1", "claim": "Report only: genes kept by filtering; which PCs track condition vs donor; DE gene count at padj<0.05; top 10 TFs, PROGENy pathways and Hallmark sets; type I IFN signal (STAT1/STAT2/IRF9, Hallmark INTERFERON_ALPHA_RESPONSE), since Mtb is known to induce type I IFN in macrophages"}
+  ]
+}

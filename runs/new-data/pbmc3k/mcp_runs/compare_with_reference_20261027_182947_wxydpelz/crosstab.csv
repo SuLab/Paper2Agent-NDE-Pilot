@@ -1,0 +1,9 @@
+louvain,B cells,CD16+ NK cells,Classical monocytes,DC,MAIT cells,Megakaryocytes/platelets,NK cells,Non-classical monocytes,Regulatory T cells,Tcm/Naive cytotoxic T cells,Tcm/Naive helper T cells,Tem/Effector helper T cells,Tem/Trm cytotoxic T cells
+CD4 T cells,1,0,1,0,7,0,2,4,15,137,822,133,22
+CD14+ Monocytes,0,0,404,4,0,1,0,71,0,0,0,0,0
+B cells,337,0,0,1,0,0,0,1,0,0,3,0,0
+CD8 T cells,1,2,0,0,61,0,92,0,13,4,58,16,69
+NK cells,0,128,0,0,0,0,14,0,1,0,0,0,11
+FCGR3A+ Monocytes,0,0,1,0,0,0,0,149,0,0,0,0,0
+Dendritic cells,0,0,0,37,0,0,0,0,0,0,0,0,0
+Megakaryocytes,0,0,0,0,0,14,1,0,0,0,0,0,0

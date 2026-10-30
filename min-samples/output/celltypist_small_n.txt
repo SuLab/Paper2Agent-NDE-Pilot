@@ -1,0 +1,22 @@
+/home/asu/Science/paper2agent-runs/celltypist/celltypist-env/lib/python3.12/site-packages/celltypist/classifier.py:11: FutureWarning: `__version__` is deprecated, use `importlib.metadata.version('scanpy')` instead
+  from scanpy import __version__ as scv
+label column: louvain | cells: 2638
+annotate n=5    majority_voting=False OK (5 labels)
+annotate n=5    majority_voting=True  ERROR KeyError: 'majority_voting'
+annotate n=12   majority_voting=False OK (7 labels)
+annotate n=12   majority_voting=True  ERROR KeyError: 'majority_voting'
+annotate n=30   majority_voting=False OK (11 labels)
+annotate n=30   majority_voting=True  ERROR KeyError: 'majority_voting'
+annotate n=51   majority_voting=False OK (12 labels)
+annotate n=51   majority_voting=True  OK (8 labels)
+annotate n=60   majority_voting=False OK (15 labels)
+annotate n=60   majority_voting=True  OK (14 labels)
+annotate n=200  majority_voting=False OK (21 labels)
+annotate n=200  majority_voting=True  OK (9 labels)
+train 2 types x 1 cells feature_selection=False OK (2 types, 1452 features)
+train 2 types x 1 cells feature_selection=True  OK (2 types, 300 features)
+train 2 types x 3 cells feature_selection=False OK (2 types, 3332 features)
+train 2 types x 3 cells feature_selection=True  OK (2 types, 300 features)
+train 3 types x 10 cells feature_selection=False OK (3 types, 6756 features)
+train 3 types x 10 cells feature_selection=True  OK (3 types, 735 features)
+train 1 type x 50 cells ERROR ValueError: This solver needs samples of at least 2 classes in the data, but the data contains only one class: 'CD4 T cell

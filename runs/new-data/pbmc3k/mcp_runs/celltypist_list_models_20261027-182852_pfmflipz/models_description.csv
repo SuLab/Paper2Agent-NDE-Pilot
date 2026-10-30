@@ -1,0 +1,62 @@
+model,description
+Immune_All_Low.pkl,immune sub-populations combined from 20 tissues of 18 studies
+Immune_All_High.pkl,immune populations combined from 20 tissues of 18 studies
+Adult_COVID19_PBMC.pkl,peripheral blood mononuclear cell types from COVID-19 patients and healthy controls
+Adult_CynomolgusMacaque_Hippocampus.pkl,cell types from the hippocampus of adult cynomolgus monkeys (Macaca fascicularis)
+Adult_Human_MTG.pkl,cell types and subtypes (10x-based) from the adult human middle temporal gyrus
+Adult_Human_PancreaticIslet.pkl,cell types from pancreatic islets of healthy adult humans
+Adult_Human_PrefrontalCortex.pkl,cell types and subtypes from the adult human dorsolateral prefrontal cortex
+Adult_Human_Skin.pkl,cell types from human healthy adult skin
+Adult_Human_Vascular.pkl,vascular populations combined from multiple adult human organs
+Adult_Mouse_Gut.pkl,cell types in the adult mouse gut combined from eight datasets
+Adult_Mouse_OlfactoryBulb.pkl,cell types from the olfactory bulb of adult mice
+Adult_Pig_Hippocampus.pkl,cell types from the adult pig hippocampus
+Adult_RhesusMacaque_Hippocampus.pkl,cell types from the hippocampus of adult rhesus monkeys (Macaca mulatta)
+Adult_cHSPCs_Illumina.pkl,"human circulating hematopoietic stem and progenitor cell types in aging, cytopenia, and myelodysplastic syndrome (Illumina)"
+Adult_cHSPCs_Ultima.pkl,"human circulating hematopoietic stem and progenitor cell types in aging, cytopenia, and myelodysplastic syndrome (Ultima)"
+Autopsy_COVID19_Lung.pkl,cell types from the lungs of 16 SARS-CoV-2 infected COVID-19 autopsy adult donors
+COVID19_HumanChallenge_Blood.pkl,detailed blood cell states from 16 individuals after being challenged with SARS-CoV-2
+COVID19_Immune_Landscape.pkl,immune subtypes from lung and blood of COVID-19 patients and healthy controls
+Cells_Adult_Breast.pkl,cell types from the adult human breast
+Cells_Fetal_Lung.pkl,cell types from human embryonic and fetal lungs
+Cells_Human_Tonsil.pkl,tonsillar cell types from humans (3-65 years)
+Cells_Intestinal_Tract.pkl,"intestinal cells from fetal, pediatric (healthy and Crohn's disease) and adult human gut"
+Cells_Lung_Airway.pkl,cell populations from scRNA-seq of five locations of the human lungs and airways
+Developing_Human_Brain.pkl,cell types from the first-trimester developing human brain
+Developing_Human_Gonads.pkl,cell types of human gonadal and adjacent extragonadal tissue from the first and second trimesters of gestation
+Developing_Human_Hippocampus.pkl,cell types from the developing human hippocampus
+Developing_Human_Organs.pkl,cell types of five endoderm-derived organs in developing humans from 7–21 post-conception weeks
+Developing_Human_Thymus.pkl,"cell populations in embryonic, fetal, pediatric, and adult stages of the human thymus"
+Developing_Mouse_Brain.pkl,cell types from the embryonic mouse brain between gastrulation and birth
+Developing_Mouse_Hippocampus.pkl,cell types from the mouse hippocampus at postnatal day 7
+Fetal_Human_AdrenalGlands.pkl,cell types of human fetal adrenal glands from 8 to 14 post-conceptional weeks
+Fetal_Human_Pancreas.pkl,pancreatic cell types from human embryos at 9-19 weeks post conception
+Fetal_Human_Pituitary.pkl,cell types of human fetal pituitaries from 7 to 25 weeks postfertilization
+Fetal_Human_Retina.pkl,cell types from human fetal neural retina and retinal pigment epithelium
+Fetal_Human_Skin.pkl,cell types from developing human fetal skin
+Healthy_Adult_Heart.pkl,cell types from eight anatomical regions of the healthy adult human heart
+Healthy_COVID19_PBMC.pkl,peripheral blood mononuclear cell types from healthy and COVID-19 individuals
+Healthy_Human_Liver.pkl,cell types from scRNA-seq and snRNA-seq of the adult human liver
+Healthy_Mouse_Liver.pkl,cell types from scRNA-seq and snRNA-seq of the healthy murine liver
+Human_AdultAged_Hippocampus.pkl,cell types from the hippocampus of adult and aged humans
+Human_Colorectal_Cancer.pkl,cell types of colon tissues from patients with colorectal cancer
+Human_Developmental_Retina.pkl,cell types from human fetal retina
+Human_Embryonic_YolkSac.pkl,cell types of the human yolk sac from 4-8 post-conception weeks
+Human_Endometrium_Atlas.pkl,endometrial cell types integrated from seven datasets across the menstrual cycle
+Human_IPF_Lung.pkl,"cell types from idiopathic pulmonary fibrosis, chronic obstructive pulmonary disease, and healthy lungs of adult humans"
+Human_Longitudinal_Hippocampus.pkl,cell types from the adult human anterior and posterior hippocampus
+Human_Lung_Atlas.pkl,integrated Human Lung Cell Atlas (HLCA) combining multiple datasets of the healthy respiratory system
+Human_PF_Lung.pkl,cell types from different forms of pulmonary fibrosis lungs of adult humans
+Human_Placenta_Decidua.pkl,cell types from first-trimester human placentas with matched maternal blood and decidua
+Lethal_COVID19_Lung.pkl,cell types from the lungs of individuals who died of COVID-19 and control individuals
+Mouse_Dendritic_Subtypes.pkl,"dendritic cell subtypes integrated from 9 datasets across murine spleen, bone marrow, blood, and lung tissue"
+Mouse_Dentate_Gyrus.pkl,"cell types from the dentate gyrus in perinatal, juvenile, and adult mice"
+Mouse_Isocortex_Hippocampus.pkl,cell types from the adult mouse isocortex (neocortex) and hippocampal formation
+Mouse_Postnatal_DentateGyrus.pkl,cell types from the mouse dentate gyrus in postnatal days 12-35
+Mouse_Whole_Brain.pkl,cell types from the whole adult mouse brain
+Nuclei_Human_InnerEar.pkl,cell types from human inner ear at fetal age weeks 7.5 and 9.2 as well as adult
+Nuclei_Lung_Airway.pkl,cell populations from snRNA-seq of five locations of the human lungs and airways
+PaediatricAdult_COVID19_Airway.pkl,cell types in the airway of paediatric and adult patients with COVID-19 and healthy controls
+PaediatricAdult_COVID19_PBMC.pkl,peripheral blood mononuclear cell types of paediatric and adult patients with COVID-19 and healthy controls
+Pan_Fetal_Human.pkl,stromal and immune populations from the human fetus
+Thymus_Allograft_PBMC.pkl,"cell types from cultured, transplanted and control thymus tissue, patient-derived longitudinal PBMC, and control PBMC"

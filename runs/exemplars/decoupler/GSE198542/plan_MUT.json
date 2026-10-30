@@ -1,0 +1,81 @@
+[
+ {
+  "name": "filter",
+  "tool": "decoupler_filter_genes_by_expression",
+  "arguments": {
+   "data_path": "/home/asu/Science/paper2agent-runs/exemplars/decoupler/GSE198542/GSE198542_MUT_zikv_vs_mock.h5ad",
+   "group_key": "condition",
+   "output_dir": "/home/asu/Science/paper2agent-runs/exemplars/decoupler/GSE198542/mcp_runs"
+  }
+ },
+ {
+  "name": "pcs",
+  "tool": "decoupler_rank_pcs_by_metadata",
+  "arguments": {
+   "data_path": "$filter.artifacts.0.path",
+   "obs_keys": [
+    "condition",
+    "extraction_date"
+   ],
+   "color_keys": [
+    "condition",
+    "extraction_date"
+   ],
+   "output_dir": "/home/asu/Science/paper2agent-runs/exemplars/decoupler/GSE198542/mcp_runs"
+  }
+ },
+ {
+  "name": "de",
+  "tool": "pydeseq2_test_differential_expression",
+  "arguments": {
+   "data_path": "$filter.artifacts.0.path",
+   "condition_key": "condition",
+   "group": "ZIKV",
+   "reference": "mock",
+   "design": "~condition",
+   "n_cpus": 4,
+   "output_dir": "/home/asu/Science/paper2agent-runs/exemplars/decoupler/GSE198542/mcp_runs"
+  }
+ },
+ {
+  "name": "ulm_collectri",
+  "tool": "decoupler_score_activities_ulm",
+  "arguments": {
+   "de_results_path": "$de.artifacts.0.path",
+   "network": "collectri",
+   "contrast_name": "MUT.ZIKV.vs.mock",
+   "output_dir": "/home/asu/Science/paper2agent-runs/exemplars/decoupler/GSE198542/mcp_runs"
+  }
+ },
+ {
+  "name": "ulm_progeny",
+  "tool": "decoupler_score_activities_ulm",
+  "arguments": {
+   "de_results_path": "$de.artifacts.0.path",
+   "network": "progeny",
+   "contrast_name": "MUT.ZIKV.vs.mock",
+   "output_dir": "/home/asu/Science/paper2agent-runs/exemplars/decoupler/GSE198542/mcp_runs"
+  }
+ },
+ {
+  "name": "ulm_hallmark",
+  "tool": "decoupler_score_activities_ulm",
+  "arguments": {
+   "de_results_path": "$de.artifacts.0.path",
+   "network": "hallmark",
+   "contrast_name": "MUT.ZIKV.vs.mock",
+   "output_dir": "/home/asu/Science/paper2agent-runs/exemplars/decoupler/GSE198542/mcp_runs"
+  }
+ },
+ {
+  "name": "inspect_stat2",
+  "tool": "decoupler_inspect_source_targets",
+  "arguments": {
+   "de_results_path": "$de.artifacts.0.path",
+   "network": "collectri",
+   "source": "STAT2",
+   "scores_path": "$ulm_collectri.artifacts.0.path",
+   "output_dir": "/home/asu/Science/paper2agent-runs/exemplars/decoupler/GSE198542/mcp_runs"
+  }
+ }
+]

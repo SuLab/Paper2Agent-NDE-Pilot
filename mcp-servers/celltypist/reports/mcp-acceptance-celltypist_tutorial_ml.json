@@ -1,0 +1,270 @@
+[
+ {
+  "name": "ctml-ml-cell47-builtin-bestmatch-majority-voting",
+  "tool": "celltypist_compare_with_reference",
+  "arguments": {
+   "annotation_dir": "/home/asu/Science/paper2agent-runs/celltypist/tests/data/celltypist_tutorial_ml/fixtures/builtin_bestmatch",
+   "reference_key": "cell_type",
+   "use_as_prediction": "majority_voting",
+   "reference_groups": [
+    "Microglia",
+    "Macro_pDC"
+   ],
+   "output_dir": "/home/asu/Science/paper2agent-runs/celltypist/tmp/verify_celltypist_tutorial_ml/acceptance_outputs"
+  },
+  "expected_subset": {
+   "n_cells": 500,
+   "reference_key": "cell_type",
+   "use_as_prediction": "majority_voting",
+   "n_reference_groups": 12,
+   "n_predicted_labels": 11,
+   "n_cells_missing_reference": 0,
+   "reference_group_sizes": {
+    "Microglia": 60,
+    "Macro_pDC": 40
+   },
+   "selected_groups": {
+    "Microglia": {
+     "n_cells": 60,
+     "prediction_counts": {
+      "Macrophages": 32,
+      "DC1": 13,
+      "Alveolar macrophages": 8,
+      "pDC": 5,
+      "Endothelial cells": 1,
+      "Neutrophil-myeloid progenitor": 1
+     }
+    },
+    "Macro_pDC": {
+     "n_cells": 40,
+     "prediction_counts": {
+      "pDC": 34,
+      "Alveolar macrophages": 5,
+      "Macrophages": 1
+     }
+    }
+   }
+  },
+  "min_artifacts": 6,
+  "required_inputs": [
+   "annotation_dir",
+   "reference_key"
+  ],
+  "artifact_root": "/home/asu/Science/paper2agent-runs/celltypist/tmp/verify_celltypist_tutorial_ml/acceptance_outputs",
+  "unique_artifacts": true
+ },
+ {
+  "name": "ctml-ml-cell47-repeated-call",
+  "tool": "celltypist_compare_with_reference",
+  "arguments": {
+   "annotation_dir": "/home/asu/Science/paper2agent-runs/celltypist/tests/data/celltypist_tutorial_ml/fixtures/builtin_bestmatch",
+   "reference_key": "cell_type",
+   "use_as_prediction": "majority_voting",
+   "reference_groups": [
+    "Microglia",
+    "Macro_pDC"
+   ],
+   "output_dir": "/home/asu/Science/paper2agent-runs/celltypist/tmp/verify_celltypist_tutorial_ml/acceptance_outputs"
+  },
+  "expected_subset": {
+   "n_cells": 500,
+   "reference_key": "cell_type",
+   "use_as_prediction": "majority_voting",
+   "n_reference_groups": 12,
+   "n_predicted_labels": 11,
+   "n_cells_missing_reference": 0,
+   "reference_group_sizes": {
+    "Microglia": 60,
+    "Macro_pDC": 40
+   },
+   "selected_groups": {
+    "Microglia": {
+     "n_cells": 60,
+     "prediction_counts": {
+      "Macrophages": 32,
+      "DC1": 13,
+      "Alveolar macrophages": 8,
+      "pDC": 5,
+      "Endothelial cells": 1,
+      "Neutrophil-myeloid progenitor": 1
+     }
+    },
+    "Macro_pDC": {
+     "n_cells": 40,
+     "prediction_counts": {
+      "pDC": 34,
+      "Alveolar macrophages": 5,
+      "Macrophages": 1
+     }
+    }
+   }
+  },
+  "min_artifacts": 6,
+  "required_inputs": [
+   "annotation_dir",
+   "reference_key"
+  ],
+  "artifact_root": "/home/asu/Science/paper2agent-runs/celltypist/tmp/verify_celltypist_tutorial_ml/acceptance_outputs",
+  "unique_artifacts": true
+ },
+ {
+  "name": "ctml-ml-cell82-custom-seed0-probmatch-boxplots",
+  "tool": "celltypist_compare_with_reference",
+  "arguments": {
+   "annotation_dir": "/home/asu/Science/paper2agent-runs/celltypist/tests/data/celltypist_tutorial_ml/fixtures/custom_seed0_probmatch",
+   "reference_key": "cell_type",
+   "use_as_prediction": "majority_voting",
+   "reference_groups": [
+    "Microglia",
+    "Macro_pDC"
+   ],
+   "output_dir": "/home/asu/Science/paper2agent-runs/celltypist/tmp/verify_celltypist_tutorial_ml/acceptance_outputs"
+  },
+  "expected_subset": {
+   "n_cells": 500,
+   "n_reference_groups": 12,
+   "n_predicted_labels": 12,
+   "selected_groups": {
+    "Microglia": {
+     "n_cells": 60,
+     "prediction_counts": {
+      "Unassigned": 51,
+      "pDC": 4,
+      "Macrophages|pDC": 2,
+      "DC1": 1,
+      "Endothelial cells": 1,
+      "Neutrophil-myeloid progenitor": 1
+     }
+    },
+    "Macro_pDC": {
+     "n_cells": 40,
+     "prediction_counts": {
+      "Macrophages|pDC": 35,
+      "Macrophages": 3,
+      "Unassigned": 2
+     }
+    }
+   }
+  },
+  "min_artifacts": 6,
+  "required_inputs": [
+   "annotation_dir",
+   "reference_key"
+  ],
+  "artifact_root": "/home/asu/Science/paper2agent-runs/celltypist/tmp/verify_celltypist_tutorial_ml/acceptance_outputs",
+  "unique_artifacts": true
+ },
+ {
+  "name": "ctml-relabelled-reference-column",
+  "tool": "celltypist_compare_with_reference",
+  "arguments": {
+   "annotation_dir": "/home/asu/Science/paper2agent-runs/celltypist/tests/data/celltypist_tutorial_ml/fixtures/relabelled_reference",
+   "reference_key": "expert_annotation",
+   "use_as_prediction": "majority_voting",
+   "reference_groups": [
+    "pop_04"
+   ],
+   "plot_group_probabilities": false,
+   "output_dir": "/home/asu/Science/paper2agent-runs/celltypist/tmp/verify_celltypist_tutorial_ml/acceptance_outputs"
+  },
+  "expected_subset": {
+   "n_cells": 500,
+   "reference_key": "expert_annotation",
+   "n_reference_groups": 12,
+   "selected_groups": {
+    "pop_04": {
+     "n_cells": 60,
+     "prediction_counts": {
+      "Macrophages": 32,
+      "DC1": 13,
+      "Alveolar macrophages": 8,
+      "pDC": 5,
+      "Endothelial cells": 1,
+      "Neutrophil-myeloid progenitor": 1
+     }
+    }
+   }
+  },
+  "min_artifacts": 4,
+  "required_inputs": [
+   "annotation_dir",
+   "reference_key"
+  ],
+  "artifact_root": "/home/asu/Science/paper2agent-runs/celltypist/tmp/verify_celltypist_tutorial_ml/acceptance_outputs",
+  "unique_artifacts": true
+ },
+ {
+  "name": "ctml-error-missing-reference-column",
+  "tool": "celltypist_compare_with_reference",
+  "required_inputs": [
+   "annotation_dir",
+   "reference_key"
+  ],
+  "arguments": {
+   "annotation_dir": "/home/asu/Science/paper2agent-runs/celltypist/tests/data/celltypist_tutorial_ml/fixtures/builtin_bestmatch",
+   "reference_key": "author_cell_type",
+   "output_dir": "/home/asu/Science/paper2agent-runs/celltypist/tmp/verify_celltypist_tutorial_ml/acceptance_outputs"
+  },
+  "error_contains": "reference_key 'author_cell_type' is not an obs column"
+ },
+ {
+  "name": "ctml-error-missing-group",
+  "tool": "celltypist_compare_with_reference",
+  "required_inputs": [
+   "annotation_dir",
+   "reference_key"
+  ],
+  "arguments": {
+   "annotation_dir": "/home/asu/Science/paper2agent-runs/celltypist/tests/data/celltypist_tutorial_ml/fixtures/builtin_bestmatch",
+   "reference_key": "cell_type",
+   "reference_groups": [
+    "Microglia",
+    "Not_a_type"
+   ],
+   "output_dir": "/home/asu/Science/paper2agent-runs/celltypist/tmp/verify_celltypist_tutorial_ml/acceptance_outputs"
+  },
+  "error_contains": "['Not_a_type'] not found"
+ },
+ {
+  "name": "ctml-error-no-majority-voting-column",
+  "tool": "celltypist_compare_with_reference",
+  "required_inputs": [
+   "annotation_dir",
+   "reference_key"
+  ],
+  "arguments": {
+   "annotation_dir": "/home/asu/Science/paper2agent-runs/celltypist/tests/data/celltypist_tutorial_ml/fixtures/builtin_bestmatch_no_mv",
+   "reference_key": "cell_type",
+   "output_dir": "/home/asu/Science/paper2agent-runs/celltypist/tmp/verify_celltypist_tutorial_ml/acceptance_outputs"
+  },
+  "error_contains": "has no 'majority_voting' column"
+ },
+ {
+  "name": "ctml-error-misaligned-cell-ids",
+  "tool": "celltypist_compare_with_reference",
+  "required_inputs": [
+   "annotation_dir",
+   "reference_key"
+  ],
+  "arguments": {
+   "annotation_dir": "/home/asu/Science/paper2agent-runs/celltypist/tests/data/celltypist_tutorial_ml/fixtures_invalid/misaligned_probability",
+   "reference_key": "cell_type",
+   "output_dir": "/home/asu/Science/paper2agent-runs/celltypist/tmp/verify_celltypist_tutorial_ml/acceptance_outputs"
+  },
+  "error_contains": "probability_matrix.csv do not align"
+ },
+ {
+  "name": "ctml-error-missing-directory",
+  "tool": "celltypist_compare_with_reference",
+  "required_inputs": [
+   "annotation_dir",
+   "reference_key"
+  ],
+  "arguments": {
+   "annotation_dir": "/home/asu/Science/paper2agent-runs/celltypist/tests/data/celltypist_tutorial_ml/fixtures/does_not_exist",
+   "reference_key": "cell_type",
+   "output_dir": "/home/asu/Science/paper2agent-runs/celltypist/tmp/verify_celltypist_tutorial_ml/acceptance_outputs"
+  },
+  "error_contains": "annotation_dir does not exist"
+ }
+]

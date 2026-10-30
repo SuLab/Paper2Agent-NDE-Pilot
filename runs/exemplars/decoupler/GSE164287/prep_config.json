@@ -1,0 +1,1 @@
+{"gse": "GSE164287", "condition": {"field": "moi", "levels": {"uninfected": "uninfected", "10": "Mtb"}}, "covariates": {"donor": "donor"}}

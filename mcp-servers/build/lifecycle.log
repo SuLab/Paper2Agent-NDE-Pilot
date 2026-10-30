@@ -1,0 +1,31 @@
+decoupler environment af072c797e1169e32 start=2026-10-27T22:43:36.755Z finish=2026-10-27T22:49:48.638Z status=succeeded
+celltypist environment ada6e60b1554972df start=2026-10-27T22:43:36.755Z finish=2026-10-27T22:51:40.871Z status=succeeded
+decoupler scanner af4af591e3c21f8e0 start=2026-10-27T22:43:36.755Z finish=2026-10-27T22:52:27.245Z status=succeeded
+decoupler environment-attempt2 af072c797e1169e32 start=2026-10-27T22:52:37.563Z finish=2026-10-27T22:53:45.219Z status=succeeded
+decoupler executor-bulk_rna a57e5d34fd7eb85d6 start=2026-10-27T22:54:13.206Z running
+celltypist scanner a27c1d8cdca7ccafe start=2026-10-27T22:43:36.755Z finish=2026-10-27T22:54:27.208Z status=succeeded
+celltypist executor-celltypist_tutorial a782b254340169ac4 start=2026-10-27T22:54:27.408Z running
+celltypist executor-celltypist_tutorial_ml a5122e0359c431dca start=2026-10-27T22:54:27.408Z running
+celltypist executor-celltypist_tutorial a782b254340169ac4 start=2026-10-27T22:54:27.408Z finish=2026-10-27T23:15:18.652Z status=succeeded
+celltypist executor-celltypist_tutorial_ml a5122e0359c431dca start=2026-10-27T22:54:27.408Z finish=2026-10-27T23:17:39.840Z status=succeeded
+celltypist implementer-celltypist_tutorial ac9a08a99ddaa84b7 start=2026-10-27T23:18:59.236Z running
+celltypist implementer-celltypist_tutorial_ml a4439171fdb6d2574 start=2026-10-27T23:18:59.236Z running
+decoupler executor-bulk_rna a57e5d34fd7eb85d6 start=2026-10-27T22:54:13.206Z finish=2026-10-27T23:19:51.729Z status=succeeded
+decoupler implementer-bulk_enrichment a2fc814e69fdd10ec start=2026-10-27T23:20:29.790Z running
+celltypist implementer-celltypist_tutorial ac9a08a99ddaa84b7 start=2026-10-27T23:18:59.236Z finish=2026-10-27T23:29:31.810Z status=succeeded
+celltypist implementer-celltypist_tutorial_ml a4439171fdb6d2574 start=2026-10-27T23:18:59.236Z finish=2026-10-27T23:30:35.612Z status=succeeded
+celltypist verifier-celltypist_tutorial ac96d80c1da909d21 start=2026-10-27T23:30:37.653Z running
+celltypist verifier-celltypist_tutorial_ml a9bb2d13bedd8ff61 start=2026-10-27T23:30:37.653Z running
+decoupler implementer-bulk_enrichment a2fc814e69fdd10ec start=2026-10-27T23:20:29.790Z finish=2026-10-27T23:34:32.914Z status=succeeded
+decoupler verifier-bulk_enrichment a1f437adf1648aa30 start=2026-10-27T23:34:33.426Z running
+PAUSE at 2026-10-27T23:43:26.413Z (user requested pause until 17:40 PDT): verifiers ac96d80c1da909d21 a9bb2d13bedd8ff61 a1f437adf1648aa30 stopped -> cancelled
+RESUME at 2026-10-28T00:40:24.345Z
+celltypist verifier-celltypist_tutorial-attempt2 ac96d80c1da909d21 start=2026-10-28T00:40:24.345Z running
+celltypist verifier-celltypist_tutorial_ml-attempt2 a9bb2d13bedd8ff61 start=2026-10-28T00:40:24.345Z running
+decoupler verifier-bulk_enrichment-attempt2 a1f437adf1648aa30 start=2026-10-28T00:40:24.345Z running
+celltypist verifier-celltypist_tutorial_ml-attempt2 a9bb2d13bedd8ff61 start=2026-10-28T00:40:24.345Z finish=2026-10-28T00:57:37.737Z status=succeeded
+celltypist verifier-celltypist_tutorial-attempt2 ac96d80c1da909d21 start=2026-10-28T00:40:24.345Z finish=2026-10-28T01:01:21.730Z status=succeeded
+decoupler verifier-bulk_enrichment-attempt2 a1f437adf1648aa30 start=2026-10-28T00:40:24.345Z finish=2026-10-28T01:11:19.145Z status=succeeded
+celltypist delivery-verifier ac96d80c1da909d21 start=2026-10-28T01:17:42.380Z running
+celltypist delivery-verifier ac96d80c1da909d21 start=2026-10-28T01:17:42.380Z finish=2026-10-28T01:28:34.290Z status=succeeded
+decoupler delivery-verifier a1f437adf1648aa30 start=2026-10-28T01:28:00.422Z finish=2026-10-28T01:34:57.621Z status=succeeded

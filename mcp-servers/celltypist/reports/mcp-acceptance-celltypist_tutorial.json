@@ -1,0 +1,496 @@
+[
+ {
+  "name": "celltypist_tutorial-list-models-reference",
+  "tool": "celltypist_list_models",
+  "arguments": {
+   "output_dir": "/home/asu/Science/paper2agent-runs/celltypist/tmp/verify_celltypist_tutorial/acceptance_outputs"
+  },
+  "required_inputs": [],
+  "expected_subset": {
+   "n_models": 61,
+   "default_model": "Immune_All_Low.pkl"
+  },
+  "min_artifacts": 1,
+  "artifact_root": "/home/asu/Science/paper2agent-runs/celltypist/tmp/verify_celltypist_tutorial/acceptance_outputs",
+  "unique_artifacts": true
+ },
+ {
+  "name": "celltypist_tutorial-list-models-repeat",
+  "tool": "celltypist_list_models",
+  "arguments": {
+   "output_dir": "/home/asu/Science/paper2agent-runs/celltypist/tmp/verify_celltypist_tutorial/acceptance_outputs"
+  },
+  "required_inputs": [],
+  "expected_subset": {
+   "n_models": 61
+  },
+  "min_artifacts": 1,
+  "artifact_root": "/home/asu/Science/paper2agent-runs/celltypist/tmp/verify_celltypist_tutorial/acceptance_outputs",
+  "unique_artifacts": true
+ },
+ {
+  "name": "celltypist_tutorial-annotate-demo2000-builtin-default-model",
+  "tool": "celltypist_annotate_cells",
+  "arguments": {
+   "adata_path": "/home/asu/Science/paper2agent-runs/celltypist/tests/data/celltypist_tutorial/inputs/demo_2000_cells.h5ad",
+   "output_dir": "/home/asu/Science/paper2agent-runs/celltypist/tmp/verify_celltypist_tutorial/acceptance_outputs"
+  },
+  "required_inputs": [
+   "adata_path"
+  ],
+  "expected_subset": {
+   "n_cells": 2000,
+   "n_model_cell_types": 98,
+   "model": "Immune_All_Low.pkl",
+   "mode": "best match",
+   "majority_voting_requested": false,
+   "majority_voting_performed": false
+  },
+  "min_artifacts": 4,
+  "artifact_root": "/home/asu/Science/paper2agent-runs/celltypist/tmp/verify_celltypist_tutorial/acceptance_outputs",
+  "unique_artifacts": true
+ },
+ {
+  "name": "celltypist_tutorial-annotate-demo400-seeded-custom-model-majority-voting",
+  "tool": "celltypist_annotate_cells",
+  "arguments": {
+   "adata_path": "/home/asu/Science/paper2agent-runs/celltypist/tests/data/celltypist_tutorial/inputs/demo_400_cells.h5ad",
+   "model": "/home/asu/Science/paper2agent-runs/celltypist/tests/data/celltypist_tutorial/models/model_seeded_rs0_run1.pkl",
+   "majority_voting": true,
+   "output_dir": "/home/asu/Science/paper2agent-runs/celltypist/tmp/verify_celltypist_tutorial/acceptance_outputs"
+  },
+  "required_inputs": [
+   "adata_path"
+  ],
+  "expected_subset": {
+   "n_cells": 400,
+   "n_model_cell_types": 10,
+   "majority_voting_performed": true,
+   "n_over_clusters": 20,
+   "over_clustering_source": "celltypist Leiden over-clustering"
+  },
+  "min_artifacts": 4,
+  "artifact_root": "/home/asu/Science/paper2agent-runs/celltypist/tmp/verify_celltypist_tutorial/acceptance_outputs",
+  "unique_artifacts": true
+ },
+ {
+  "name": "celltypist_tutorial-annotate-user-over-clustering-prob-match",
+  "tool": "celltypist_annotate_cells",
+  "arguments": {
+   "adata_path": "/home/asu/Science/paper2agent-runs/celltypist/tests/data/celltypist_tutorial/inputs/demo_400_user_meta.h5ad",
+   "model": "/home/asu/Science/paper2agent-runs/celltypist/tests/data/celltypist_tutorial/models/model_seeded_rs0_run1.pkl",
+   "mode": "prob match",
+   "p_thres": 0.3,
+   "majority_voting": true,
+   "over_clustering_key": "my_clusters",
+   "min_prop": 0.6,
+   "output_dir": "/home/asu/Science/paper2agent-runs/celltypist/tmp/verify_celltypist_tutorial/acceptance_outputs"
+  },
+  "required_inputs": [
+   "adata_path"
+  ],
+  "expected_subset": {
+   "n_cells": 400,
+   "mode": "prob match",
+   "p_thres": 0.3,
+   "majority_voting_performed": true,
+   "n_over_clusters": 7,
+   "over_clustering_source": "my_clusters",
+   "min_prop": 0.6
+  },
+  "min_artifacts": 4,
+  "artifact_root": "/home/asu/Science/paper2agent-runs/celltypist/tmp/verify_celltypist_tutorial/acceptance_outputs",
+  "unique_artifacts": true
+ },
+ {
+  "name": "celltypist_tutorial-annotate-repeat-first40",
+  "tool": "celltypist_annotate_cells",
+  "arguments": {
+   "adata_path": "/home/asu/Science/paper2agent-runs/celltypist/tests/data/celltypist_tutorial/inputs/demo_400_first40.h5ad",
+   "model": "/home/asu/Science/paper2agent-runs/celltypist/tests/data/celltypist_tutorial/models/model_seeded_rs0_run1.pkl",
+   "majority_voting": true,
+   "output_dir": "/home/asu/Science/paper2agent-runs/celltypist/tmp/verify_celltypist_tutorial/acceptance_outputs"
+  },
+  "required_inputs": [
+   "adata_path"
+  ],
+  "expected_subset": {
+   "n_cells": 40,
+   "majority_voting_requested": true,
+   "majority_voting_performed": false
+  },
+  "min_artifacts": 4,
+  "artifact_root": "/home/asu/Science/paper2agent-runs/celltypist/tmp/verify_celltypist_tutorial/acceptance_outputs",
+  "unique_artifacts": true
+ },
+ {
+  "name": "celltypist_tutorial-annotate-repeat-first40-again",
+  "tool": "celltypist_annotate_cells",
+  "arguments": {
+   "adata_path": "/home/asu/Science/paper2agent-runs/celltypist/tests/data/celltypist_tutorial/inputs/demo_400_first40.h5ad",
+   "model": "/home/asu/Science/paper2agent-runs/celltypist/tests/data/celltypist_tutorial/models/model_seeded_rs0_run1.pkl",
+   "majority_voting": true,
+   "output_dir": "/home/asu/Science/paper2agent-runs/celltypist/tmp/verify_celltypist_tutorial/acceptance_outputs"
+  },
+  "required_inputs": [
+   "adata_path"
+  ],
+  "expected_subset": {
+   "n_cells": 40,
+   "majority_voting_requested": true,
+   "majority_voting_performed": false
+  },
+  "min_artifacts": 4,
+  "artifact_root": "/home/asu/Science/paper2agent-runs/celltypist/tmp/verify_celltypist_tutorial/acceptance_outputs",
+  "unique_artifacts": true
+ },
+ {
+  "name": "celltypist_tutorial-annotate-missing-file",
+  "tool": "celltypist_annotate_cells",
+  "arguments": {
+   "adata_path": "/home/asu/Science/paper2agent-runs/celltypist/tests/data/celltypist_tutorial/inputs/absent.h5ad",
+   "output_dir": "/home/asu/Science/paper2agent-runs/celltypist/tmp/verify_celltypist_tutorial/acceptance_outputs"
+  },
+  "required_inputs": [
+   "adata_path"
+  ],
+  "error_contains": "No such file"
+ },
+ {
+  "name": "celltypist_tutorial-annotate-missing-over-clustering-key",
+  "tool": "celltypist_annotate_cells",
+  "arguments": {
+   "adata_path": "/home/asu/Science/paper2agent-runs/celltypist/tests/data/celltypist_tutorial/inputs/demo_400_user_meta.h5ad",
+   "model": "/home/asu/Science/paper2agent-runs/celltypist/tests/data/celltypist_tutorial/models/model_seeded_rs0_run1.pkl",
+   "majority_voting": true,
+   "over_clustering_key": "cell_type",
+   "output_dir": "/home/asu/Science/paper2agent-runs/celltypist/tmp/verify_celltypist_tutorial/acceptance_outputs"
+  },
+  "required_inputs": [
+   "adata_path"
+  ],
+  "error_contains": "over_clustering_key 'cell_type' is not an obs column"
+ },
+ {
+  "name": "celltypist_tutorial-annotate-non-normalised-input",
+  "tool": "celltypist_annotate_cells",
+  "arguments": {
+   "adata_path": "/home/asu/Science/paper2agent-runs/celltypist/tests/data/celltypist_tutorial/inputs/demo_400_counts_like.h5ad",
+   "model": "/home/asu/Science/paper2agent-runs/celltypist/tests/data/celltypist_tutorial/models/model_seeded_rs0_run1.pkl",
+   "output_dir": "/home/asu/Science/paper2agent-runs/celltypist/tmp/verify_celltypist_tutorial/acceptance_outputs"
+  },
+  "required_inputs": [
+   "adata_path"
+  ],
+  "error_contains": "Invalid expression matrix in `.X`"
+ },
+ {
+  "name": "celltypist_tutorial-annotate-unknown-model-name",
+  "tool": "celltypist_annotate_cells",
+  "arguments": {
+   "adata_path": "/home/asu/Science/paper2agent-runs/celltypist/tests/data/celltypist_tutorial/inputs/demo_400_first40.h5ad",
+   "model": "No_Such_Model.pkl",
+   "output_dir": "/home/asu/Science/paper2agent-runs/celltypist/tmp/verify_celltypist_tutorial/acceptance_outputs"
+  },
+  "required_inputs": [
+   "adata_path"
+  ],
+  "error_contains": "No models match the celltypist model repertoire"
+ },
+ {
+  "name": "celltypist_tutorial-train-seeded-tutorial-reference",
+  "tool": "celltypist_train_model",
+  "arguments": {
+   "adata_path": "/home/asu/Science/paper2agent-runs/celltypist/tests/data/celltypist_tutorial/inputs/demo_2000_cells.h5ad",
+   "label_key": "cell_type",
+   "feature_selection": true,
+   "n_jobs": 10,
+   "seed": 0,
+   "model_name": "model_from_immune2000",
+   "output_dir": "/home/asu/Science/paper2agent-runs/celltypist/tmp/verify_celltypist_tutorial/acceptance_outputs"
+  },
+  "required_inputs": [
+   "adata_path",
+   "label_key"
+  ],
+  "expected_subset": {
+   "n_cells": 2000,
+   "n_cell_types": 10,
+   "n_features": 2652,
+   "seed": 0,
+   "n_jobs": 10,
+   "feature_selection": true,
+   "cell_types": [
+    "DC1",
+    "Endothelial cells",
+    "Follicular B cells",
+    "Kupffer cells",
+    "Macrophages",
+    "Mast cells",
+    "Neutrophil-myeloid progenitor",
+    "Plasma cells",
+    "gamma-delta T cells",
+    "pDC"
+   ]
+  },
+  "min_artifacts": 1,
+  "artifact_root": "/home/asu/Science/paper2agent-runs/celltypist/tmp/verify_celltypist_tutorial/acceptance_outputs",
+  "unique_artifacts": true
+ },
+ {
+  "name": "celltypist_tutorial-train-renamed-label-column",
+  "tool": "celltypist_train_model",
+  "arguments": {
+   "adata_path": "/home/asu/Science/paper2agent-runs/celltypist/tests/data/celltypist_tutorial/inputs/demo_400_user_meta.h5ad",
+   "label_key": "coarse_group",
+   "feature_selection": true,
+   "top_genes": 100,
+   "n_jobs": 10,
+   "seed": 1,
+   "output_dir": "/home/asu/Science/paper2agent-runs/celltypist/tmp/verify_celltypist_tutorial/acceptance_outputs"
+  },
+  "required_inputs": [
+   "adata_path",
+   "label_key"
+  ],
+  "expected_subset": {
+   "n_cells": 400,
+   "n_cell_types": 4,
+   "n_features": 388,
+   "label_key": "coarse_group",
+   "top_genes": 100,
+   "cell_types": [
+    "B lineage",
+    "Myeloid",
+    "Stromal",
+    "T cells"
+   ]
+  },
+  "min_artifacts": 1,
+  "artifact_root": "/home/asu/Science/paper2agent-runs/celltypist/tmp/verify_celltypist_tutorial/acceptance_outputs",
+  "unique_artifacts": true
+ },
+ {
+  "name": "celltypist_tutorial-train-renamed-label-column-repeat",
+  "tool": "celltypist_train_model",
+  "arguments": {
+   "adata_path": "/home/asu/Science/paper2agent-runs/celltypist/tests/data/celltypist_tutorial/inputs/demo_400_user_meta.h5ad",
+   "label_key": "coarse_group",
+   "feature_selection": true,
+   "top_genes": 100,
+   "n_jobs": 10,
+   "seed": 1,
+   "output_dir": "/home/asu/Science/paper2agent-runs/celltypist/tmp/verify_celltypist_tutorial/acceptance_outputs"
+  },
+  "required_inputs": [
+   "adata_path",
+   "label_key"
+  ],
+  "expected_subset": {
+   "n_cells": 400,
+   "n_cell_types": 4,
+   "n_features": 388
+  },
+  "min_artifacts": 1,
+  "artifact_root": "/home/asu/Science/paper2agent-runs/celltypist/tmp/verify_celltypist_tutorial/acceptance_outputs",
+  "unique_artifacts": true
+ },
+ {
+  "name": "celltypist_tutorial-train-missing-label-column",
+  "tool": "celltypist_train_model",
+  "arguments": {
+   "adata_path": "/home/asu/Science/paper2agent-runs/celltypist/tests/data/celltypist_tutorial/inputs/demo_400_user_meta.h5ad",
+   "label_key": "cell_type",
+   "output_dir": "/home/asu/Science/paper2agent-runs/celltypist/tmp/verify_celltypist_tutorial/acceptance_outputs"
+  },
+  "required_inputs": [
+   "adata_path",
+   "label_key"
+  ],
+  "error_contains": "label_key 'cell_type' is not an obs column"
+ },
+ {
+  "name": "celltypist_tutorial-train-non-normalised-input",
+  "tool": "celltypist_train_model",
+  "arguments": {
+   "adata_path": "/home/asu/Science/paper2agent-runs/celltypist/tests/data/celltypist_tutorial/inputs/demo_400_counts_like.h5ad",
+   "label_key": "cell_type",
+   "output_dir": "/home/asu/Science/paper2agent-runs/celltypist/tmp/verify_celltypist_tutorial/acceptance_outputs"
+  },
+  "required_inputs": [
+   "adata_path",
+   "label_key"
+  ],
+  "error_contains": "expect log1p normalized expression to 10000 counts per cell"
+ },
+ {
+  "name": "celltypist_tutorial-train-missing-file",
+  "tool": "celltypist_train_model",
+  "arguments": {
+   "adata_path": "/home/asu/Science/paper2agent-runs/celltypist/tests/data/celltypist_tutorial/inputs/absent.h5ad",
+   "label_key": "cell_type",
+   "output_dir": "/home/asu/Science/paper2agent-runs/celltypist/tmp/verify_celltypist_tutorial/acceptance_outputs"
+  },
+  "required_inputs": [
+   "adata_path",
+   "label_key"
+  ],
+  "error_contains": "No such file"
+ },
+ {
+  "name": "celltypist_tutorial-inspect-builtin-model",
+  "tool": "celltypist_inspect_model",
+  "arguments": {
+   "model": "Immune_All_Low.pkl",
+   "cell_types": [
+    "Mast cells"
+   ],
+   "top_n": 3,
+   "output_dir": "/home/asu/Science/paper2agent-runs/celltypist/tmp/verify_celltypist_tutorial/acceptance_outputs"
+  },
+  "required_inputs": [
+   "model"
+  ],
+  "expected_subset": {
+   "n_cell_types": 98,
+   "n_features": 6639,
+   "description": {
+    "version": "v2",
+    "date": "2022-07-16 00:20:42.927778"
+   }
+  },
+  "min_artifacts": 1,
+  "artifact_root": "/home/asu/Science/paper2agent-runs/celltypist/tmp/verify_celltypist_tutorial/acceptance_outputs",
+  "unique_artifacts": true
+ },
+ {
+  "name": "celltypist_tutorial-inspect-seeded-model-top3",
+  "tool": "celltypist_inspect_model",
+  "arguments": {
+   "model": "/home/asu/Science/paper2agent-runs/celltypist/tests/data/celltypist_tutorial/models/model_seeded_rs0_run1.pkl",
+   "cell_types": [
+    "Mast cells"
+   ],
+   "top_n": 3,
+   "output_dir": "/home/asu/Science/paper2agent-runs/celltypist/tmp/verify_celltypist_tutorial/acceptance_outputs"
+  },
+  "required_inputs": [
+   "model"
+  ],
+  "expected_subset": {
+   "n_cell_types": 10,
+   "n_features": 2652,
+   "top_markers": {
+    "Mast cells": [
+     "TPSB2",
+     "KRT1",
+     "SLC45A3"
+    ]
+   }
+  },
+  "min_artifacts": 1,
+  "artifact_root": "/home/asu/Science/paper2agent-runs/celltypist/tmp/verify_celltypist_tutorial/acceptance_outputs",
+  "unique_artifacts": true
+ },
+ {
+  "name": "celltypist_tutorial-inspect-as-run-model-violin-cell67",
+  "tool": "celltypist_inspect_model",
+  "arguments": {
+   "model": "/home/asu/Science/paper2agent-runs/celltypist/tests/data/celltypist_tutorial/models/model_from_immune2000.pkl",
+   "cell_types": [
+    "Mast cells"
+   ],
+   "top_n": 3,
+   "adata_path": "/home/asu/Science/paper2agent-runs/celltypist/tests/data/celltypist_tutorial/inputs/demo_2000_cells.h5ad",
+   "groupby_key": "cell_type",
+   "output_dir": "/home/asu/Science/paper2agent-runs/celltypist/tmp/verify_celltypist_tutorial/acceptance_outputs"
+  },
+  "required_inputs": [
+   "model"
+  ],
+  "expected_subset": {
+   "top_markers": {
+    "Mast cells": [
+     "TPSB2",
+     "SLC45A3",
+     "CPA3"
+    ]
+   },
+   "genes_missing_from_adata": {},
+   "groupby_key": "cell_type"
+  },
+  "min_artifacts": 2,
+  "artifact_root": "/home/asu/Science/paper2agent-runs/celltypist/tmp/verify_celltypist_tutorial/acceptance_outputs",
+  "unique_artifacts": true
+ },
+ {
+  "name": "celltypist_tutorial-inspect-seeded-model-top3-repeat",
+  "tool": "celltypist_inspect_model",
+  "arguments": {
+   "model": "/home/asu/Science/paper2agent-runs/celltypist/tests/data/celltypist_tutorial/models/model_seeded_rs0_run1.pkl",
+   "cell_types": [
+    "Mast cells"
+   ],
+   "top_n": 3,
+   "output_dir": "/home/asu/Science/paper2agent-runs/celltypist/tmp/verify_celltypist_tutorial/acceptance_outputs"
+  },
+  "required_inputs": [
+   "model"
+  ],
+  "expected_subset": {
+   "top_markers": {
+    "Mast cells": [
+     "TPSB2",
+     "KRT1",
+     "SLC45A3"
+    ]
+   }
+  },
+  "min_artifacts": 1,
+  "artifact_root": "/home/asu/Science/paper2agent-runs/celltypist/tmp/verify_celltypist_tutorial/acceptance_outputs",
+  "unique_artifacts": true
+ },
+ {
+  "name": "celltypist_tutorial-inspect-unknown-cell-type",
+  "tool": "celltypist_inspect_model",
+  "arguments": {
+   "model": "/home/asu/Science/paper2agent-runs/celltypist/tests/data/celltypist_tutorial/models/model_seeded_rs0_run1.pkl",
+   "cell_types": [
+    "Unicorn cells"
+   ],
+   "output_dir": "/home/asu/Science/paper2agent-runs/celltypist/tmp/verify_celltypist_tutorial/acceptance_outputs"
+  },
+  "required_inputs": [
+   "model"
+  ],
+  "error_contains": "'Unicorn cells' is not found"
+ },
+ {
+  "name": "celltypist_tutorial-inspect-violin-without-groupby",
+  "tool": "celltypist_inspect_model",
+  "arguments": {
+   "model": "/home/asu/Science/paper2agent-runs/celltypist/tests/data/celltypist_tutorial/models/model_seeded_rs0_run1.pkl",
+   "cell_types": [
+    "Mast cells"
+   ],
+   "adata_path": "/home/asu/Science/paper2agent-runs/celltypist/tests/data/celltypist_tutorial/inputs/demo_400_cells.h5ad",
+   "output_dir": "/home/asu/Science/paper2agent-runs/celltypist/tmp/verify_celltypist_tutorial/acceptance_outputs"
+  },
+  "required_inputs": [
+   "model"
+  ],
+  "error_contains": "groupby_key is required when adata_path is given"
+ },
+ {
+  "name": "celltypist_tutorial-inspect-missing-model-file",
+  "tool": "celltypist_inspect_model",
+  "arguments": {
+   "model": "/home/asu/Science/paper2agent-runs/celltypist/tests/data/celltypist_tutorial/models/absent.pkl",
+   "output_dir": "/home/asu/Science/paper2agent-runs/celltypist/tmp/verify_celltypist_tutorial/acceptance_outputs"
+  },
+  "required_inputs": [
+   "model"
+  ],
+  "error_contains": "No such model file"
+ }
+]

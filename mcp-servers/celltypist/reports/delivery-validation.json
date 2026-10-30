@@ -1,0 +1,315 @@
+{
+ "stage": "Paper2MCP stage 6, delivery (relocation) validation",
+ "generated": "2026-10-28T01:28:13+00:00",
+ "agent": {
+  "role": "independent delivery verifier",
+  "identity": "Fresh verifier agent of this run. Earlier in this run it was the stage-3 independent verifier of module celltypist_tutorial (reports/verification-celltypist_tutorial.json). It never implemented, packaged or edited any production file, USAGE.md or the ZIP; the coordinator confirmed eligibility."
+ },
+ "success": true,
+ "archive": {
+  "path": "/home/asu/Science/paper2agent-runs/celltypist/dist/celltypist-mcp.zip",
+  "sha256": "a52110dafbeb2b68b10236993d432ef832eac7169be8ddb79fa1b1210d4faf8d",
+  "sha256_expected": "a52110dafbeb2b68b10236993d432ef832eac7169be8ddb79fa1b1210d4faf8d",
+  "integrity": "unzip -t: no errors; 11 entries (7 files, 4 directories); no absolute or '..' names; no symlinks",
+  "not_modified": "dist/ was only read"
+ },
+ "packaged_files": {
+  "celltypist-mcp/USAGE.md": {
+   "sha256": "c2225d3a0d4625b12b069ba9dd1609235638ed7507fe3f56286f4d09b3081de1",
+   "bytes": 9826,
+   "mode": "0o644",
+   "extracted_sha256_matches": true,
+   "equals_verified_project_file": true
+  },
+  "celltypist-mcp/src/requirements.txt": {
+   "sha256": "0c03ac91b311c6ae890e86637c442b1e70ed3c7414514eb8d3e7125b0c5b816e",
+   "bytes": 2600,
+   "mode": "0o644",
+   "extracted_sha256_matches": true,
+   "equals_verified_project_file": true
+  },
+  "celltypist-mcp/src/tools/celltypist_tutorial_ml.py": {
+   "sha256": "c6ee78ae8fea3e712ba92e845bfdc3a7c9461ec5d13c122b3cd5e8b0350718c2",
+   "bytes": 11399,
+   "mode": "0o644",
+   "extracted_sha256_matches": true,
+   "equals_verified_project_file": true
+  },
+  "celltypist-mcp/src/tools/celltypist_tutorial.py": {
+   "sha256": "5a32c110d7ef55bd517d9eaa2261a523dfffc38df832bd9424d7391eae9f360b",
+   "bytes": 16153,
+   "mode": "0o644",
+   "extracted_sha256_matches": true,
+   "equals_verified_project_file": true
+  },
+  "celltypist-mcp/src/tools/__init__.py": {
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "bytes": 0,
+   "mode": "0o644",
+   "extracted_sha256_matches": true,
+   "equals_verified_project_file": true
+  },
+  "celltypist-mcp/src/celltypist_mcp.py": {
+   "sha256": "4f65b0afafd53dc8f4ed63af387732c641c3135243d229f1cdc38e64553f78f2",
+   "bytes": 731,
+   "mode": "0o644",
+   "extracted_sha256_matches": true,
+   "equals_verified_project_file": true
+  },
+  "celltypist-mcp/THIRD_PARTY/celltypist-LICENSE.txt": {
+   "sha256": "ce27e69d9d8cfc3d7a863bc1528eb9b21af922fdac4bf021b1cb072e31a104e6",
+   "bytes": 1370,
+   "mode": "0o644",
+   "extracted_sha256_matches": true,
+   "equals_verified_project_file": null
+  }
+ },
+ "packaged_files_notes": [
+  "All 7 extracted files are byte-identical to their archive entries; the extraction holds no other files.",
+  "src/tools/celltypist_tutorial.py sha256 5a32c110... and src/tools/celltypist_tutorial_ml.py c6ee78ae... equal the independently verified production revisions; USAGE.md, src/celltypist_mcp.py and src/requirements.txt equal the project copies.",
+  "Contents follow output-delivery.md: USAGE.md, server entry point, both tool modules, the pinned requirements and the celltypist licence (THIRD_PARTY). No tests, fixtures, notebooks, reports, environments, caches or secrets are included.",
+  "Permissions: every entry is 0644 and stays 0644 after extraction. No executable bit is needed, because the server is started as `.venv/bin/python src/celltypist_mcp.py`; no permission-restoration step is required."
+ ],
+ "extraction": {
+  "location": "/tmp/claude-1000/-home-asu-Science-Paper2Agent/d2536f51-2133-41ea-8332-1193e4e1d01d/scratchpad/delivery test/celltypist",
+  "package_root": "/tmp/claude-1000/-home-asu-Science-Paper2Agent/d2536f51-2133-41ea-8332-1193e4e1d01d/scratchpad/delivery test/celltypist/celltypist-mcp",
+  "path_contains_space": true,
+  "command": "cd '/tmp/claude-1000/-home-asu-Science-Paper2Agent/d2536f51-2133-41ea-8332-1193e4e1d01d/scratchpad/delivery test/celltypist' && unzip -q /home/asu/Science/paper2agent-runs/celltypist/dist/celltypist-mcp.zip",
+  "inventory_log": "/home/asu/Science/paper2agent-runs/celltypist/tmp/delivery/packaged_files.json"
+ },
+ "installation": {
+  "followed": "USAGE.md 'Install' section literally, from the extracted celltypist-mcp/ folder",
+  "commands": [
+   {
+    "command": "uv venv .venv --python 3.12",
+    "cwd": "/tmp/claude-1000/-home-asu-Science-Paper2Agent/d2536f51-2133-41ea-8332-1193e4e1d01d/scratchpad/delivery test/celltypist/celltypist-mcp",
+    "environment": "env -i HOME=$HOME PATH=$PATH (no VIRTUAL_ENV, PYTHONPATH, CELLTYPIST_FOLDER or project variables)",
+    "exit": 0,
+    "log": "/home/asu/Science/paper2agent-runs/celltypist/tmp/delivery/install_step1.log"
+   },
+   {
+    "command": "uv pip install --python .venv/bin/python -r src/requirements.txt",
+    "cwd": "/tmp/claude-1000/-home-asu-Science-Paper2Agent/d2536f51-2133-41ea-8332-1193e4e1d01d/scratchpad/delivery test/celltypist/celltypist-mcp",
+    "environment": "env -i HOME=$HOME PATH=$PATH (no VIRTUAL_ENV, PYTHONPATH, CELLTYPIST_FOLDER or project variables)",
+    "exit": 0,
+    "log": "/home/asu/Science/paper2agent-runs/celltypist/tmp/delivery/install_step2.log"
+   },
+   {
+    "command": "uv pip check --python .venv/bin/python",
+    "cwd": "/tmp/claude-1000/-home-asu-Science-Paper2Agent/d2536f51-2133-41ea-8332-1193e4e1d01d/scratchpad/delivery test/celltypist/celltypist-mcp",
+    "environment": "env -i HOME=$HOME PATH=$PATH (no VIRTUAL_ENV, PYTHONPATH, CELLTYPIST_FOLDER or project variables)",
+    "exit": 0,
+    "log": "/home/asu/Science/paper2agent-runs/celltypist/tmp/delivery/install_step3.log"
+   }
+  ],
+  "note": "The brief abbreviated the commands (`uv pip install -r src/requirements.txt`, `uv pip check`). USAGE.md's exact commands add `--python .venv/bin/python`, and those exact commands were run. Install took about 1 s because uv's local cache was warm (including the celltypist git build), so the download/build path for a cold cache was not exercised here.",
+  "packages_installed": 122,
+  "uv": "0.10.11"
+ },
+ "runtime_identity": {
+  "interpreter": "/tmp/claude-1000/-home-asu-Science-Paper2Agent/d2536f51-2133-41ea-8332-1193e4e1d01d/scratchpad/delivery test/celltypist/celltypist-mcp/.venv/bin/python",
+  "interpreter_realpath": "/home/asu/.local/share/uv/python/cpython-3.12.13-linux-x86_64-gnu/bin/python3.12",
+  "python_version": "3.12.13",
+  "pyvenv_cfg": "home = ~/.local/share/uv/python/cpython-3.12-linux-x86_64-gnu/bin (uv-managed CPython 3.12.13), include-system-site-packages = false",
+  "platform": "Linux-6.18.54.1-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+  "celltypist": {
+   "version": "1.7.1",
+   "installer": "uv",
+   "direct_url": {
+    "url": "https://github.com/Teichlab/celltypist",
+    "vcs_info": {
+     "vcs": "git",
+     "commit_id": "fe357564a6625d3b1732a022fd39f18e55696e80",
+     "requested_revision": "fe357564a6625d3b1732a022fd39f18e55696e80"
+    }
+   },
+   "imported_from": "/tmp/claude-1000/-home-asu-Science-Paper2Agent/d2536f51-2133-41ea-8332-1193e4e1d01d/scratchpad/delivery test/celltypist/celltypist-mcp/.venv/lib/python3.12/site-packages/celltypist/__init__.py"
+  },
+  "versions": {
+   "fastmcp": "4.0.3",
+   "scanpy": "1.12.4",
+   "anndata": "0.13.4",
+   "scikit-learn": "1.7.2",
+   "numpy": "2.5.4",
+   "pandas": "3.1.0",
+   "leidenalg": "0.12.0",
+   "igraph": "1.0.0",
+   "mcp": "2.3.0"
+  },
+  "module_origins_outside_extracted_venv": [],
+  "workspace_references": "None. No packaged file, .pth file or direct_url.json mentions the build workspace or celltypist-env, and the server modules import from the extracted src/tools/ (tmp/delivery/server_module_origins.txt). The only direct_url.json is celltypist's (git, pinned commit).",
+  "details": "/home/asu/Science/paper2agent-runs/celltypist/tmp/delivery/runtime_identity.json"
+ },
+ "test_inputs": {
+  "fixtures": "Copied from tests/data/celltypist_tutorial/{inputs,models} and tests/data/celltypist_tutorial_ml/{fixtures,fixtures_invalid} to /tmp/claude-1000/-home-asu-Science-Paper2Agent/d2536f51-2133-41ea-8332-1193e4e1d01d/scratchpad/delivery test/celltypist/acceptance/data/ (same relative layout)",
+  "celltypist_folder": "/tmp/claude-1000/-home-asu-Science-Paper2Agent/d2536f51-2133-41ea-8332-1193e4e1d01d/scratchpad/delivery test/celltypist/celltypist-mcp/celltypist_home (seeded from tests/data/celltypist_tutorial/celltypist_home: Immune_All_Low.pkl sha256 290874d3..., models.json sha256 f617fcd7...; unchanged after all calls)",
+  "relocated_cases": {
+   "path": "/home/asu/Science/paper2agent-runs/celltypist/tmp/delivery/acceptance-cases-relocated.json",
+   "sha256": "616836d8cf469c1bc85bbeb9f14ca3a2953560af3b31cc69ae5a53c595cf0d6d",
+   "source": "reports/mcp-acceptance-cases.json (33 merged cases, sha256 f3473250f00a3a95d96dcd64a182b47243182560c8a7afb9911ac0ff5abaab79)",
+   "rewrite": "/home/asu/Science/paper2agent-runs/celltypist/tests/data/ -> /tmp/claude-1000/-home-asu-Science-Paper2Agent/d2536f51-2133-41ea-8332-1193e4e1d01d/scratchpad/delivery test/celltypist/acceptance/data/ ; /home/asu/Science/paper2agent-runs/celltypist/tmp/acceptance/outputs -> /tmp/claude-1000/-home-asu-Science-Paper2Agent/d2536f51-2133-41ea-8332-1193e4e1d01d/scratchpad/delivery test/celltypist/acceptance/outputs. No string containing the project root remains."
+  }
+ },
+ "acceptance": {
+  "command": "cd '/tmp/claude-1000/-home-asu-Science-Paper2Agent/d2536f51-2133-41ea-8332-1193e4e1d01d/scratchpad/delivery test/celltypist/celltypist-mcp' && env -i HOME=$HOME PATH=$PATH CELLTYPIST_FOLDER='/tmp/claude-1000/-home-asu-Science-Paper2Agent/d2536f51-2133-41ea-8332-1193e4e1d01d/scratchpad/delivery test/celltypist/celltypist-mcp/celltypist_home' '/tmp/claude-1000/-home-asu-Science-Paper2Agent/d2536f51-2133-41ea-8332-1193e4e1d01d/scratchpad/delivery test/celltypist/celltypist-mcp/.venv/bin/python' /home/asu/Science/Paper2Agent/skills/paper2agent/paper2mcp/scripts/verify_mcp_server.py --server '/tmp/claude-1000/-home-asu-Science-Paper2Agent/d2536f51-2133-41ea-8332-1193e4e1d01d/scratchpad/delivery test/celltypist/celltypist-mcp/src/celltypist_mcp.py' --expected /home/asu/Science/paper2agent-runs/celltypist/reports/expected-mcp-tools.json --cases /home/asu/Science/paper2agent-runs/celltypist/tmp/delivery/acceptance-cases-relocated.json --require-all-tools --cwd '/tmp/claude-1000/-home-asu-Science-Paper2Agent/d2536f51-2133-41ea-8332-1193e4e1d01d/scratchpad/delivery test/celltypist/celltypist-mcp' --timeout 180 --call-timeout 900 --report /home/asu/Science/paper2agent-runs/celltypist/tmp/delivery/mcp-delivery-acceptance.json",
+  "exit": 0,
+  "wall_s": 70,
+  "success": true,
+  "fastmcp": "4.0.3",
+  "server_python": "/tmp/claude-1000/-home-asu-Science-Paper2Agent/d2536f51-2133-41ea-8332-1193e4e1d01d/scratchpad/delivery test/celltypist/celltypist-mcp/.venv/bin/python",
+  "expected_tools": [
+   "celltypist_annotate_cells",
+   "celltypist_compare_with_reference",
+   "celltypist_inspect_model",
+   "celltypist_list_models",
+   "celltypist_train_model"
+  ],
+  "actual_tools": [
+   "celltypist_annotate_cells",
+   "celltypist_compare_with_reference",
+   "celltypist_inspect_model",
+   "celltypist_list_models",
+   "celltypist_train_model"
+  ],
+  "missing": [],
+  "unexpected": [],
+  "cases_total": 33,
+  "cases_passed": 33,
+  "cases_by_tool": {
+   "celltypist_annotate_cells": 9,
+   "celltypist_compare_with_reference": 9,
+   "celltypist_inspect_model": 7,
+   "celltypist_list_models": 2,
+   "celltypist_train_model": 6
+  },
+  "error_cases": 15,
+  "successful_call_cases": 18,
+  "report": "/home/asu/Science/paper2agent-runs/celltypist/tmp/delivery/mcp-delivery-acceptance.json",
+  "report_sha256": "a2fb4e5752f2f62c4814a2a0c07b91b208067665cc082bedc6603a1fb332f49c"
+ },
+ "scientific_comparisons": {
+  "method": "Real MCP calls over stdio to the extracted server (StdioTransport: extracted .venv python + src/celltypist_mcp.py, cwd = package root, env = HOME, PATH, CELLTYPIST_FOLDER only), driven by a fastmcp Client script that itself ran under the extracted interpreter. Expectations come from the stage-2 executor references (notebooks/celltypist_tutorial/reference, read-only), not from server output.",
+  "script": "/home/asu/Science/paper2agent-runs/celltypist/tmp/delivery/science_check.py",
+  "script_sha256": "961df536111cd4a91182ba33e2c02216108ff8334c2890af40dc0a19058834a1",
+  "command": "cd '/tmp/claude-1000/-home-asu-Science-Paper2Agent/d2536f51-2133-41ea-8332-1193e4e1d01d/scratchpad/delivery test/celltypist/celltypist-mcp' && env -i HOME=$HOME PATH=$PATH CELLTYPIST_FOLDER='/tmp/claude-1000/-home-asu-Science-Paper2Agent/d2536f51-2133-41ea-8332-1193e4e1d01d/scratchpad/delivery test/celltypist/celltypist-mcp/celltypist_home' '/tmp/claude-1000/-home-asu-Science-Paper2Agent/d2536f51-2133-41ea-8332-1193e4e1d01d/scratchpad/delivery test/celltypist/celltypist-mcp/.venv/bin/python' -I /home/asu/Science/paper2agent-runs/celltypist/tmp/delivery/science_check.py '/tmp/claude-1000/-home-asu-Science-Paper2Agent/d2536f51-2133-41ea-8332-1193e4e1d01d/scratchpad/delivery test/celltypist/celltypist-mcp' '/tmp/claude-1000/-home-asu-Science-Paper2Agent/d2536f51-2133-41ea-8332-1193e4e1d01d/scratchpad/delivery test/celltypist/acceptance/data' '/tmp/claude-1000/-home-asu-Science-Paper2Agent/d2536f51-2133-41ea-8332-1193e4e1d01d/scratchpad/delivery test/celltypist/acceptance/science_outputs' /home/asu/Science/paper2agent-runs/celltypist /home/asu/Science/paper2agent-runs/celltypist/tmp/delivery/science_check.json",
+  "exit": 0,
+  "client_stdout_bytes": 0,
+  "results": {
+   "annotate_demo2000_mv_vs_executor_reference": {
+    "reference": "notebooks/celltypist_tutorial/reference/annotate_demo2000_ImmuneAllLow_mv",
+    "output_dir_files": [
+     "annotated.h5ad",
+     "decision_matrix.csv",
+     "predicted_labels.csv",
+     "probability_matrix.csv"
+    ],
+    "columns": [
+     "predicted_labels",
+     "over_clustering",
+     "majority_voting"
+    ],
+    "n_cells": 2000,
+    "index_equal": true,
+    "label_mismatches": {
+     "predicted_labels": 0,
+     "over_clustering": 0,
+     "majority_voting": 0
+    },
+    "labels_exactly_equal": true,
+    "n_over_clusters": 46,
+    "decision_layout_equal": true,
+    "decision_max_abs_diff": 0.0,
+    "probability_max_abs_diff": 0.0,
+    "tolerances": {
+     "decision_atol": 1e-09,
+     "probability_atol": 2.5e-10
+    },
+    "input_sha256_unchanged": true,
+    "pass": true
+   },
+   "compare_with_reference_crosstab_vs_executor_reference": {
+    "reference": "notebooks/celltypist_tutorial/reference/annotate_demo2000_ImmuneAllLow_mv/crosstab_cell_type_vs_majority_voting.csv (+ dotplot_majority_voting_fraction.csv)",
+    "crosstab_shape": [
+     10,
+     10
+    ],
+    "crosstab_equal": true,
+    "dotplot_fraction_layout_equal": true,
+    "dotplot_fraction_max_abs_diff": 0.0,
+    "pass": true
+   },
+   "train_seeded_gene_list_vs_executor_reference": {
+    "reference": "notebooks/celltypist_tutorial/reference/train_seeded_rs0/run1/model_arrays.npz",
+    "n_features": 2652,
+    "n_features_reference": 2652,
+    "gene_list_equal_incl_order": true,
+    "cell_types_equal": true,
+    "coef_bitwise_equal": true,
+    "intercept_bitwise_equal": true,
+    "pass": true
+   },
+   "error_missing_label_column": {
+    "is_error": true,
+    "text": "Error calling tool 'celltypist_train_model': \"label_key 'cell_type' is not an obs column of demo_400_user_meta.h5ad; available columns: ['author_label', 'coarse_group', 'my_clusters']\"",
+    "input_sha256_unchanged": true,
+    "pass": true
+   },
+   "repeated_calls_fresh_directories": {
+    "annotate_dirs_differ": true,
+    "annotate_artifact_paths_disjoint": true,
+    "annotate_tables_identical": true,
+    "compare_dirs_differ": true,
+    "pass": true
+   }
+  },
+  "all_pass": true,
+  "cache_after": [
+   "Immune_All_Low.pkl",
+   "models.json"
+  ],
+  "summary": [
+   "annotate demo_2000 + Immune_All_Low.pkl + majority voting (tutorial cell 28): all 2000 cells' predicted_labels, over_clustering (46 clusters) and majority_voting exactly equal the executor reference; decision and probability matrices max |diff| 0.0 (tolerances 1e-9 / 2.5e-10); output_dir holds exactly the 4 contract files; input sha256 unchanged.",
+   "celltypist_compare_with_reference on that output: the 10x10 crosstab equals reference crosstab_cell_type_vs_majority_voting.csv exactly; the dot-plot fraction table equals the reference (max |diff| 0.0).",
+   "seeded train (demo_2000, cell_type, feature_selection, n_jobs=10, seed=0): gene list equals the reference's 2652 genes in order; cell types equal; coef_ and intercept_ bitwise equal.",
+   "error case: train with label_key='cell_type' on a file without that column returns an MCP tool error naming the column; input unchanged.",
+   "repeated identical annotate calls get distinct output dirs and disjoint artifact paths with byte-identical tables; repeated compare calls get distinct output dirs."
+  ],
+  "details": "/home/asu/Science/paper2agent-runs/celltypist/tmp/delivery/science_check.json"
+ },
+ "logs": {
+  "directory": "/home/asu/Science/paper2agent-runs/celltypist/tmp/delivery",
+  "files": [
+   "acceptance-cases-relocated.json",
+   "acceptance_helper_exit.txt",
+   "acceptance_helper_stderr.txt",
+   "acceptance_helper_stdout.txt",
+   "install_commands.txt",
+   "install_step1.log",
+   "install_step2.log",
+   "install_step3.log",
+   "mcp-delivery-acceptance.json",
+   "packaged_files.json",
+   "runtime_identity.json",
+   "runtime_identity.stderr",
+   "science_check.json",
+   "science_check.py",
+   "science_check_exit.txt",
+   "science_check_stderr.txt",
+   "science_check_stdout.txt",
+   "server_module_origins.txt"
+  ]
+ },
+ "package_defects": [],
+ "observations_not_defects": [
+  "The identity probe (runtime_identity.json) created an empty CELLTYPIST_FOLDER 'celltypist_probe_home' inside the extracted folder, because celltypist creates its cache directory on import. This is a verifier artifact inside the extraction directory, not package content.",
+  "USAGE.md's 'Validation performed' figures (33 cases: 18 successful-call, 15 error) match this run."
+ ],
+ "remaining_limits": [
+  "Platform: validated only on Linux x86_64 (WSL2 kernel 6.18, glibc 2.39) with uv 0.10.11 and uv-managed CPython 3.12.13; macOS, Windows and other Python versions are untested.",
+  "Cold install: uv's cache was warm, so a recipient's first install needs network access to PyPI and GitHub (git clone of Teichlab/celltypist at fe357564) and was not timed here.",
+  "Model downloads: the cases ran on a seeded CELLTYPIST_FOLDER. With an empty cache, built-in models come from celltypist.cog.sanger.ac.uk under celltypist's fixed 30 s timeout (one timeout was seen during stage-3 verification); the remote index and model builds can change.",
+  "Exact majority-voting and seeded-training equality depends on the pinned scanpy/igraph/leidenalg/scikit-learn versions, the same n_jobs and similar BLAS behaviour; expect small numerical drift or cluster relabelling on other hardware.",
+  "GPU paths are not exposed or tested.",
+  "Scope: faithful wrappers for the 5 selected tools; this does not re-validate CellTypist's models or the paper's results."
+ ]
+}

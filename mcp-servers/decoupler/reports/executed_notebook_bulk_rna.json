@@ -1,0 +1,2584 @@
+{
+  "bulk_rna": {
+    "execution_id": "bulk_rna",
+    "owning_module": "bulk_enrichment",
+    "status": "succeeded",
+    "status_detail": "Real upstream notebook executed end-to-end with papermill on kernel decoupler-p2a (all 30 code cells completed, 0 errors). All inputs were downloaded live (no substitution). Reference outputs saved; replay from saved inputs in fresh processes reproduced every reference output bit-for-bit (4 replays).",
+    "report_written_utc": "2026-10-27T23:19:23.617190+00:00",
+    "source": {
+      "path": "repo/decoupler/docs/notebooks/bulk/rna.ipynb",
+      "sha256": "17b5e32e241626da72800125b6ae979c179ddf6e35be83892e5c75013e12fe2b",
+      "sha256_verified_before_and_after": true,
+      "title": "Bulk Enrichment Analysis",
+      "decoupler_repository": "https://github.com/scverse/decoupler.git",
+      "decoupler_commit": "27a1be7c75d88306bf3c2e4d0e7fb4b42d48f78a",
+      "tutorials_submodule": {
+        "path": "docs/notebooks",
+        "url": "https://github.com/scverse/decoupler-tutorials/",
+        "commit": "306be6673a5df5baf780e44ea929391616dbe5d8"
+      },
+      "source_url": "https://github.com/scverse/decoupler-tutorials/blob/306be6673a5df5baf780e44ea929391616dbe5d8/bulk/rna.ipynb",
+      "working_copy": "notebooks/bulk_rna/bulk_rna_source.ipynb (byte copy; same sha256)",
+      "repo_untouched": "git -C repo/decoupler status --short --ignored is empty after this stage"
+    },
+    "execution_mode": "papermill notebook execution (unmodified cells) + IPython post_run_cell capture hook loaded via IPYTHONDIR startup file + reference driver (fresh process) + replay (fresh processes)",
+    "execution_path": "notebooks/bulk_rna/bulk_rna_execution_final.ipynb",
+    "inspection_path": "notebooks/bulk_rna/bulk_rna_inspection.ipynb",
+    "kernel": {
+      "name": "decoupler-p2a",
+      "kernelspec": "decoupler-env/share/jupyter/kernels/decoupler-p2a/kernel.json",
+      "kernelspec_argv0": "/home/asu/Science/paper2agent-runs/decoupler/decoupler-env/bin/python",
+      "evidence_used": "papermill log line 'Executing notebook with kernel: decoupler-p2a' (logs/papermill_attempt2.log); cell-2 TqdmWarning path is inside decoupler-env site-packages",
+      "note": "The executed notebook's metadata.kernelspec still reads the upstream 'python3' entry; papermill 2.7.0 did not rewrite it."
+    },
+    "commands": [
+      {
+        "step": "copy source",
+        "command": "cp repo/decoupler/docs/notebooks/bulk/rna.ipynb notebooks/bulk_rna/bulk_rna_source.ipynb",
+        "exit_status": 0
+      },
+      {
+        "step": "install capture hook (scratch IPython profile)",
+        "command": "cp notebooks/bulk_rna/scripts/kernel_capture_startup.py tmp/outputs/bulk_rna/ipythondir/profile_default/startup/00_p2a_capture.py",
+        "exit_status": 0
+      },
+      {
+        "step": "attempt 1 papermill",
+        "command": "IPYTHONDIR=$PROJECT_ROOT/tmp/outputs/bulk_rna/ipythondir P2A_CAPTURE_DIR=$PROJECT_ROOT/notebooks/bulk_rna/kernel_capture /usr/bin/time -v \"$PROJECT_PYTHON\" -m papermill notebooks/bulk_rna/bulk_rna_source.ipynb tmp/outputs/bulk_rna/attempt1/bulk_rna_executed.ipynb -k decoupler-p2a --cwd tmp/outputs/bulk_rna/attempt1 --log-output",
+        "exit_status": 0,
+        "log": "notebooks/bulk_rna/logs/papermill_attempt1.log",
+        "note": "notebook succeeded; capture hook raised on anndata 0.13 layers[None] so nothing was captured (attempts/attempt1_capture_errors.log)"
+      },
+      {
+        "step": "hook unit check on a 4-cell synthetic notebook (scratchpad, not evidence)",
+        "command": "papermill <scratchpad>/hooktest/t.ipynb ... -k decoupler-p2a",
+        "exit_status": 0
+      },
+      {
+        "step": "attempt 2 papermill (final)",
+        "command": "IPYTHONDIR=$PROJECT_ROOT/tmp/outputs/bulk_rna/ipythondir P2A_CAPTURE_DIR=$PROJECT_ROOT/notebooks/bulk_rna/kernel_capture /usr/bin/time -v \"$PROJECT_PYTHON\" -m papermill notebooks/bulk_rna/bulk_rna_source.ipynb tmp/outputs/bulk_rna/attempt2/bulk_rna_executed.ipynb -k decoupler-p2a --cwd tmp/outputs/bulk_rna/attempt2 --log-output",
+        "exit_status": 0,
+        "log": "notebooks/bulk_rna/logs/papermill_attempt2.log"
+      },
+      {
+        "step": "promote final notebook",
+        "command": "cp tmp/outputs/bulk_rna/attempt2/bulk_rna_executed.ipynb notebooks/bulk_rna/bulk_rna_execution_final.ipynb",
+        "exit_status": 0
+      },
+      {
+        "step": "extract images",
+        "command": "\"$PROJECT_PYTHON\" -I $SKILL/scripts/extract_notebook_images.py notebooks/bulk_rna/bulk_rna_execution_final.ipynb notebooks/bulk_rna/images",
+        "exit_status": 0
+      },
+      {
+        "step": "inspection copy",
+        "command": "\"$PROJECT_PYTHON\" -I $SKILL/scripts/preprocess_notebook.py notebooks/bulk_rna/bulk_rna_execution_final.ipynb notebooks/bulk_rna/bulk_rna_inspection.ipynb",
+        "exit_status": 0
+      },
+      {
+        "step": "reference driver run 1",
+        "command": "\"$PROJECT_PYTHON\" -I notebooks/bulk_rna/scripts/reference_driver.py",
+        "exit_status": 1,
+        "note": "own CSV round-trip check failed for float32 X_pca (compared in float64); fixed to compare in the original dtype; partial outputs discarded"
+      },
+      {
+        "step": "reference driver run 2",
+        "command": "\"$PROJECT_PYTHON\" -I notebooks/bulk_rna/scripts/reference_driver.py",
+        "exit_status": 0,
+        "log": "notebooks/bulk_rna/logs/reference_driver.log",
+        "wall_time_s": 22.66
+      },
+      {
+        "step": "replay first pair (superseded)",
+        "command": "replay.py --label run1_ncpus8_chain / run2_ncpus8_chain",
+        "exit_status": 0,
+        "note": "all identifiers and DE/ulm/rank_obsm floats bitwise identical; only the sign-invariant |X_pca| check showed a 3e-6 artifact from parsing float32 CSV text as float64; script fixed and runs repeated with the same labels (outputs overwritten)"
+      },
+      {
+        "step": "replay run1_ncpus8_chain",
+        "command": "decoupler-env/bin/python -I notebooks/bulk_rna/scripts/replay.py --label run1_ncpus8_chain --n-cpus 8 --de-input notebook_chain",
+        "exit_status": 0,
+        "log": "notebooks/bulk_rna/logs/replay_run1_ncpus8_chain.log"
+      },
+      {
+        "step": "replay run2_ncpus8_chain",
+        "command": "decoupler-env/bin/python -I notebooks/bulk_rna/scripts/replay.py --label run2_ncpus8_chain --n-cpus 8 --de-input notebook_chain",
+        "exit_status": 0,
+        "log": "notebooks/bulk_rna/logs/replay_run2_ncpus8_chain.log"
+      },
+      {
+        "step": "replay variant_ncpus1_chain",
+        "command": "decoupler-env/bin/python -I notebooks/bulk_rna/scripts/replay.py --label variant_ncpus1_chain --n-cpus 1 --de-input notebook_chain",
+        "exit_status": 0,
+        "log": "notebooks/bulk_rna/logs/replay_variant_ncpus1_chain.log"
+      },
+      {
+        "step": "replay variant_ncpus8_filtered_only",
+        "command": "decoupler-env/bin/python -I notebooks/bulk_rna/scripts/replay.py --label variant_ncpus8_filtered_only --n-cpus 8 --de-input filtered_only",
+        "exit_status": 0,
+        "log": "notebooks/bulk_rna/logs/replay_variant_ncpus8_filtered_only.log"
+      },
+      {
+        "step": "figure determinism probe x4",
+        "command": "PYTHONHASHSEED=<s> decoupler-env/bin/python -P -s notebooks/bulk_rna/scripts/figure_determinism_probe.py tmp/outputs/bulk_rna/figprobe/seed<label>",
+        "exit_status": 0
+      },
+      {
+        "step": "compare notebook runs",
+        "command": "\"$PROJECT_PYTHON\" -I notebooks/bulk_rna/scripts/compare_notebook_runs.py notebooks/bulk_rna/bulk_rna_source.ipynb notebooks/bulk_rna/attempts/attempt1_bulk_rna_executed.ipynb notebooks/bulk_rna/bulk_rna_execution_final.ipynb notebooks/bulk_rna/replay/notebook_run_comparison.json",
+        "exit_status": 0
+      },
+      {
+        "step": "environment freeze",
+        "command": "uv pip freeze --python \"$PROJECT_PYTHON\" > notebooks/bulk_rna/logs/uv_pip_freeze.txt",
+        "exit_status": 0,
+        "note": "164 packages; identical to reports/environment-requirements.txt"
+      }
+    ],
+    "runtime": {
+      "python": "3.13.12 (main, Mar 10 2026, 18:17:38) [Clang 21.1.4 ]",
+      "interpreter": "/home/asu/Science/paper2agent-runs/decoupler/decoupler-env/bin/python",
+      "platform": "Linux-6.18.54.1-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+      "cpu": "13th Gen Intel(R) Core(TM) i7-1370P, os.cpu_count()=20, no GPU",
+      "versions": {
+        "decoupler": "2.3.1 (file:///home/asu/Science/paper2agent-runs/decoupler/repo/decoupler, commit 27a1be7)",
+        "pydeseq2": "0.5.4",
+        "scanpy": "1.12.4",
+        "anndata": "0.13.4",
+        "numpy": "2.5.4",
+        "pandas": "3.1.0",
+        "scipy": "1.18.1",
+        "scikit-learn": "1.9.1",
+        "numba": "0.68.1",
+        "matplotlib": "3.11.2",
+        "adjusttext": "1.4.0",
+        "marsilea": "0.8.1",
+        "igraph": "1.0.0",
+        "pyarrow": "26.0.0",
+        "papermill": "2.7.0",
+        "ipykernel": "7.4.0",
+        "ipython": "9.17.1"
+      },
+      "uv_pip_freeze": "notebooks/bulk_rna/logs/uv_pip_freeze.txt",
+      "pydeseq2_n_cpus": 8,
+      "pydeseq2_n_cpus_note": "notebook value DefaultInference(n_cpus=8); replay also run with n_cpus=1 -> bitwise identical results",
+      "blas": [
+        {
+          "user_api": "blas",
+          "internal_api": "openblas",
+          "num_threads": 20,
+          "version": "0.3.34.106.0",
+          "filepath": "/home/asu/Science/paper2agent-runs/decoupler/decoupler-env/lib/python3.13/site-packages/numpy.libs/libscipy_openblas64_-f48b354e.so"
+        }
+      ],
+      "numba_num_threads": 20,
+      "thread_env_vars": {
+        "OMP_NUM_THREADS": null,
+        "OPENBLAS_NUM_THREADS": null,
+        "MKL_NUM_THREADS": null,
+        "NUMBA_NUM_THREADS": null,
+        "PYTHONHASHSEED": null,
+        "MPLBACKEND": null
+      },
+      "wall_time": {
+        "papermill_attempt2_s": 78.41,
+        "papermill_attempt2_duration_metadata_s": 77.754848,
+        "papermill_attempt1_s": 71.2,
+        "capture_hook_overhead_estimate_s": "about 7 (attempt 2 minus attempt 1, which captured nothing)",
+        "deseq2_cell_23_s": 28.91,
+        "download_cells_s": {
+          "cell 4 hsctgfb": 1.37,
+          "cell 30 collectri": 3.41,
+          "cell 40 progeny": 6.29,
+          "cell 52 hallmark": 1.76
+        },
+        "reference_driver_s": 22.66,
+        "replay_s": {
+          "run1_ncpus8_chain": 92.69,
+          "run2_ncpus8_chain": 38.44,
+          "variant_ncpus1_chain": 149.18,
+          "variant_ncpus8_filtered_only": 43.54
+        },
+        "max_rss_kb": {
+          "papermill_attempt2": 829372,
+          "replay_max": 973564
+        }
+      },
+      "papermill_start_end_utc": [
+        "2026-10-27T22:59:27.665048+00:00",
+        "2026-10-27T23:00:45.419896+00:00"
+      ]
+    },
+    "data_and_seed_provenance": {
+      "hsctgfb": {
+        "call": "dc.ds.hsctgfb() (cell 4)",
+        "url": "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE151251&format=file&file=GSE151251%5FHSCs%5FCtrl%2Evs%2EHSCs%5FTGFb%2Ecounts%2Etsv%2Egz",
+        "geo_accession": "GSE151251",
+        "saved_as": "notebooks/bulk_rna/data/hsctgfb_as_returned.h5ad",
+        "sha256": "298daee66fd4625a2f09e480e761c2584ae637283f7dba37a2b0ff579bf7a1a5",
+        "content_sha256_X_float64_obsnames_varnames": "d996483a409fb044432ee51d7033adac08a8ba50309840c073884345693f88e4",
+        "shape": [
+          6,
+          58674
+        ],
+        "orientation": "samples x genes (obs = 6 samples, var = 58674 gene symbols)",
+        "units": "raw integer read counts stored as float64 (loader casts with astype(float)); all values integer-valued, min 0",
+        "download_cell_utc": [
+          "2026-10-27T22:59:30.837659+00:00",
+          "2026-10-27T22:59:32.210890+00:00"
+        ],
+        "how_saved": "IPython post_run_cell hook wrote the in-kernel object after cell 4 with AnnData.write_h5ad (kernel_capture/adata__exec02.h5ad); data/ holds a byte copy",
+        "raw_http_payload_saved": false
+      },
+      "networks": {
+        "collectri": {
+          "rows": 42990,
+          "n_sources": 1185,
+          "n_targets": 6675,
+          "columns": [
+            "source",
+            "target",
+            "weight",
+            "resources",
+            "references",
+            "sign_decision"
+          ],
+          "source_urls": [
+            "https://zenodo.org/records/8192729/files/CollecTRI_regulons.csv?download=1"
+          ],
+          "download_cell_start_utc": "2026-10-27T23:00:10.435301+00:00",
+          "download_cell_end_utc": "2026-10-27T23:00:13.844549+00:00",
+          "notebook_cell_index": 30,
+          "parquet": "notebooks/bulk_rna/data/networks/collectri.parquet",
+          "csv": "notebooks/bulk_rna/data/networks/collectri.csv",
+          "sha256_parquet": "c6782ed7da258bb9ea0e6bacc9d64a7ad7cd1101d1c59dd1cc7011c08a05de2a",
+          "call": "dc.op.collectri(organism=\"human\")"
+        },
+        "progeny": {
+          "rows": 62421,
+          "n_sources": 14,
+          "n_targets": 17610,
+          "columns": [
+            "source",
+            "target",
+            "weight",
+            "padj"
+          ],
+          "source_urls": [
+            "https://omnipathdb.org/queries/annotations (show_resources)",
+            "https://omnipathdb.org/resources (show_resources)",
+            "https://omnipathdb.org/annotations?databases=PROGENy&license=academic"
+          ],
+          "download_cell_start_utc": "2026-10-27T23:00:21.481019+00:00",
+          "download_cell_end_utc": "2026-10-27T23:00:27.767278+00:00",
+          "notebook_cell_index": 40,
+          "parquet": "notebooks/bulk_rna/data/networks/progeny.parquet",
+          "csv": "notebooks/bulk_rna/data/networks/progeny.csv",
+          "sha256_parquet": "7287dd5dd945f57fb4dbd62c8e4867d73f5bbc2c6e59c01ec914cbc70a5381a0",
+          "call": "dc.op.progeny(organism=\"human\")"
+        },
+        "hallmark": {
+          "rows": 7318,
+          "n_sources": 50,
+          "n_targets": 4380,
+          "columns": [
+            "source",
+            "target"
+          ],
+          "source_urls": [
+            "https://static.omnipathdb.org/tables/msigdb-hallmark.tsv.gz"
+          ],
+          "download_cell_start_utc": "2026-10-27T23:00:38.205355+00:00",
+          "download_cell_end_utc": "2026-10-27T23:00:39.966431+00:00",
+          "notebook_cell_index": 52,
+          "parquet": "notebooks/bulk_rna/data/networks/hallmark.parquet",
+          "csv": "notebooks/bulk_rna/data/networks/hallmark.csv",
+          "sha256_parquet": "445e3e9518c7a3a75507609d7b8c72c922689437b0997adc722d10803cfc08c8",
+          "call": "dc.op.hallmark(organism=\"human\")"
+        }
+      },
+      "network_rows_match_upstream_stored_outputs": "collectri 42990, progeny 62421, hallmark 7318 rows, equal to the counts in the upstream stored notebook outputs",
+      "demonstration_labels": {
+        "files": [
+          "notebooks/bulk_rna/data/reference_input_labels.csv",
+          "notebooks/bulk_rna/data/reference_input_labels.json"
+        ],
+        "rule": "condition = 'control' if '-Ctrl' in sample name else 'treatment'; sample_id = sample name before first '_' (decoupler/ds/_bulk.py lines 49-52)",
+        "values": "25/26/27_HSCs-Ctrl1-3 -> control; 31/32/33_HSCs-TGFb1-3 -> treatment",
+        "role": "reference-input metadata for fixtures only; production tools must read condition_key/group/reference from user metadata"
+      },
+      "randomness": "No RNG seeding in the notebook. scanpy PCA random_state=0 default; dc.pp.extract fixed seed 0; adjustText default_rng(42) but wall-clock time limit (see flakiness). PyDESeq2 and ulm deterministic here: all replays bitwise identical."
+    },
+    "outputs": {
+      "executed_notebook": {
+        "path": "notebooks/bulk_rna/bulk_rna_execution_final.ipynb",
+        "sha256": "766c255b586cce50943cae515e9a623e5671f806350ae5cf0e0f22aae2d560d0"
+      },
+      "inspection_notebook": {
+        "path": "notebooks/bulk_rna/bulk_rna_inspection.ipynb",
+        "sha256": "16fd38321a8b345e6bcc53645317d204972ed810ce2e9536701e0ea7618e24b2"
+      },
+      "reference_manifest": "notebooks/bulk_rna/reference/manifest.json (per-file sha256 + exact producing call)",
+      "reference_summary": "notebooks/bulk_rna/reference/reference_summary.json",
+      "kernel_capture_manifest": "notebooks/bulk_rna/kernel_capture/capture_manifest.jsonl",
+      "per_tool_reference": {
+        "decoupler_filter_genes_by_expression": [
+          "reference/filter_by_expr/kept_genes.txt",
+          "reference/filter_by_expr/filter_by_expr_summary.json",
+          "reference/filter_by_expr/adata_filtered_by_expr.h5ad",
+          "images/figure_2.png (cell 11)"
+        ],
+        "decoupler_rank_pcs_by_metadata": [
+          "reference/pca_rankby_obsm/rank_obsm.parquet|csv",
+          "reference/pca_rankby_obsm/pca_variance_ratio.csv",
+          "reference/pca_rankby_obsm/X_pca.csv",
+          "reference/pca_rankby_obsm/adata_after_rankby_obsm.h5ad",
+          "images/figure_3.png, figure_4.png (cell 19), figure_5.png (cell 21)"
+        ],
+        "pydeseq2_test_differential_expression": [
+          "reference/deseq2/results_df.parquet|csv",
+          "images/figure_6.png (cell 26)"
+        ],
+        "decoupler_score_activities_ulm": [
+          "reference/ulm/data_stat_matrix.parquet|csv",
+          "reference/ulm/{collectri,progeny,hallmark}_scores_full.parquet|csv",
+          "reference/ulm/{net}_padj_full.parquet|csv",
+          "reference/ulm/{net}_scores_padj_lt_0.05.parquet|csv",
+          "reference/ulm/{net}_long.csv",
+          "reference/ulm/{progeny,hallmark}_dotplot_df.csv",
+          "images/figure_7.png (34), figure_10.png (44), figure_11.png (46), figure_15.png (56), figure_16.png (58)"
+        ],
+        "decoupler_inspect_source_targets": [
+          "reference/leading_edge/progeny_TGFb_positive_weights.txt",
+          "reference/leading_edge/progeny_TGFb_negative_weights.txt",
+          "reference/leading_edge/hallmark_TGF_BETA_SIGNALING.txt",
+          "reference/leading_edge/leading_edges.json",
+          "images/figure_8.png (36 network), figure_9.png (38 volcano SRF), figure_12.png (48 source_targets), figure_13.png/figure_14.png (50), figure_17.png (60)"
+        ]
+      },
+      "driver_added_outputs": "Only the full unfiltered ulm scores ({net}_scores_full) come from a driver call: dc.mt.ulm(data=<captured data>, net=<captured network>) in reference_driver.py. Asserted: its padj equals the notebook's tf_padj/pw_padj/hm_padj exactly and its scores under the notebook's padj<0.05 mask equal the notebook's filtered tf_acts/pw_acts/hm_acts exactly. Every other reference file is the notebook's own in-kernel object (byte copy or verified bit-exact CSV mirror).",
+      "csv_precision": "CSV mirrors written with pandas default float repr and checked to reload bit-exactly in pandas 3.1 (read_csv default precision); compare float32 columns (X_pca, rank_obsm stat/pval/padj) in float32. Parquet/h5ad are canonical.",
+      "files": [
+        {
+          "path": "notebooks/bulk_rna/attempts/attempt1_bulk_rna_executed.ipynb",
+          "sha256": "5b13477ebe90d057ca4514b0e578990ee59a49429d7d2cc7f92b99ecafafee38",
+          "bytes": 1743826
+        },
+        {
+          "path": "notebooks/bulk_rna/attempts/attempt1_capture_errors.log",
+          "sha256": "cbafc2453d50c05ae8cf49f402a97dbc6ed6e95e0157dc75f5f605e718e0fe81",
+          "bytes": 16277
+        },
+        {
+          "path": "notebooks/bulk_rna/bulk_rna_execution_final.ipynb",
+          "sha256": "766c255b586cce50943cae515e9a623e5671f806350ae5cf0e0f22aae2d560d0",
+          "bytes": 1742948
+        },
+        {
+          "path": "notebooks/bulk_rna/bulk_rna_inspection.ipynb",
+          "sha256": "16fd38321a8b345e6bcc53645317d204972ed810ce2e9536701e0ea7618e24b2",
+          "bytes": 76499
+        },
+        {
+          "path": "notebooks/bulk_rna/bulk_rna_source.ipynb",
+          "sha256": "17b5e32e241626da72800125b6ae979c179ddf6e35be83892e5c75013e12fe2b",
+          "bytes": 1726098
+        },
+        {
+          "path": "notebooks/bulk_rna/data/hsctgfb_as_returned.h5ad",
+          "sha256": "298daee66fd4625a2f09e480e761c2584ae637283f7dba37a2b0ff579bf7a1a5",
+          "bytes": 5484962
+        },
+        {
+          "path": "notebooks/bulk_rna/data/inputs_metadata.json",
+          "sha256": "fa1c9a7b0e364b07896a717497ee627e5053d0e61cc58942afe0dd3d434df0f0",
+          "bytes": 3725
+        },
+        {
+          "path": "notebooks/bulk_rna/data/networks/collectri.csv",
+          "sha256": "f4706bde7185746f9263ff83ca2cc3a31078d2bb7580305cf53182fe08757f79",
+          "bytes": 2414371
+        },
+        {
+          "path": "notebooks/bulk_rna/data/networks/collectri.parquet",
+          "sha256": "c6782ed7da258bb9ea0e6bacc9d64a7ad7cd1101d1c59dd1cc7011c08a05de2a",
+          "bytes": 724009
+        },
+        {
+          "path": "notebooks/bulk_rna/data/networks/hallmark.csv",
+          "sha256": "b5c397d070ff8de8ed7877ef1dbef925ac9d0612e2dc98316a2dc846c3a30c2c",
+          "bytes": 174843
+        },
+        {
+          "path": "notebooks/bulk_rna/data/networks/hallmark.parquet",
+          "sha256": "445e3e9518c7a3a75507609d7b8c72c922689437b0997adc722d10803cfc08c8",
+          "bytes": 46126
+        },
+        {
+          "path": "notebooks/bulk_rna/data/networks/progeny.csv",
+          "sha256": "40fc8a6c2a0eefa499d56126beec23500ce27f587938cd82867a16653a40aeab",
+          "bytes": 3255286
+        },
+        {
+          "path": "notebooks/bulk_rna/data/networks/progeny.parquet",
+          "sha256": "7287dd5dd945f57fb4dbd62c8e4867d73f5bbc2c6e59c01ec914cbc70a5381a0",
+          "bytes": 1472091
+        },
+        {
+          "path": "notebooks/bulk_rna/data/reference_input_labels.csv",
+          "sha256": "a69dd0b33b04054f96571c9402f795e0bdc537be8809f5b97d76b5fbf60bc15a",
+          "bytes": 183
+        },
+        {
+          "path": "notebooks/bulk_rna/data/reference_input_labels.json",
+          "sha256": "a6af1ed027148de3459037914f455d1b8e03bc282d29e507549cdc35e6546a8d",
+          "bytes": 1632
+        },
+        {
+          "path": "notebooks/bulk_rna/images/figure_1.png",
+          "sha256": "0ab6705d434eaa899fa092e55aa77e853d86c405a5ea14f84b43ca94adea7658",
+          "bytes": 17673
+        },
+        {
+          "path": "notebooks/bulk_rna/images/figure_10.png",
+          "sha256": "c6ebede059ba5222008b4d646980266b927677260e02fcae944f8a0a8deab297",
+          "bytes": 45443
+        },
+        {
+          "path": "notebooks/bulk_rna/images/figure_11.png",
+          "sha256": "50ebdeeefad88e15242fe29a2bb71ed7677788a39d1e8a86e8a2783c4dccdda9",
+          "bytes": 57247
+        },
+        {
+          "path": "notebooks/bulk_rna/images/figure_12.png",
+          "sha256": "e3dca8c7ea41b32cc43fb93a4adeb6d83430e1313c53afb9c7bb9d7ac560b249",
+          "bytes": 113170
+        },
+        {
+          "path": "notebooks/bulk_rna/images/figure_13.png",
+          "sha256": "6625d855776c55f64c044777df576e370b2fce6fd1967e4e7976affa8763b275",
+          "bytes": 52597
+        },
+        {
+          "path": "notebooks/bulk_rna/images/figure_14.png",
+          "sha256": "f7d5b2417119466bf14bd0c51f710370beb803154ceec0bdc5046c778662dd8e",
+          "bytes": 55568
+        },
+        {
+          "path": "notebooks/bulk_rna/images/figure_15.png",
+          "sha256": "04a9de69e96c123cd59615940172ddc3a82f2f2b431cff73385ec5cd36e5e4e9",
+          "bytes": 88879
+        },
+        {
+          "path": "notebooks/bulk_rna/images/figure_16.png",
+          "sha256": "cbe32b6895bace3a41dfd1924870799c1d618ea77159794a30a623055b42d7af",
+          "bytes": 101809
+        },
+        {
+          "path": "notebooks/bulk_rna/images/figure_17.png",
+          "sha256": "1093f5f42f170d27c57f4dea6301bb80faaaa0f07ba120f8903592a2d06f0fb8",
+          "bytes": 59560
+        },
+        {
+          "path": "notebooks/bulk_rna/images/figure_2.png",
+          "sha256": "27b9538c1cf8c6c62939e292327a14e9b400044499785a1ebbaa317e0b60cb50",
+          "bytes": 43711
+        },
+        {
+          "path": "notebooks/bulk_rna/images/figure_3.png",
+          "sha256": "ed5133fb84a9ee8f8dc229d9543af4a99f6a67dcd782eab0f761e89c8ffa2e79",
+          "bytes": 20783
+        },
+        {
+          "path": "notebooks/bulk_rna/images/figure_4.png",
+          "sha256": "05d4f5b59caf3715c9076d0eff632b3e391a87b06cd42aa9689b026425019c7a",
+          "bytes": 91083
+        },
+        {
+          "path": "notebooks/bulk_rna/images/figure_5.png",
+          "sha256": "430360193da00895f1bb94401db2ba56a241df16f56d65cf636d2c9dabae87ec",
+          "bytes": 35483
+        },
+        {
+          "path": "notebooks/bulk_rna/images/figure_6.png",
+          "sha256": "1a952a400fd706340f058475ca12f774d41a3fc6ab3a06230fa027cee2c2e625",
+          "bytes": 109123
+        },
+        {
+          "path": "notebooks/bulk_rna/images/figure_7.png",
+          "sha256": "484eff7015a6d4b454a4858d2d8ca577cf387ff755f035665c7136ea78606cd8",
+          "bytes": 77865
+        },
+        {
+          "path": "notebooks/bulk_rna/images/figure_8.png",
+          "sha256": "7f2b06faa77a40074de5c4abffdc0809aafa2c1e5065b8a3fbb38d4009421fed",
+          "bytes": 195018
+        },
+        {
+          "path": "notebooks/bulk_rna/images/figure_9.png",
+          "sha256": "0901a1d0d05da2ffdd272ba11f789c9818543dc9cabf00bbdf7029104ee99e3c",
+          "bytes": 70733
+        },
+        {
+          "path": "notebooks/bulk_rna/images/image-manifest.json",
+          "sha256": "fa20c4055a1fcc38c015b2901d55df8701bae7c335355d31950aaefbb08be5b8",
+          "bytes": 4318
+        },
+        {
+          "path": "notebooks/bulk_rna/kernel_capture/adata__exec02.h5ad",
+          "sha256": "298daee66fd4625a2f09e480e761c2584ae637283f7dba37a2b0ff579bf7a1a5",
+          "bytes": 5484962
+        },
+        {
+          "path": "notebooks/bulk_rna/kernel_capture/adata__exec06.h5ad",
+          "sha256": "ad245f2e4276b69ff24db39a6c3250f83ca3298fd03bde102a6479256633c56a",
+          "bytes": 1816998
+        },
+        {
+          "path": "notebooks/bulk_rna/kernel_capture/adata__exec07.h5ad",
+          "sha256": "70fc4c1397b9465affb301dd697e1c18b91109464727b3bf6533d65d17786ef3",
+          "bytes": 4793006
+        },
+        {
+          "path": "notebooks/bulk_rna/kernel_capture/adata__exec08.h5ad",
+          "sha256": "5a701e71017160c6bf0b5a6dd54c0766829de3073caa7676b79f7b7f5e62ff48",
+          "bytes": 4799734
+        },
+        {
+          "path": "notebooks/bulk_rna/kernel_capture/adata__exec10.h5ad",
+          "sha256": "66c183b47beb976d75b289ec97e4fa681272045beac77fbf6bd30958ffdcd22e",
+          "bytes": 4800326
+        },
+        {
+          "path": "notebooks/bulk_rna/kernel_capture/adata__exec11.h5ad",
+          "sha256": "a479cb965b9ab124f0b94a017991730c3e3615d187d523666620555e1a294a42",
+          "bytes": 2363192
+        },
+        {
+          "path": "notebooks/bulk_rna/kernel_capture/capture_errors.log",
+          "sha256": "7738535d264d6e29981cd55df643eed6fa0ea3f2e2ade60ed1d98ebede893423",
+          "bytes": 4123
+        },
+        {
+          "path": "notebooks/bulk_rna/kernel_capture/capture_manifest.jsonl",
+          "sha256": "cb39cde3d81bab8f2413ef52021c067ace5ee272838540640acbae500ad0bd49",
+          "bytes": 8313
+        },
+        {
+          "path": "notebooks/bulk_rna/kernel_capture/collectri__exec15.parquet",
+          "sha256": "c6782ed7da258bb9ea0e6bacc9d64a7ad7cd1101d1c59dd1cc7011c08a05de2a",
+          "bytes": 724009
+        },
+        {
+          "path": "notebooks/bulk_rna/kernel_capture/data__exec14.parquet",
+          "sha256": "6480d541e911bceb20eed2ae8a2072946ea9c6d73feed3dccb6bde704f9ad4cd",
+          "bytes": 10939770
+        },
+        {
+          "path": "notebooks/bulk_rna/kernel_capture/df__exec23.parquet",
+          "sha256": "1d1b781360617db905bbe1396a6201be6dee906cc78e9697309ad9fe3ecea3a1",
+          "bytes": 2894
+        },
+        {
+          "path": "notebooks/bulk_rna/kernel_capture/df__exec29.parquet",
+          "sha256": "0cb1cea6a69778208dbe30a25c46fd028a1e2f83fa998555607a9066c99f0f20",
+          "bytes": 4480
+        },
+        {
+          "path": "notebooks/bulk_rna/kernel_capture/hallmark__exec26.parquet",
+          "sha256": "445e3e9518c7a3a75507609d7b8c72c922689437b0997adc722d10803cfc08c8",
+          "bytes": 46126
+        },
+        {
+          "path": "notebooks/bulk_rna/kernel_capture/hm_acts__exec27.parquet",
+          "sha256": "66a5d1ac8b08927a7870b3e73ea6de0d2ae482586601ee67c490d5ea1d756a7e",
+          "bytes": 20830
+        },
+        {
+          "path": "notebooks/bulk_rna/kernel_capture/hm_padj__exec27.parquet",
+          "sha256": "15e2db974f82541fd0f5e0b6af14ba8115af3fe8c4b988dd40a7383aac73b7bd",
+          "bytes": 33590
+        },
+        {
+          "path": "notebooks/bulk_rna/kernel_capture/le__exec30.npy",
+          "sha256": "85a20c25a68d92b9de2293cc7c9abc9da0f8744e0dd970de036ee5d5581277a8",
+          "bytes": 2256
+        },
+        {
+          "path": "notebooks/bulk_rna/kernel_capture/msk__exec16.parquet",
+          "sha256": "45f4797b99ed044db66a6c23bb68ecec72b320498f22558d729b97aad980d0e4",
+          "bytes": 6517
+        },
+        {
+          "path": "notebooks/bulk_rna/kernel_capture/msk__exec21.parquet",
+          "sha256": "5e825befb3591e7cd6a38eaebc81fe40d06013e5c1bd587ed24c640de0535eb2",
+          "bytes": 2184
+        },
+        {
+          "path": "notebooks/bulk_rna/kernel_capture/msk__exec27.parquet",
+          "sha256": "7f4f157bd84f6381d483afbd5172cfc587273fe5c44bfd31c28d8c910c85b334",
+          "bytes": 2922
+        },
+        {
+          "path": "notebooks/bulk_rna/kernel_capture/neg_le__exec25.npy",
+          "sha256": "30b6413d07e492c0312ea035d6890a1c6490c8d7139a060129e1b0cf63ab79ce",
+          "bytes": 32832
+        },
+        {
+          "path": "notebooks/bulk_rna/kernel_capture/pos_le__exec25.npy",
+          "sha256": "ea151ceffdd2903a1c32384795dea5a200c2a72130c29f51a9153e6efb4d66ec",
+          "bytes": 65200
+        },
+        {
+          "path": "notebooks/bulk_rna/kernel_capture/progeny__exec20.parquet",
+          "sha256": "7287dd5dd945f57fb4dbd62c8e4867d73f5bbc2c6e59c01ec914cbc70a5381a0",
+          "bytes": 1472091
+        },
+        {
+          "path": "notebooks/bulk_rna/kernel_capture/pw_acts__exec21.parquet",
+          "sha256": "db4e8ec24904ffdc3308bee9603969091a4868fee0fdbe2fe1366e56400d60aa",
+          "bytes": 8123
+        },
+        {
+          "path": "notebooks/bulk_rna/kernel_capture/pw_padj__exec21.parquet",
+          "sha256": "f4e7b4e4da979e1423774d904d019b0ac1d27a67be551668c33e82984f765baf",
+          "bytes": 9194
+        },
+        {
+          "path": "notebooks/bulk_rna/kernel_capture/results_df__exec12.parquet",
+          "sha256": "2dc50f701b9e06313f2af558118a852df8a2a2d991b8f71767194082b3d9fd6d",
+          "bytes": 1305010
+        },
+        {
+          "path": "notebooks/bulk_rna/kernel_capture/tf_acts__exec16.parquet",
+          "sha256": "b2a9acc1e8eb22c0fc89167394ae9ee5355bceace380b4ba37554b76a0d3524e",
+          "bytes": 78967
+        },
+        {
+          "path": "notebooks/bulk_rna/kernel_capture/tf_padj__exec16.parquet",
+          "sha256": "7e5063f074cdf21ec6e6d48b7ee0632bbef4b3d772630f6b9440d7c6e788fe91",
+          "bytes": 356264
+        },
+        {
+          "path": "notebooks/bulk_rna/logs/figprobe_seed0a.err",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        {
+          "path": "notebooks/bulk_rna/logs/figprobe_seed0b.err",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        {
+          "path": "notebooks/bulk_rna/logs/figprobe_seed1.err",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        {
+          "path": "notebooks/bulk_rna/logs/figprobe_seed2.err",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        {
+          "path": "notebooks/bulk_rna/logs/papermill_attempt1.log",
+          "sha256": "bb879ea37c34da9c5af6017409d35b4e1682fe9eaae2ae18deafec1fea9d1c9d",
+          "bytes": 18123
+        },
+        {
+          "path": "notebooks/bulk_rna/logs/papermill_attempt1_exit.txt",
+          "sha256": "19eaf43821a7660ec323a87c8457bf74823beb296c39f5e01aa8a683aa50f061",
+          "bytes": 7
+        },
+        {
+          "path": "notebooks/bulk_rna/logs/papermill_attempt1_time.txt",
+          "sha256": "a1804ccfa4e0ea0c0367b98542a3efcf4d9abf02c97ba5ba415a6fc233a74f5c",
+          "bytes": 1106
+        },
+        {
+          "path": "notebooks/bulk_rna/logs/papermill_attempt2.log",
+          "sha256": "bdca4a739414384dbb6daa14097efc9141ed34915d9637b6ada5a563f3b089ff",
+          "bytes": 18123
+        },
+        {
+          "path": "notebooks/bulk_rna/logs/papermill_attempt2_exit.txt",
+          "sha256": "19eaf43821a7660ec323a87c8457bf74823beb296c39f5e01aa8a683aa50f061",
+          "bytes": 7
+        },
+        {
+          "path": "notebooks/bulk_rna/logs/papermill_attempt2_time.txt",
+          "sha256": "aa780f5356f11ec3a7f44095c8eae8a4694c28710c4ed8fbc8919d7143ce88ac",
+          "bytes": 1106
+        },
+        {
+          "path": "notebooks/bulk_rna/logs/reference_driver.log",
+          "sha256": "04cc1820b02cc850e2dd5fe71b85e52f68818ddf854f7c5c5e025fc58c4880ad",
+          "bytes": 180
+        },
+        {
+          "path": "notebooks/bulk_rna/logs/reference_driver_exit.txt",
+          "sha256": "19eaf43821a7660ec323a87c8457bf74823beb296c39f5e01aa8a683aa50f061",
+          "bytes": 7
+        },
+        {
+          "path": "notebooks/bulk_rna/logs/replay_exits.txt",
+          "sha256": "39181ed8836999737311e216d5589507d5fafdf86080c7d2571a8e31c0f5f6bf",
+          "bytes": 236
+        },
+        {
+          "path": "notebooks/bulk_rna/logs/replay_run1_ncpus8_chain.log",
+          "sha256": "981107555b7d43116bb0f1fe339804b34739c61c76fc7bd21c24a038ad4a2126",
+          "bytes": 1648
+        },
+        {
+          "path": "notebooks/bulk_rna/logs/replay_run2_ncpus8_chain.log",
+          "sha256": "c35d6ac8e3bf73b9ce78b068bb45e3d1f7003d722d58d2e33d6f43fa6f5feca3",
+          "bytes": 1645
+        },
+        {
+          "path": "notebooks/bulk_rna/logs/replay_variant_ncpus1_chain.log",
+          "sha256": "71a3d099e9ae01f35deb0e90430875f1d5d308781f9b671c93b29e5eeb70833f",
+          "bytes": 1652
+        },
+        {
+          "path": "notebooks/bulk_rna/logs/replay_variant_ncpus8_filtered_only.log",
+          "sha256": "6ea03e3f8ed0cf1a85dbd68f33a7b19c7e77cf2216e6b11a847b01aa18484bc2",
+          "bytes": 1656
+        },
+        {
+          "path": "notebooks/bulk_rna/logs/runtime_info.json",
+          "sha256": "3f8e77710557ede194c4fe62652957be28b0e214e5e21f5c9f6f0f7f67046ab2",
+          "bytes": 745
+        },
+        {
+          "path": "notebooks/bulk_rna/logs/uv_pip_freeze.txt",
+          "sha256": "924e0c9f7bcff4e88c85f409d5137134b3280af7bffd655401a0b62e2e3bc0c8",
+          "bytes": 3007
+        },
+        {
+          "path": "notebooks/bulk_rna/reference/deseq2/results_df.csv",
+          "sha256": "45f21d5b256efaed20818dea6f304ee83a6596eb4e4d403eeada070cd3256108",
+          "bytes": 2460234
+        },
+        {
+          "path": "notebooks/bulk_rna/reference/deseq2/results_df.parquet",
+          "sha256": "2dc50f701b9e06313f2af558118a852df8a2a2d991b8f71767194082b3d9fd6d",
+          "bytes": 1305010
+        },
+        {
+          "path": "notebooks/bulk_rna/reference/filter_by_expr/adata_filtered_by_expr.h5ad",
+          "sha256": "ad245f2e4276b69ff24db39a6c3250f83ca3298fd03bde102a6479256633c56a",
+          "bytes": 1816998
+        },
+        {
+          "path": "notebooks/bulk_rna/reference/filter_by_expr/filter_by_expr_summary.json",
+          "sha256": "24dc0546695c343acb6a10ea8ba3b12f68b0e023515b27f5421ee4c27b26d335",
+          "bytes": 483
+        },
+        {
+          "path": "notebooks/bulk_rna/reference/filter_by_expr/kept_genes.txt",
+          "sha256": "5e66f85ad1a61cc02af3f566c2928d4e8df78fe7c59150a051b7fcc8a9f13e54",
+          "bytes": 156470
+        },
+        {
+          "path": "notebooks/bulk_rna/reference/leading_edge/hallmark_TGF_BETA_SIGNALING.txt",
+          "sha256": "7556172b514755a59db4d8c2a63e2aac6d211088234aedddcd74212fe49d4c94",
+          "bytes": 114
+        },
+        {
+          "path": "notebooks/bulk_rna/reference/leading_edge/leading_edges.json",
+          "sha256": "0d672d7e8cc81d4efe8023974c74bda7443596e9e6f3684ad46d701930140443",
+          "bytes": 14171
+        },
+        {
+          "path": "notebooks/bulk_rna/reference/leading_edge/progeny_TGFb_negative_weights.txt",
+          "sha256": "53843cfdb31d4224a9f97789e2d160035e86ac51662a014bf9bbeb4e6c937ff1",
+          "bytes": 1821
+        },
+        {
+          "path": "notebooks/bulk_rna/reference/leading_edge/progeny_TGFb_positive_weights.txt",
+          "sha256": "9f97becffe8d1c957f519d48a1e7b358befbe6dc1b689fc275ac3d8e7b5daaa1",
+          "bytes": 3646
+        },
+        {
+          "path": "notebooks/bulk_rna/reference/manifest.json",
+          "sha256": "59f18d9b81885a3ac7971ab393f677cf33b3498faeef3b5ea757074c4179b431",
+          "bytes": 23490
+        },
+        {
+          "path": "notebooks/bulk_rna/reference/pca_rankby_obsm/X_pca.csv",
+          "sha256": "7f9524632aee12f1143ca2cef0b3019b62defbfa8b899ba380502f105ea205a6",
+          "bytes": 408
+        },
+        {
+          "path": "notebooks/bulk_rna/reference/pca_rankby_obsm/adata_after_rankby_obsm.h5ad",
+          "sha256": "5a701e71017160c6bf0b5a6dd54c0766829de3073caa7676b79f7b7f5e62ff48",
+          "bytes": 4799734
+        },
+        {
+          "path": "notebooks/bulk_rna/reference/pca_rankby_obsm/pca_variance_ratio.csv",
+          "sha256": "c9be961ee9adc33ac7d4f910b8f1aa0917c3160a9e16ec6fe730e9c45b38bede",
+          "bytes": 241
+        },
+        {
+          "path": "notebooks/bulk_rna/reference/pca_rankby_obsm/rank_obsm.csv",
+          "sha256": "d8fbe133c0f29d4abfc0cc413d76c94e0a8194b8f2b59a3ecc5f140df781106d",
+          "bytes": 449
+        },
+        {
+          "path": "notebooks/bulk_rna/reference/pca_rankby_obsm/rank_obsm.parquet",
+          "sha256": "7fef76db755ec35e94549c5beda59d1f1a396cd580173fca6be3f2e992e31eee",
+          "bytes": 4313
+        },
+        {
+          "path": "notebooks/bulk_rna/reference/reference_summary.json",
+          "sha256": "e829834530d7cb9f6bc2ff13fc0b4c1ffae3d6d176ee48447237355dd862c651",
+          "bytes": 7289
+        },
+        {
+          "path": "notebooks/bulk_rna/reference/ulm/collectri_long.csv",
+          "sha256": "29c1181f8e533de07ea8283c282f7683d8a84f87b5ea211c57917bf18f56bb8b",
+          "bytes": 33180
+        },
+        {
+          "path": "notebooks/bulk_rna/reference/ulm/collectri_padj_full.csv",
+          "sha256": "e65ed44f8ccd878d267c365af261c4126a0edfe038481d11125fcd71b43275a3",
+          "bytes": 16622
+        },
+        {
+          "path": "notebooks/bulk_rna/reference/ulm/collectri_padj_full.parquet",
+          "sha256": "7e5063f074cdf21ec6e6d48b7ee0632bbef4b3d772630f6b9440d7c6e788fe91",
+          "bytes": 356264
+        },
+        {
+          "path": "notebooks/bulk_rna/reference/ulm/collectri_scores_full.csv",
+          "sha256": "9871ef011d27753a4c528613e25d43646355319c37b28011f1dbfb41a3c31328",
+          "bytes": 16515
+        },
+        {
+          "path": "notebooks/bulk_rna/reference/ulm/collectri_scores_full.parquet",
+          "sha256": "849a8de5889b22843000bd518394180433c966e7996a5e20e5457869cdd85a7b",
+          "bytes": 356264
+        },
+        {
+          "path": "notebooks/bulk_rna/reference/ulm/collectri_scores_padj_lt_0.05.csv",
+          "sha256": "a26b1daa310326e7a8e4be93c13a8c63a15570862ce291781cb1d0017d2bffaa",
+          "bytes": 3538
+        },
+        {
+          "path": "notebooks/bulk_rna/reference/ulm/collectri_scores_padj_lt_0.05.parquet",
+          "sha256": "b2a9acc1e8eb22c0fc89167394ae9ee5355bceace380b4ba37554b76a0d3524e",
+          "bytes": 78967
+        },
+        {
+          "path": "notebooks/bulk_rna/reference/ulm/data_stat_matrix.csv",
+          "sha256": "c788c21aadbbf85be8c3d643857ebabb8c0dffe626da825116db33d2929d2437",
+          "bytes": 531307
+        },
+        {
+          "path": "notebooks/bulk_rna/reference/ulm/data_stat_matrix.parquet",
+          "sha256": "6480d541e911bceb20eed2ae8a2072946ea9c6d73feed3dccb6bde704f9ad4cd",
+          "bytes": 10939770
+        },
+        {
+          "path": "notebooks/bulk_rna/reference/ulm/hallmark_dotplot_df.csv",
+          "sha256": "dd8c93e20bb55240263e7dcb69181ca6327f5ffce286bcecec14f5cc8c94059f",
+          "bytes": 2352
+        },
+        {
+          "path": "notebooks/bulk_rna/reference/ulm/hallmark_long.csv",
+          "sha256": "60f63a9f4440bb29d8798e41ab4734354b3cb4f3c5ffd1b90f4fc054fb165f83",
+          "bytes": 3234
+        },
+        {
+          "path": "notebooks/bulk_rna/reference/ulm/hallmark_padj_full.csv",
+          "sha256": "0e56d0ffd5795c419082309c30a164b4af26e54d3c6b4afa24d4fa750f47256f",
+          "bytes": 1982
+        },
+        {
+          "path": "notebooks/bulk_rna/reference/ulm/hallmark_padj_full.parquet",
+          "sha256": "15e2db974f82541fd0f5e0b6af14ba8115af3fe8c4b988dd40a7383aac73b7bd",
+          "bytes": 33590
+        },
+        {
+          "path": "notebooks/bulk_rna/reference/ulm/hallmark_scores_full.csv",
+          "sha256": "e3d1964c378d29a99a50d51e828891105eeb0f7954b0c80ef6387b95e9bbcada",
+          "bytes": 1902
+        },
+        {
+          "path": "notebooks/bulk_rna/reference/ulm/hallmark_scores_full.parquet",
+          "sha256": "bca82589ec6767f85e6f4b10233ee1cb3748faefbd4725d56a0542f0fb8fc0cd",
+          "bytes": 33590
+        },
+        {
+          "path": "notebooks/bulk_rna/reference/ulm/hallmark_scores_padj_lt_0.05.csv",
+          "sha256": "ac2fe18f9bc914ee4169cde93c3e45095ff856fde5cb5d6a7b2d01258bba2807",
+          "bytes": 1141
+        },
+        {
+          "path": "notebooks/bulk_rna/reference/ulm/hallmark_scores_padj_lt_0.05.parquet",
+          "sha256": "66a5d1ac8b08927a7870b3e73ea6de0d2ae482586601ee67c490d5ea1d756a7e",
+          "bytes": 20830
+        },
+        {
+          "path": "notebooks/bulk_rna/reference/ulm/progeny_dotplot_df.csv",
+          "sha256": "1e0a1c692fc4b5099bdaaf89e42a298f8e4dfa132a6d5603d8c49497eab26e16",
+          "bytes": 547
+        },
+        {
+          "path": "notebooks/bulk_rna/reference/ulm/progeny_long.csv",
+          "sha256": "fe2efd93b07eaf693819597329058a3fdc4720553432ea1b25e7992b420b3c02",
+          "bytes": 698
+        },
+        {
+          "path": "notebooks/bulk_rna/reference/ulm/progeny_padj_full.csv",
+          "sha256": "e4c40a17d82421e0c509aaa3cc9824a7b197dac3e8c2d4a09f50df5bbb7d2335",
+          "bytes": 339
+        },
+        {
+          "path": "notebooks/bulk_rna/reference/ulm/progeny_padj_full.parquet",
+          "sha256": "f4e7b4e4da979e1423774d904d019b0ac1d27a67be551668c33e82984f765baf",
+          "bytes": 9194
+        },
+        {
+          "path": "notebooks/bulk_rna/reference/ulm/progeny_scores_full.csv",
+          "sha256": "69fbece8bcea9f68f6bdd5a928f426c565167d94c5ae825291f061d7cf1c6f73",
+          "bytes": 372
+        },
+        {
+          "path": "notebooks/bulk_rna/reference/ulm/progeny_scores_full.parquet",
+          "sha256": "f6e3234465fb0bfa2eb9c74bf18fabac06a8a936e2fd6c7335a6772e51f1902e",
+          "bytes": 9194
+        },
+        {
+          "path": "notebooks/bulk_rna/reference/ulm/progeny_scores_padj_lt_0.05.csv",
+          "sha256": "74718aaaba67290b17af0904d34770f5396eb3b1467473b6cfcf8474d40dfedd",
+          "bytes": 322
+        },
+        {
+          "path": "notebooks/bulk_rna/reference/ulm/progeny_scores_padj_lt_0.05.parquet",
+          "sha256": "db4e8ec24904ffdc3308bee9603969091a4868fee0fdbe2fe1366e56400d60aa",
+          "bytes": 8123
+        },
+        {
+          "path": "notebooks/bulk_rna/replay/figure_determinism.json",
+          "sha256": "948d9d0c1d5efef961d1f445927c1196ca38e24a0b5018d3521d1ef9b9039cc5",
+          "bytes": 3365
+        },
+        {
+          "path": "notebooks/bulk_rna/replay/notebook_run_comparison.json",
+          "sha256": "59bcdce3495e4a6b67e33e20d3677c3cb93459779a88177b876efdafd7f68199",
+          "bytes": 7679
+        },
+        {
+          "path": "notebooks/bulk_rna/replay/run1_ncpus8_chain/collectri_padj_full.parquet",
+          "sha256": "7e5063f074cdf21ec6e6d48b7ee0632bbef4b3d772630f6b9440d7c6e788fe91",
+          "bytes": 356264
+        },
+        {
+          "path": "notebooks/bulk_rna/replay/run1_ncpus8_chain/collectri_scores_full.parquet",
+          "sha256": "849a8de5889b22843000bd518394180433c966e7996a5e20e5457869cdd85a7b",
+          "bytes": 356264
+        },
+        {
+          "path": "notebooks/bulk_rna/replay/run1_ncpus8_chain/comparison.json",
+          "sha256": "db386fd1e28fac70ae75f8d843f997900e2525d2050c2aedce1f7cdf26d79e36",
+          "bytes": 10425
+        },
+        {
+          "path": "notebooks/bulk_rna/replay/run1_ncpus8_chain/data_stat_matrix.parquet",
+          "sha256": "6480d541e911bceb20eed2ae8a2072946ea9c6d73feed3dccb6bde704f9ad4cd",
+          "bytes": 10939770
+        },
+        {
+          "path": "notebooks/bulk_rna/replay/run1_ncpus8_chain/hallmark_TGF_BETA_SIGNALING.txt",
+          "sha256": "7556172b514755a59db4d8c2a63e2aac6d211088234aedddcd74212fe49d4c94",
+          "bytes": 114
+        },
+        {
+          "path": "notebooks/bulk_rna/replay/run1_ncpus8_chain/hallmark_padj_full.parquet",
+          "sha256": "15e2db974f82541fd0f5e0b6af14ba8115af3fe8c4b988dd40a7383aac73b7bd",
+          "bytes": 33590
+        },
+        {
+          "path": "notebooks/bulk_rna/replay/run1_ncpus8_chain/hallmark_scores_full.parquet",
+          "sha256": "bca82589ec6767f85e6f4b10233ee1cb3748faefbd4725d56a0542f0fb8fc0cd",
+          "bytes": 33590
+        },
+        {
+          "path": "notebooks/bulk_rna/replay/run1_ncpus8_chain/kept_genes.txt",
+          "sha256": "5e66f85ad1a61cc02af3f566c2928d4e8df78fe7c59150a051b7fcc8a9f13e54",
+          "bytes": 156470
+        },
+        {
+          "path": "notebooks/bulk_rna/replay/run1_ncpus8_chain/progeny_TGFb_negative_weights.txt",
+          "sha256": "53843cfdb31d4224a9f97789e2d160035e86ac51662a014bf9bbeb4e6c937ff1",
+          "bytes": 1821
+        },
+        {
+          "path": "notebooks/bulk_rna/replay/run1_ncpus8_chain/progeny_TGFb_positive_weights.txt",
+          "sha256": "9f97becffe8d1c957f519d48a1e7b358befbe6dc1b689fc275ac3d8e7b5daaa1",
+          "bytes": 3646
+        },
+        {
+          "path": "notebooks/bulk_rna/replay/run1_ncpus8_chain/progeny_padj_full.parquet",
+          "sha256": "f4e7b4e4da979e1423774d904d019b0ac1d27a67be551668c33e82984f765baf",
+          "bytes": 9194
+        },
+        {
+          "path": "notebooks/bulk_rna/replay/run1_ncpus8_chain/progeny_scores_full.parquet",
+          "sha256": "f6e3234465fb0bfa2eb9c74bf18fabac06a8a936e2fd6c7335a6772e51f1902e",
+          "bytes": 9194
+        },
+        {
+          "path": "notebooks/bulk_rna/replay/run1_ncpus8_chain/rank_obsm.parquet",
+          "sha256": "ed0f41ec420d4e55f5ffb0cd029d1344c01e950a965100c0e8ea5025b3e6a3d3",
+          "bytes": 3773
+        },
+        {
+          "path": "notebooks/bulk_rna/replay/run1_ncpus8_chain/results_df.parquet",
+          "sha256": "2dc50f701b9e06313f2af558118a852df8a2a2d991b8f71767194082b3d9fd6d",
+          "bytes": 1305010
+        },
+        {
+          "path": "notebooks/bulk_rna/replay/run2_ncpus8_chain/collectri_padj_full.parquet",
+          "sha256": "7e5063f074cdf21ec6e6d48b7ee0632bbef4b3d772630f6b9440d7c6e788fe91",
+          "bytes": 356264
+        },
+        {
+          "path": "notebooks/bulk_rna/replay/run2_ncpus8_chain/collectri_scores_full.parquet",
+          "sha256": "849a8de5889b22843000bd518394180433c966e7996a5e20e5457869cdd85a7b",
+          "bytes": 356264
+        },
+        {
+          "path": "notebooks/bulk_rna/replay/run2_ncpus8_chain/comparison.json",
+          "sha256": "dea099321ded5303f10925cab2fa9a3086c8db6cc2e8d48af1d6744fdb21c9f5",
+          "bytes": 10428
+        },
+        {
+          "path": "notebooks/bulk_rna/replay/run2_ncpus8_chain/data_stat_matrix.parquet",
+          "sha256": "6480d541e911bceb20eed2ae8a2072946ea9c6d73feed3dccb6bde704f9ad4cd",
+          "bytes": 10939770
+        },
+        {
+          "path": "notebooks/bulk_rna/replay/run2_ncpus8_chain/hallmark_TGF_BETA_SIGNALING.txt",
+          "sha256": "7556172b514755a59db4d8c2a63e2aac6d211088234aedddcd74212fe49d4c94",
+          "bytes": 114
+        },
+        {
+          "path": "notebooks/bulk_rna/replay/run2_ncpus8_chain/hallmark_padj_full.parquet",
+          "sha256": "15e2db974f82541fd0f5e0b6af14ba8115af3fe8c4b988dd40a7383aac73b7bd",
+          "bytes": 33590
+        },
+        {
+          "path": "notebooks/bulk_rna/replay/run2_ncpus8_chain/hallmark_scores_full.parquet",
+          "sha256": "bca82589ec6767f85e6f4b10233ee1cb3748faefbd4725d56a0542f0fb8fc0cd",
+          "bytes": 33590
+        },
+        {
+          "path": "notebooks/bulk_rna/replay/run2_ncpus8_chain/kept_genes.txt",
+          "sha256": "5e66f85ad1a61cc02af3f566c2928d4e8df78fe7c59150a051b7fcc8a9f13e54",
+          "bytes": 156470
+        },
+        {
+          "path": "notebooks/bulk_rna/replay/run2_ncpus8_chain/progeny_TGFb_negative_weights.txt",
+          "sha256": "53843cfdb31d4224a9f97789e2d160035e86ac51662a014bf9bbeb4e6c937ff1",
+          "bytes": 1821
+        },
+        {
+          "path": "notebooks/bulk_rna/replay/run2_ncpus8_chain/progeny_TGFb_positive_weights.txt",
+          "sha256": "9f97becffe8d1c957f519d48a1e7b358befbe6dc1b689fc275ac3d8e7b5daaa1",
+          "bytes": 3646
+        },
+        {
+          "path": "notebooks/bulk_rna/replay/run2_ncpus8_chain/progeny_padj_full.parquet",
+          "sha256": "f4e7b4e4da979e1423774d904d019b0ac1d27a67be551668c33e82984f765baf",
+          "bytes": 9194
+        },
+        {
+          "path": "notebooks/bulk_rna/replay/run2_ncpus8_chain/progeny_scores_full.parquet",
+          "sha256": "f6e3234465fb0bfa2eb9c74bf18fabac06a8a936e2fd6c7335a6772e51f1902e",
+          "bytes": 9194
+        },
+        {
+          "path": "notebooks/bulk_rna/replay/run2_ncpus8_chain/rank_obsm.parquet",
+          "sha256": "ed0f41ec420d4e55f5ffb0cd029d1344c01e950a965100c0e8ea5025b3e6a3d3",
+          "bytes": 3773
+        },
+        {
+          "path": "notebooks/bulk_rna/replay/run2_ncpus8_chain/results_df.parquet",
+          "sha256": "2dc50f701b9e06313f2af558118a852df8a2a2d991b8f71767194082b3d9fd6d",
+          "bytes": 1305010
+        },
+        {
+          "path": "notebooks/bulk_rna/replay/variant_ncpus1_chain/collectri_padj_full.parquet",
+          "sha256": "7e5063f074cdf21ec6e6d48b7ee0632bbef4b3d772630f6b9440d7c6e788fe91",
+          "bytes": 356264
+        },
+        {
+          "path": "notebooks/bulk_rna/replay/variant_ncpus1_chain/collectri_scores_full.parquet",
+          "sha256": "849a8de5889b22843000bd518394180433c966e7996a5e20e5457869cdd85a7b",
+          "bytes": 356264
+        },
+        {
+          "path": "notebooks/bulk_rna/replay/variant_ncpus1_chain/comparison.json",
+          "sha256": "f566c6277c0c59df3ac1e648acc2c0f23beec0f28e36f3bba365d2a7ae69e838",
+          "bytes": 10436
+        },
+        {
+          "path": "notebooks/bulk_rna/replay/variant_ncpus1_chain/data_stat_matrix.parquet",
+          "sha256": "6480d541e911bceb20eed2ae8a2072946ea9c6d73feed3dccb6bde704f9ad4cd",
+          "bytes": 10939770
+        },
+        {
+          "path": "notebooks/bulk_rna/replay/variant_ncpus1_chain/hallmark_TGF_BETA_SIGNALING.txt",
+          "sha256": "7556172b514755a59db4d8c2a63e2aac6d211088234aedddcd74212fe49d4c94",
+          "bytes": 114
+        },
+        {
+          "path": "notebooks/bulk_rna/replay/variant_ncpus1_chain/hallmark_padj_full.parquet",
+          "sha256": "15e2db974f82541fd0f5e0b6af14ba8115af3fe8c4b988dd40a7383aac73b7bd",
+          "bytes": 33590
+        },
+        {
+          "path": "notebooks/bulk_rna/replay/variant_ncpus1_chain/hallmark_scores_full.parquet",
+          "sha256": "bca82589ec6767f85e6f4b10233ee1cb3748faefbd4725d56a0542f0fb8fc0cd",
+          "bytes": 33590
+        },
+        {
+          "path": "notebooks/bulk_rna/replay/variant_ncpus1_chain/kept_genes.txt",
+          "sha256": "5e66f85ad1a61cc02af3f566c2928d4e8df78fe7c59150a051b7fcc8a9f13e54",
+          "bytes": 156470
+        },
+        {
+          "path": "notebooks/bulk_rna/replay/variant_ncpus1_chain/progeny_TGFb_negative_weights.txt",
+          "sha256": "53843cfdb31d4224a9f97789e2d160035e86ac51662a014bf9bbeb4e6c937ff1",
+          "bytes": 1821
+        },
+        {
+          "path": "notebooks/bulk_rna/replay/variant_ncpus1_chain/progeny_TGFb_positive_weights.txt",
+          "sha256": "9f97becffe8d1c957f519d48a1e7b358befbe6dc1b689fc275ac3d8e7b5daaa1",
+          "bytes": 3646
+        },
+        {
+          "path": "notebooks/bulk_rna/replay/variant_ncpus1_chain/progeny_padj_full.parquet",
+          "sha256": "f4e7b4e4da979e1423774d904d019b0ac1d27a67be551668c33e82984f765baf",
+          "bytes": 9194
+        },
+        {
+          "path": "notebooks/bulk_rna/replay/variant_ncpus1_chain/progeny_scores_full.parquet",
+          "sha256": "f6e3234465fb0bfa2eb9c74bf18fabac06a8a936e2fd6c7335a6772e51f1902e",
+          "bytes": 9194
+        },
+        {
+          "path": "notebooks/bulk_rna/replay/variant_ncpus1_chain/rank_obsm.parquet",
+          "sha256": "ed0f41ec420d4e55f5ffb0cd029d1344c01e950a965100c0e8ea5025b3e6a3d3",
+          "bytes": 3773
+        },
+        {
+          "path": "notebooks/bulk_rna/replay/variant_ncpus1_chain/results_df.parquet",
+          "sha256": "2dc50f701b9e06313f2af558118a852df8a2a2d991b8f71767194082b3d9fd6d",
+          "bytes": 1305010
+        },
+        {
+          "path": "notebooks/bulk_rna/replay/variant_ncpus8_filtered_only/collectri_padj_full.parquet",
+          "sha256": "7e5063f074cdf21ec6e6d48b7ee0632bbef4b3d772630f6b9440d7c6e788fe91",
+          "bytes": 356264
+        },
+        {
+          "path": "notebooks/bulk_rna/replay/variant_ncpus8_filtered_only/collectri_scores_full.parquet",
+          "sha256": "849a8de5889b22843000bd518394180433c966e7996a5e20e5457869cdd85a7b",
+          "bytes": 356264
+        },
+        {
+          "path": "notebooks/bulk_rna/replay/variant_ncpus8_filtered_only/comparison.json",
+          "sha256": "d14ca6599e81c63336570d3b68ae4a7614e7b3e5a7a69ef03566333e9e20b40c",
+          "bytes": 10321
+        },
+        {
+          "path": "notebooks/bulk_rna/replay/variant_ncpus8_filtered_only/data_stat_matrix.parquet",
+          "sha256": "6480d541e911bceb20eed2ae8a2072946ea9c6d73feed3dccb6bde704f9ad4cd",
+          "bytes": 10939770
+        },
+        {
+          "path": "notebooks/bulk_rna/replay/variant_ncpus8_filtered_only/hallmark_TGF_BETA_SIGNALING.txt",
+          "sha256": "7556172b514755a59db4d8c2a63e2aac6d211088234aedddcd74212fe49d4c94",
+          "bytes": 114
+        },
+        {
+          "path": "notebooks/bulk_rna/replay/variant_ncpus8_filtered_only/hallmark_padj_full.parquet",
+          "sha256": "15e2db974f82541fd0f5e0b6af14ba8115af3fe8c4b988dd40a7383aac73b7bd",
+          "bytes": 33590
+        },
+        {
+          "path": "notebooks/bulk_rna/replay/variant_ncpus8_filtered_only/hallmark_scores_full.parquet",
+          "sha256": "bca82589ec6767f85e6f4b10233ee1cb3748faefbd4725d56a0542f0fb8fc0cd",
+          "bytes": 33590
+        },
+        {
+          "path": "notebooks/bulk_rna/replay/variant_ncpus8_filtered_only/kept_genes.txt",
+          "sha256": "5e66f85ad1a61cc02af3f566c2928d4e8df78fe7c59150a051b7fcc8a9f13e54",
+          "bytes": 156470
+        },
+        {
+          "path": "notebooks/bulk_rna/replay/variant_ncpus8_filtered_only/progeny_TGFb_negative_weights.txt",
+          "sha256": "53843cfdb31d4224a9f97789e2d160035e86ac51662a014bf9bbeb4e6c937ff1",
+          "bytes": 1821
+        },
+        {
+          "path": "notebooks/bulk_rna/replay/variant_ncpus8_filtered_only/progeny_TGFb_positive_weights.txt",
+          "sha256": "9f97becffe8d1c957f519d48a1e7b358befbe6dc1b689fc275ac3d8e7b5daaa1",
+          "bytes": 3646
+        },
+        {
+          "path": "notebooks/bulk_rna/replay/variant_ncpus8_filtered_only/progeny_padj_full.parquet",
+          "sha256": "f4e7b4e4da979e1423774d904d019b0ac1d27a67be551668c33e82984f765baf",
+          "bytes": 9194
+        },
+        {
+          "path": "notebooks/bulk_rna/replay/variant_ncpus8_filtered_only/progeny_scores_full.parquet",
+          "sha256": "f6e3234465fb0bfa2eb9c74bf18fabac06a8a936e2fd6c7335a6772e51f1902e",
+          "bytes": 9194
+        },
+        {
+          "path": "notebooks/bulk_rna/replay/variant_ncpus8_filtered_only/rank_obsm.parquet",
+          "sha256": "ed0f41ec420d4e55f5ffb0cd029d1344c01e950a965100c0e8ea5025b3e6a3d3",
+          "bytes": 3773
+        },
+        {
+          "path": "notebooks/bulk_rna/replay/variant_ncpus8_filtered_only/results_df.parquet",
+          "sha256": "2dc50f701b9e06313f2af558118a852df8a2a2d991b8f71767194082b3d9fd6d",
+          "bytes": 1305010
+        },
+        {
+          "path": "notebooks/bulk_rna/scripts/compare_notebook_runs.py",
+          "sha256": "6abad1bbbf8ca007a3a26fb888e2335fbb8ffdb73c411598bd01961fa486cbb9",
+          "bytes": 3310
+        },
+        {
+          "path": "notebooks/bulk_rna/scripts/figure_determinism_probe.py",
+          "sha256": "ede6c939ee605413fa38182b88aeeb1aef9b29aab1b5c8e76921beddb03788e9",
+          "bytes": 2226
+        },
+        {
+          "path": "notebooks/bulk_rna/scripts/kernel_capture_startup.py",
+          "sha256": "6a3b17c18f9bdd496653d365f7a17af99659c630b391d7e75a9107da25d3636f",
+          "bytes": 5904
+        },
+        {
+          "path": "notebooks/bulk_rna/scripts/reference_driver.py",
+          "sha256": "a94eb016c857bd72a6d09149bc244d2ea5ddca3daf0e60758bed697ca0d1280f",
+          "bytes": 24576
+        },
+        {
+          "path": "notebooks/bulk_rna/scripts/replay.py",
+          "sha256": "1a275536fbf39aab5bbf73afe5d2fb0e83ef097b311ce123cd1fa84fe44675e1",
+          "bytes": 12926
+        }
+      ]
+    },
+    "reference_numbers": {
+      "filter_by_expr": {
+        "shape_before": [
+          6,
+          58674
+        ],
+        "shape_after": [
+          6,
+          19510
+        ],
+        "n_genes_kept": 19510,
+        "n_genes_removed": 39164,
+        "kept_genes_sha256": "fe15b8353e3d3d95899b7306eabeefbd70fad62fd295f842f40ebfc47374ba27"
+      },
+      "pca_rankby_obsm": {
+        "variance_ratio": [
+          0.6149707994767409,
+          0.14678879713488935,
+          0.10126783655712782,
+          0.07409037244614604,
+          0.06288219438509615
+        ],
+        "significant": [
+          {
+            "obsm": "PC1",
+            "obs": "condition",
+            "stat": 267.5409851074219,
+            "padj": 0.0008177597192116082
+          }
+        ],
+        "note": "only PC1~condition is significant (padj 8.18e-4); sample_id rows have NaN stat and pval 1 (one sample per level)"
+      },
+      "deseq2": {
+        "shape": [
+          19510,
+          6
+        ],
+        "n_nan": {
+          "baseMean": 0,
+          "log2FoldChange": 0,
+          "lfcSE": 0,
+          "stat": 0,
+          "pvalue": 0,
+          "padj": 0
+        },
+        "n_padj_lt_0.05": 8517,
+        "n_padj_lt_0.05_up": 4328,
+        "n_padj_lt_0.05_down": 4189,
+        "printed_rows": {
+          "WASH7P": {
+            "baseMean": 10.350604500666433,
+            "log2FoldChange": -0.010705626222710537,
+            "lfcSE": 0.6509176319780748,
+            "stat": -0.01644697531111147,
+            "pvalue": 0.986877803928919,
+            "padj": 0.9914014080642886
+          },
+          "MIR6859-1": {
+            "baseMean": 10.115836547544728,
+            "log2FoldChange": 0.001173910726028365,
+            "lfcSE": 0.6565872169530581,
+            "stat": 0.0017878976253543058,
+            "pvalue": 0.9985734648484389,
+            "padj": 0.9993444405107503
+          },
+          "MT-TT": {
+            "baseMean": 204.70822998645642,
+            "log2FoldChange": -0.4854994586144385,
+            "lfcSE": 0.22041569252008755,
+            "stat": -2.2026537814234466,
+            "pvalue": 0.02761916017791543,
+            "padj": 0.061262710392704894
+          },
+          "MT-TP": {
+            "baseMean": 345.08355497827216,
+            "log2FoldChange": -0.4602884009012636,
+            "lfcSE": 0.16165047282099634,
+            "stat": -2.8474299695427674,
+            "pvalue": 0.004407379002404118,
+            "padj": 0.012196874374028985
+          }
+        }
+      },
+      "ulm": {
+        "collectri": {
+          "network_rows": 42990,
+          "n_sources_scored": 655,
+          "n_significant_padj_lt_0.05": 143,
+          "n_significant_positive": 64,
+          "n_significant_negative": 79,
+          "top3_positive": [
+            {
+              "source": "SRF",
+              "score": 7.383742530399846,
+              "padj": 3.477631724257968e-11
+            },
+            {
+              "source": "MYOCD",
+              "score": 7.345932745635272,
+              "padj": 3.477631724257968e-11
+            },
+            {
+              "source": "SMAD3",
+              "score": 7.206794380712145,
+              "padj": 7.777984506462943e-11
+            }
+          ],
+          "top3_negative": [
+            {
+              "source": "IRF1",
+              "score": -9.359191851511149,
+              "padj": 5.8178855028855644e-18
+            },
+            {
+              "source": "SKIL",
+              "score": -7.435938852999661,
+              "padj": 3.477631724257968e-11
+            },
+            {
+              "source": "NR1H4",
+              "score": -5.898247142435999,
+              "padj": 3.4944048366014613e-07
+            }
+          ]
+        },
+        "progeny": {
+          "network_rows": 62421,
+          "n_sources_scored": 14,
+          "n_significant_padj_lt_0.05": 12,
+          "n_significant_positive": 8,
+          "n_significant_negative": 4,
+          "top3_positive": [
+            {
+              "source": "TGFb",
+              "score": 59.359794170609085,
+              "padj": 0.0
+            },
+            {
+              "source": "MAPK",
+              "score": 25.60717333058477,
+              "padj": 0.0
+            },
+            {
+              "source": "PI3K",
+              "score": 24.523090630976796,
+              "padj": 0.0
+            }
+          ],
+          "top3_negative": [
+            {
+              "source": "JAK-STAT",
+              "score": -14.310255360581763,
+              "padj": 1.401298464324817e-45
+            },
+            {
+              "source": "p53",
+              "score": -12.616977567839143,
+              "padj": 5.508673674639999e-36
+            },
+            {
+              "source": "NFkB",
+              "score": -10.118751138955501,
+              "padj": 8.134209850998007e-24
+            }
+          ]
+        },
+        "hallmark": {
+          "network_rows": 7318,
+          "n_sources_scored": 50,
+          "n_significant_padj_lt_0.05": 30,
+          "n_significant_positive": 13,
+          "n_significant_negative": 17,
+          "top3_positive": [
+            {
+              "source": "EPITHELIAL_MESENCHYMAL_TRANSITION",
+              "score": 13.67402013601219,
+              "padj": 1.1381346127246164e-40
+            },
+            {
+              "source": "G2M_CHECKPOINT",
+              "score": 8.307739015711144,
+              "padj": 1.2981254255122615e-15
+            },
+            {
+              "source": "E2F_TARGETS",
+              "score": 8.116301260022238,
+              "padj": 5.08878632930602e-15
+            }
+          ],
+          "top3_negative": [
+            {
+              "source": "INTERFERON_ALPHA_RESPONSE",
+              "score": -12.770970969578213,
+              "padj": 8.391695897782401e-36
+            },
+            {
+              "source": "INTERFERON_GAMMA_RESPONSE",
+              "score": -12.439695752191462,
+              "padj": 3.612670436022397e-34
+            },
+            {
+              "source": "REACTIVE_OXYGEN_SPECIES_PATHWAY",
+              "score": -6.567070601324147,
+              "padj": 4.055478453057759e-10
+            }
+          ]
+        }
+      },
+      "progeny_TGFb": {
+        "score": 59.359794170609085,
+        "padj": 0.0
+      },
+      "hallmark_TGF_BETA_SIGNALING": {
+        "score": 5.380781620502749,
+        "padj": 3.7509087746911973e-07
+      },
+      "leading_edge": {
+        "progeny_TGFb_positive_weights": {
+          "n_genes": 581,
+          "first5_printed": [
+            "IL11",
+            "AMIGO2",
+            "SERPINE2",
+            "ACTC1",
+            "NOX4"
+          ]
+        },
+        "progeny_TGFb_negative_weights": {
+          "n_genes": 292,
+          "first5_printed": [
+            "SMAD3",
+            "ADAMTS1",
+            "GALNT15",
+            "HGF",
+            "NID2"
+          ]
+        },
+        "hallmark_TGF_BETA_SIGNALING": {
+          "n_genes": 19,
+          "first5_printed": [
+            "PMEPA1",
+            "JUNB",
+            "SKIL",
+            "LTBP2",
+            "KLF10"
+          ]
+        }
+      },
+      "agreement_with_upstream_stored_notebook": "All text outputs of all 30 code cells equal the upstream stored outputs at displayed precision (order-insensitive across stdout/stderr interleaving; PyDESeq2 timing strings normalised), except an extra TqdmWarning in cell 2 (ipywidgets not installed). Includes the 143 / 12 / 30 significant counts, PROGENy TGFb 59.359794, and the printed leading-edge genes."
+    },
+    "replay": {
+      "script": "notebooks/bulk_rna/scripts/replay.py",
+      "script_sha256": "1a275536fbf39aab5bbf73afe5d2fb0e83ef097b311ce123cd1fa84fe44675e1",
+      "inputs_used_only": [
+        "notebooks/bulk_rna/data/hsctgfb_as_returned.h5ad",
+        "notebooks/bulk_rna/data/reference_input_labels.csv",
+        "notebooks/bulk_rna/data/networks/{collectri,progeny,hallmark}.parquet"
+      ],
+      "chain": "filter_by_expr -> normalize_total/log1p/scale/pca/swap_layer -> rankby_obsm -> PyDESeq2 (design '~condition', refit_cooks=True, contrast condition treatment vs control) -> stat matrix -> ulm x3 -> leading_edge x3; same calls and parameters as the notebook, no network",
+      "runs": {
+        "run1_ncpus8_chain": {
+          "command": "decoupler-env/bin/python -I notebooks/bulk_rna/scripts/replay.py --label run1_ncpus8_chain --n-cpus 8 --de-input notebook_chain",
+          "exit_status": 0,
+          "comparison_file": "notebooks/bulk_rna/replay/run1_ncpus8_chain/comparison.json",
+          "wall_time_s": 92.69,
+          "timings_s": {
+            "filter_by_expr_s": 0.22,
+            "pca_rankby_obsm_s": 1.7,
+            "deseq2_s": 79.43,
+            "ulm_collectri_s": 0.44,
+            "ulm_progeny_s": 0.16,
+            "ulm_hallmark_s": 0.1
+          },
+          "all_within_tolerance": true,
+          "all_float_checks_bitwise_identical": true,
+          "identifier_checks": {
+            "filter_by_expr_kept_genes_ordered_identical": true,
+            "rank_obsm_ids_identical": true,
+            "deseq2_index_identical": true,
+            "ulm_sources_identical": {
+              "collectri": true,
+              "progeny": true,
+              "hallmark": true
+            },
+            "ulm_significant_sets_identical": {
+              "collectri": true,
+              "progeny": true,
+              "hallmark": true
+            },
+            "leading_edges_ordered_identical": {
+              "progeny_TGFb_positive_weights": true,
+              "progeny_TGFb_negative_weights": true,
+              "hallmark_TGF_BETA_SIGNALING": true
+            }
+          },
+          "float_comparisons": {
+            "pca_rankby_obsm.stat": {
+              "bitwise_identical": true,
+              "max_abs_diff": 0.0,
+              "max_rel_diff": 0.0,
+              "nan_pattern_equal": true,
+              "rtol": 0.0001,
+              "atol": 1e-06,
+              "within_tolerance": true
+            },
+            "pca_rankby_obsm.pval": {
+              "bitwise_identical": true,
+              "max_abs_diff": 0.0,
+              "max_rel_diff": 0.0,
+              "nan_pattern_equal": true,
+              "rtol": 0.0001,
+              "atol": 1e-06,
+              "within_tolerance": true
+            },
+            "pca_rankby_obsm.padj": {
+              "bitwise_identical": true,
+              "max_abs_diff": 0.0,
+              "max_rel_diff": 0.0,
+              "nan_pattern_equal": true,
+              "rtol": 0.0001,
+              "atol": 1e-06,
+              "within_tolerance": true
+            },
+            "pca_rankby_obsm.variance_ratio": {
+              "bitwise_identical": true,
+              "max_abs_diff": 0.0,
+              "max_rel_diff": 0.0,
+              "nan_pattern_equal": true,
+              "rtol": 1e-05,
+              "atol": 1e-07,
+              "within_tolerance": true
+            },
+            "pca_rankby_obsm.X_pca_abs_sign_invariant": {
+              "bitwise_identical": true,
+              "max_abs_diff": 0.0,
+              "max_rel_diff": 0.0,
+              "nan_pattern_equal": true,
+              "rtol": 0.0001,
+              "atol": 0.0001,
+              "within_tolerance": true
+            },
+            "deseq2.baseMean": {
+              "bitwise_identical": true,
+              "max_abs_diff": 0.0,
+              "max_rel_diff": 0.0,
+              "nan_pattern_equal": true,
+              "rtol": 1e-12,
+              "atol": 0.0,
+              "within_tolerance": true
+            },
+            "deseq2.log2FoldChange": {
+              "bitwise_identical": true,
+              "max_abs_diff": 0.0,
+              "max_rel_diff": 0.0,
+              "nan_pattern_equal": true,
+              "rtol": 1e-06,
+              "atol": 1e-09,
+              "within_tolerance": true
+            },
+            "deseq2.lfcSE": {
+              "bitwise_identical": true,
+              "max_abs_diff": 0.0,
+              "max_rel_diff": 0.0,
+              "nan_pattern_equal": true,
+              "rtol": 1e-06,
+              "atol": 1e-09,
+              "within_tolerance": true
+            },
+            "deseq2.stat": {
+              "bitwise_identical": true,
+              "max_abs_diff": 0.0,
+              "max_rel_diff": 0.0,
+              "nan_pattern_equal": true,
+              "rtol": 1e-06,
+              "atol": 1e-09,
+              "within_tolerance": true
+            },
+            "deseq2.pvalue": {
+              "bitwise_identical": true,
+              "max_abs_diff": 0.0,
+              "max_rel_diff": 0.0,
+              "nan_pattern_equal": true,
+              "rtol": 1e-06,
+              "atol": 1e-15,
+              "within_tolerance": true
+            },
+            "deseq2.padj": {
+              "bitwise_identical": true,
+              "max_abs_diff": 0.0,
+              "max_rel_diff": 0.0,
+              "nan_pattern_equal": true,
+              "rtol": 1e-06,
+              "atol": 1e-15,
+              "within_tolerance": true
+            },
+            "data_stat_matrix": {
+              "bitwise_identical": true,
+              "max_abs_diff": 0.0,
+              "max_rel_diff": 0.0,
+              "nan_pattern_equal": true,
+              "rtol": 1e-06,
+              "atol": 1e-09,
+              "within_tolerance": true
+            },
+            "ulm.collectri.scores": {
+              "bitwise_identical": true,
+              "max_abs_diff": 0.0,
+              "max_rel_diff": 0.0,
+              "nan_pattern_equal": true,
+              "rtol": 1e-06,
+              "atol": 1e-09,
+              "within_tolerance": true
+            },
+            "ulm.collectri.padj": {
+              "bitwise_identical": true,
+              "max_abs_diff": 0.0,
+              "max_rel_diff": 0.0,
+              "nan_pattern_equal": true,
+              "rtol": 1e-06,
+              "atol": 1e-15,
+              "within_tolerance": true
+            },
+            "ulm.progeny.scores": {
+              "bitwise_identical": true,
+              "max_abs_diff": 0.0,
+              "max_rel_diff": 0.0,
+              "nan_pattern_equal": true,
+              "rtol": 1e-06,
+              "atol": 1e-09,
+              "within_tolerance": true
+            },
+            "ulm.progeny.padj": {
+              "bitwise_identical": true,
+              "max_abs_diff": 0.0,
+              "max_rel_diff": 0.0,
+              "nan_pattern_equal": true,
+              "rtol": 1e-06,
+              "atol": 1e-15,
+              "within_tolerance": true
+            },
+            "ulm.hallmark.scores": {
+              "bitwise_identical": true,
+              "max_abs_diff": 0.0,
+              "max_rel_diff": 0.0,
+              "nan_pattern_equal": true,
+              "rtol": 1e-06,
+              "atol": 1e-09,
+              "within_tolerance": true
+            },
+            "ulm.hallmark.padj": {
+              "bitwise_identical": true,
+              "max_abs_diff": 0.0,
+              "max_rel_diff": 0.0,
+              "nan_pattern_equal": true,
+              "rtol": 1e-06,
+              "atol": 1e-15,
+              "within_tolerance": true
+            }
+          },
+          "deseq2_input_side_effects": {
+            "uns_keys_before": [
+              "log1p",
+              "pca",
+              "rank_obsm"
+            ],
+            "uns_keys_after": [
+              "_squared_logres",
+              "disp_function_type",
+              "log1p",
+              "pca",
+              "prior_disp_var",
+              "rank_obsm",
+              "trend_coeffs"
+            ],
+            "X_unchanged": true
+          }
+        },
+        "run2_ncpus8_chain": {
+          "command": "decoupler-env/bin/python -I notebooks/bulk_rna/scripts/replay.py --label run2_ncpus8_chain --n-cpus 8 --de-input notebook_chain",
+          "exit_status": 0,
+          "comparison_file": "notebooks/bulk_rna/replay/run2_ncpus8_chain/comparison.json",
+          "wall_time_s": 38.44,
+          "timings_s": {
+            "filter_by_expr_s": 0.36,
+            "pca_rankby_obsm_s": 1.77,
+            "deseq2_s": 27.78,
+            "ulm_collectri_s": 0.36,
+            "ulm_progeny_s": 0.14,
+            "ulm_hallmark_s": 0.06
+          },
+          "all_within_tolerance": true,
+          "all_float_checks_bitwise_identical": true,
+          "identifier_checks": {
+            "filter_by_expr_kept_genes_ordered_identical": true,
+            "rank_obsm_ids_identical": true,
+            "deseq2_index_identical": true,
+            "ulm_sources_identical": {
+              "collectri": true,
+              "progeny": true,
+              "hallmark": true
+            },
+            "ulm_significant_sets_identical": {
+              "collectri": true,
+              "progeny": true,
+              "hallmark": true
+            },
+            "leading_edges_ordered_identical": {
+              "progeny_TGFb_positive_weights": true,
+              "progeny_TGFb_negative_weights": true,
+              "hallmark_TGF_BETA_SIGNALING": true
+            }
+          },
+          "float_comparisons": {
+            "pca_rankby_obsm.stat": {
+              "bitwise_identical": true,
+              "max_abs_diff": 0.0,
+              "max_rel_diff": 0.0,
+              "nan_pattern_equal": true,
+              "rtol": 0.0001,
+              "atol": 1e-06,
+              "within_tolerance": true
+            },
+            "pca_rankby_obsm.pval": {
+              "bitwise_identical": true,
+              "max_abs_diff": 0.0,
+              "max_rel_diff": 0.0,
+              "nan_pattern_equal": true,
+              "rtol": 0.0001,
+              "atol": 1e-06,
+              "within_tolerance": true
+            },
+            "pca_rankby_obsm.padj": {
+              "bitwise_identical": true,
+              "max_abs_diff": 0.0,
+              "max_rel_diff": 0.0,
+              "nan_pattern_equal": true,
+              "rtol": 0.0001,
+              "atol": 1e-06,
+              "within_tolerance": true
+            },
+            "pca_rankby_obsm.variance_ratio": {
+              "bitwise_identical": true,
+              "max_abs_diff": 0.0,
+              "max_rel_diff": 0.0,
+              "nan_pattern_equal": true,
+              "rtol": 1e-05,
+              "atol": 1e-07,
+              "within_tolerance": true
+            },
+            "pca_rankby_obsm.X_pca_abs_sign_invariant": {
+              "bitwise_identical": true,
+              "max_abs_diff": 0.0,
+              "max_rel_diff": 0.0,
+              "nan_pattern_equal": true,
+              "rtol": 0.0001,
+              "atol": 0.0001,
+              "within_tolerance": true
+            },
+            "deseq2.baseMean": {
+              "bitwise_identical": true,
+              "max_abs_diff": 0.0,
+              "max_rel_diff": 0.0,
+              "nan_pattern_equal": true,
+              "rtol": 1e-12,
+              "atol": 0.0,
+              "within_tolerance": true
+            },
+            "deseq2.log2FoldChange": {
+              "bitwise_identical": true,
+              "max_abs_diff": 0.0,
+              "max_rel_diff": 0.0,
+              "nan_pattern_equal": true,
+              "rtol": 1e-06,
+              "atol": 1e-09,
+              "within_tolerance": true
+            },
+            "deseq2.lfcSE": {
+              "bitwise_identical": true,
+              "max_abs_diff": 0.0,
+              "max_rel_diff": 0.0,
+              "nan_pattern_equal": true,
+              "rtol": 1e-06,
+              "atol": 1e-09,
+              "within_tolerance": true
+            },
+            "deseq2.stat": {
+              "bitwise_identical": true,
+              "max_abs_diff": 0.0,
+              "max_rel_diff": 0.0,
+              "nan_pattern_equal": true,
+              "rtol": 1e-06,
+              "atol": 1e-09,
+              "within_tolerance": true
+            },
+            "deseq2.pvalue": {
+              "bitwise_identical": true,
+              "max_abs_diff": 0.0,
+              "max_rel_diff": 0.0,
+              "nan_pattern_equal": true,
+              "rtol": 1e-06,
+              "atol": 1e-15,
+              "within_tolerance": true
+            },
+            "deseq2.padj": {
+              "bitwise_identical": true,
+              "max_abs_diff": 0.0,
+              "max_rel_diff": 0.0,
+              "nan_pattern_equal": true,
+              "rtol": 1e-06,
+              "atol": 1e-15,
+              "within_tolerance": true
+            },
+            "data_stat_matrix": {
+              "bitwise_identical": true,
+              "max_abs_diff": 0.0,
+              "max_rel_diff": 0.0,
+              "nan_pattern_equal": true,
+              "rtol": 1e-06,
+              "atol": 1e-09,
+              "within_tolerance": true
+            },
+            "ulm.collectri.scores": {
+              "bitwise_identical": true,
+              "max_abs_diff": 0.0,
+              "max_rel_diff": 0.0,
+              "nan_pattern_equal": true,
+              "rtol": 1e-06,
+              "atol": 1e-09,
+              "within_tolerance": true
+            },
+            "ulm.collectri.padj": {
+              "bitwise_identical": true,
+              "max_abs_diff": 0.0,
+              "max_rel_diff": 0.0,
+              "nan_pattern_equal": true,
+              "rtol": 1e-06,
+              "atol": 1e-15,
+              "within_tolerance": true
+            },
+            "ulm.progeny.scores": {
+              "bitwise_identical": true,
+              "max_abs_diff": 0.0,
+              "max_rel_diff": 0.0,
+              "nan_pattern_equal": true,
+              "rtol": 1e-06,
+              "atol": 1e-09,
+              "within_tolerance": true
+            },
+            "ulm.progeny.padj": {
+              "bitwise_identical": true,
+              "max_abs_diff": 0.0,
+              "max_rel_diff": 0.0,
+              "nan_pattern_equal": true,
+              "rtol": 1e-06,
+              "atol": 1e-15,
+              "within_tolerance": true
+            },
+            "ulm.hallmark.scores": {
+              "bitwise_identical": true,
+              "max_abs_diff": 0.0,
+              "max_rel_diff": 0.0,
+              "nan_pattern_equal": true,
+              "rtol": 1e-06,
+              "atol": 1e-09,
+              "within_tolerance": true
+            },
+            "ulm.hallmark.padj": {
+              "bitwise_identical": true,
+              "max_abs_diff": 0.0,
+              "max_rel_diff": 0.0,
+              "nan_pattern_equal": true,
+              "rtol": 1e-06,
+              "atol": 1e-15,
+              "within_tolerance": true
+            }
+          },
+          "deseq2_input_side_effects": {
+            "uns_keys_before": [
+              "log1p",
+              "pca",
+              "rank_obsm"
+            ],
+            "uns_keys_after": [
+              "_squared_logres",
+              "disp_function_type",
+              "log1p",
+              "pca",
+              "prior_disp_var",
+              "rank_obsm",
+              "trend_coeffs"
+            ],
+            "X_unchanged": true
+          }
+        },
+        "variant_ncpus1_chain": {
+          "command": "decoupler-env/bin/python -I notebooks/bulk_rna/scripts/replay.py --label variant_ncpus1_chain --n-cpus 1 --de-input notebook_chain",
+          "exit_status": 0,
+          "comparison_file": "notebooks/bulk_rna/replay/variant_ncpus1_chain/comparison.json",
+          "wall_time_s": 149.18,
+          "timings_s": {
+            "filter_by_expr_s": 0.05,
+            "pca_rankby_obsm_s": 0.39,
+            "deseq2_s": 125.09,
+            "ulm_collectri_s": 0.59,
+            "ulm_progeny_s": 0.2,
+            "ulm_hallmark_s": 0.12
+          },
+          "all_within_tolerance": true,
+          "all_float_checks_bitwise_identical": true,
+          "identifier_checks": {
+            "filter_by_expr_kept_genes_ordered_identical": true,
+            "rank_obsm_ids_identical": true,
+            "deseq2_index_identical": true,
+            "ulm_sources_identical": {
+              "collectri": true,
+              "progeny": true,
+              "hallmark": true
+            },
+            "ulm_significant_sets_identical": {
+              "collectri": true,
+              "progeny": true,
+              "hallmark": true
+            },
+            "leading_edges_ordered_identical": {
+              "progeny_TGFb_positive_weights": true,
+              "progeny_TGFb_negative_weights": true,
+              "hallmark_TGF_BETA_SIGNALING": true
+            }
+          },
+          "float_comparisons": {
+            "pca_rankby_obsm.stat": {
+              "bitwise_identical": true,
+              "max_abs_diff": 0.0,
+              "max_rel_diff": 0.0,
+              "nan_pattern_equal": true,
+              "rtol": 0.0001,
+              "atol": 1e-06,
+              "within_tolerance": true
+            },
+            "pca_rankby_obsm.pval": {
+              "bitwise_identical": true,
+              "max_abs_diff": 0.0,
+              "max_rel_diff": 0.0,
+              "nan_pattern_equal": true,
+              "rtol": 0.0001,
+              "atol": 1e-06,
+              "within_tolerance": true
+            },
+            "pca_rankby_obsm.padj": {
+              "bitwise_identical": true,
+              "max_abs_diff": 0.0,
+              "max_rel_diff": 0.0,
+              "nan_pattern_equal": true,
+              "rtol": 0.0001,
+              "atol": 1e-06,
+              "within_tolerance": true
+            },
+            "pca_rankby_obsm.variance_ratio": {
+              "bitwise_identical": true,
+              "max_abs_diff": 0.0,
+              "max_rel_diff": 0.0,
+              "nan_pattern_equal": true,
+              "rtol": 1e-05,
+              "atol": 1e-07,
+              "within_tolerance": true
+            },
+            "pca_rankby_obsm.X_pca_abs_sign_invariant": {
+              "bitwise_identical": true,
+              "max_abs_diff": 0.0,
+              "max_rel_diff": 0.0,
+              "nan_pattern_equal": true,
+              "rtol": 0.0001,
+              "atol": 0.0001,
+              "within_tolerance": true
+            },
+            "deseq2.baseMean": {
+              "bitwise_identical": true,
+              "max_abs_diff": 0.0,
+              "max_rel_diff": 0.0,
+              "nan_pattern_equal": true,
+              "rtol": 1e-12,
+              "atol": 0.0,
+              "within_tolerance": true
+            },
+            "deseq2.log2FoldChange": {
+              "bitwise_identical": true,
+              "max_abs_diff": 0.0,
+              "max_rel_diff": 0.0,
+              "nan_pattern_equal": true,
+              "rtol": 1e-06,
+              "atol": 1e-09,
+              "within_tolerance": true
+            },
+            "deseq2.lfcSE": {
+              "bitwise_identical": true,
+              "max_abs_diff": 0.0,
+              "max_rel_diff": 0.0,
+              "nan_pattern_equal": true,
+              "rtol": 1e-06,
+              "atol": 1e-09,
+              "within_tolerance": true
+            },
+            "deseq2.stat": {
+              "bitwise_identical": true,
+              "max_abs_diff": 0.0,
+              "max_rel_diff": 0.0,
+              "nan_pattern_equal": true,
+              "rtol": 1e-06,
+              "atol": 1e-09,
+              "within_tolerance": true
+            },
+            "deseq2.pvalue": {
+              "bitwise_identical": true,
+              "max_abs_diff": 0.0,
+              "max_rel_diff": 0.0,
+              "nan_pattern_equal": true,
+              "rtol": 1e-06,
+              "atol": 1e-15,
+              "within_tolerance": true
+            },
+            "deseq2.padj": {
+              "bitwise_identical": true,
+              "max_abs_diff": 0.0,
+              "max_rel_diff": 0.0,
+              "nan_pattern_equal": true,
+              "rtol": 1e-06,
+              "atol": 1e-15,
+              "within_tolerance": true
+            },
+            "data_stat_matrix": {
+              "bitwise_identical": true,
+              "max_abs_diff": 0.0,
+              "max_rel_diff": 0.0,
+              "nan_pattern_equal": true,
+              "rtol": 1e-06,
+              "atol": 1e-09,
+              "within_tolerance": true
+            },
+            "ulm.collectri.scores": {
+              "bitwise_identical": true,
+              "max_abs_diff": 0.0,
+              "max_rel_diff": 0.0,
+              "nan_pattern_equal": true,
+              "rtol": 1e-06,
+              "atol": 1e-09,
+              "within_tolerance": true
+            },
+            "ulm.collectri.padj": {
+              "bitwise_identical": true,
+              "max_abs_diff": 0.0,
+              "max_rel_diff": 0.0,
+              "nan_pattern_equal": true,
+              "rtol": 1e-06,
+              "atol": 1e-15,
+              "within_tolerance": true
+            },
+            "ulm.progeny.scores": {
+              "bitwise_identical": true,
+              "max_abs_diff": 0.0,
+              "max_rel_diff": 0.0,
+              "nan_pattern_equal": true,
+              "rtol": 1e-06,
+              "atol": 1e-09,
+              "within_tolerance": true
+            },
+            "ulm.progeny.padj": {
+              "bitwise_identical": true,
+              "max_abs_diff": 0.0,
+              "max_rel_diff": 0.0,
+              "nan_pattern_equal": true,
+              "rtol": 1e-06,
+              "atol": 1e-15,
+              "within_tolerance": true
+            },
+            "ulm.hallmark.scores": {
+              "bitwise_identical": true,
+              "max_abs_diff": 0.0,
+              "max_rel_diff": 0.0,
+              "nan_pattern_equal": true,
+              "rtol": 1e-06,
+              "atol": 1e-09,
+              "within_tolerance": true
+            },
+            "ulm.hallmark.padj": {
+              "bitwise_identical": true,
+              "max_abs_diff": 0.0,
+              "max_rel_diff": 0.0,
+              "nan_pattern_equal": true,
+              "rtol": 1e-06,
+              "atol": 1e-15,
+              "within_tolerance": true
+            }
+          },
+          "deseq2_input_side_effects": {
+            "uns_keys_before": [
+              "log1p",
+              "pca",
+              "rank_obsm"
+            ],
+            "uns_keys_after": [
+              "_squared_logres",
+              "disp_function_type",
+              "log1p",
+              "pca",
+              "prior_disp_var",
+              "rank_obsm",
+              "trend_coeffs"
+            ],
+            "X_unchanged": true
+          }
+        },
+        "variant_ncpus8_filtered_only": {
+          "command": "decoupler-env/bin/python -I notebooks/bulk_rna/scripts/replay.py --label variant_ncpus8_filtered_only --n-cpus 8 --de-input filtered_only",
+          "exit_status": 0,
+          "comparison_file": "notebooks/bulk_rna/replay/variant_ncpus8_filtered_only/comparison.json",
+          "wall_time_s": 43.54,
+          "timings_s": {
+            "filter_by_expr_s": 0.06,
+            "pca_rankby_obsm_s": 0.47,
+            "deseq2_s": 32.73,
+            "ulm_collectri_s": 0.48,
+            "ulm_progeny_s": 0.15,
+            "ulm_hallmark_s": 0.07
+          },
+          "all_within_tolerance": true,
+          "all_float_checks_bitwise_identical": true,
+          "identifier_checks": {
+            "filter_by_expr_kept_genes_ordered_identical": true,
+            "rank_obsm_ids_identical": true,
+            "deseq2_index_identical": true,
+            "ulm_sources_identical": {
+              "collectri": true,
+              "progeny": true,
+              "hallmark": true
+            },
+            "ulm_significant_sets_identical": {
+              "collectri": true,
+              "progeny": true,
+              "hallmark": true
+            },
+            "leading_edges_ordered_identical": {
+              "progeny_TGFb_positive_weights": true,
+              "progeny_TGFb_negative_weights": true,
+              "hallmark_TGF_BETA_SIGNALING": true
+            }
+          },
+          "float_comparisons": {
+            "pca_rankby_obsm.stat": {
+              "bitwise_identical": true,
+              "max_abs_diff": 0.0,
+              "max_rel_diff": 0.0,
+              "nan_pattern_equal": true,
+              "rtol": 0.0001,
+              "atol": 1e-06,
+              "within_tolerance": true
+            },
+            "pca_rankby_obsm.pval": {
+              "bitwise_identical": true,
+              "max_abs_diff": 0.0,
+              "max_rel_diff": 0.0,
+              "nan_pattern_equal": true,
+              "rtol": 0.0001,
+              "atol": 1e-06,
+              "within_tolerance": true
+            },
+            "pca_rankby_obsm.padj": {
+              "bitwise_identical": true,
+              "max_abs_diff": 0.0,
+              "max_rel_diff": 0.0,
+              "nan_pattern_equal": true,
+              "rtol": 0.0001,
+              "atol": 1e-06,
+              "within_tolerance": true
+            },
+            "pca_rankby_obsm.variance_ratio": {
+              "bitwise_identical": true,
+              "max_abs_diff": 0.0,
+              "max_rel_diff": 0.0,
+              "nan_pattern_equal": true,
+              "rtol": 1e-05,
+              "atol": 1e-07,
+              "within_tolerance": true
+            },
+            "pca_rankby_obsm.X_pca_abs_sign_invariant": {
+              "bitwise_identical": true,
+              "max_abs_diff": 0.0,
+              "max_rel_diff": 0.0,
+              "nan_pattern_equal": true,
+              "rtol": 0.0001,
+              "atol": 0.0001,
+              "within_tolerance": true
+            },
+            "deseq2.baseMean": {
+              "bitwise_identical": true,
+              "max_abs_diff": 0.0,
+              "max_rel_diff": 0.0,
+              "nan_pattern_equal": true,
+              "rtol": 1e-12,
+              "atol": 0.0,
+              "within_tolerance": true
+            },
+            "deseq2.log2FoldChange": {
+              "bitwise_identical": true,
+              "max_abs_diff": 0.0,
+              "max_rel_diff": 0.0,
+              "nan_pattern_equal": true,
+              "rtol": 1e-06,
+              "atol": 1e-09,
+              "within_tolerance": true
+            },
+            "deseq2.lfcSE": {
+              "bitwise_identical": true,
+              "max_abs_diff": 0.0,
+              "max_rel_diff": 0.0,
+              "nan_pattern_equal": true,
+              "rtol": 1e-06,
+              "atol": 1e-09,
+              "within_tolerance": true
+            },
+            "deseq2.stat": {
+              "bitwise_identical": true,
+              "max_abs_diff": 0.0,
+              "max_rel_diff": 0.0,
+              "nan_pattern_equal": true,
+              "rtol": 1e-06,
+              "atol": 1e-09,
+              "within_tolerance": true
+            },
+            "deseq2.pvalue": {
+              "bitwise_identical": true,
+              "max_abs_diff": 0.0,
+              "max_rel_diff": 0.0,
+              "nan_pattern_equal": true,
+              "rtol": 1e-06,
+              "atol": 1e-15,
+              "within_tolerance": true
+            },
+            "deseq2.padj": {
+              "bitwise_identical": true,
+              "max_abs_diff": 0.0,
+              "max_rel_diff": 0.0,
+              "nan_pattern_equal": true,
+              "rtol": 1e-06,
+              "atol": 1e-15,
+              "within_tolerance": true
+            },
+            "data_stat_matrix": {
+              "bitwise_identical": true,
+              "max_abs_diff": 0.0,
+              "max_rel_diff": 0.0,
+              "nan_pattern_equal": true,
+              "rtol": 1e-06,
+              "atol": 1e-09,
+              "within_tolerance": true
+            },
+            "ulm.collectri.scores": {
+              "bitwise_identical": true,
+              "max_abs_diff": 0.0,
+              "max_rel_diff": 0.0,
+              "nan_pattern_equal": true,
+              "rtol": 1e-06,
+              "atol": 1e-09,
+              "within_tolerance": true
+            },
+            "ulm.collectri.padj": {
+              "bitwise_identical": true,
+              "max_abs_diff": 0.0,
+              "max_rel_diff": 0.0,
+              "nan_pattern_equal": true,
+              "rtol": 1e-06,
+              "atol": 1e-15,
+              "within_tolerance": true
+            },
+            "ulm.progeny.scores": {
+              "bitwise_identical": true,
+              "max_abs_diff": 0.0,
+              "max_rel_diff": 0.0,
+              "nan_pattern_equal": true,
+              "rtol": 1e-06,
+              "atol": 1e-09,
+              "within_tolerance": true
+            },
+            "ulm.progeny.padj": {
+              "bitwise_identical": true,
+              "max_abs_diff": 0.0,
+              "max_rel_diff": 0.0,
+              "nan_pattern_equal": true,
+              "rtol": 1e-06,
+              "atol": 1e-15,
+              "within_tolerance": true
+            },
+            "ulm.hallmark.scores": {
+              "bitwise_identical": true,
+              "max_abs_diff": 0.0,
+              "max_rel_diff": 0.0,
+              "nan_pattern_equal": true,
+              "rtol": 1e-06,
+              "atol": 1e-09,
+              "within_tolerance": true
+            },
+            "ulm.hallmark.padj": {
+              "bitwise_identical": true,
+              "max_abs_diff": 0.0,
+              "max_rel_diff": 0.0,
+              "nan_pattern_equal": true,
+              "rtol": 1e-06,
+              "atol": 1e-15,
+              "within_tolerance": true
+            }
+          },
+          "deseq2_input_side_effects": {
+            "uns_keys_before": [],
+            "uns_keys_after": [
+              "_squared_logres",
+              "disp_function_type",
+              "prior_disp_var",
+              "trend_coeffs"
+            ],
+            "X_unchanged": true
+          }
+        }
+      },
+      "outcome": "All 4 replays (two identical n_cpus=8 runs, n_cpus=1, and DE on the filtered AnnData without the PCA cells) reproduce every reference output bitwise: kept genes (ordered), rank_obsm, PCA variance ratio and signed X_pca, all 6 DESeq2 columns, the stat matrix, ulm scores and padj for all three networks, significant sets, and the three leading-edge lists (ordered). Max abs/rel difference 0.0 everywhere.",
+      "pydeseq2_deterministic": "Yes in this environment: bitwise identical between the notebook kernel and 4 fresh processes, and independent of n_cpus (1 vs 8) and of whether PCA/rankby_obsm ran on the same AnnData first.",
+      "recommended_test_tolerances": {
+        "identifiers": "exact (ordered gene lists, source names, significant sets, leading-edge order)",
+        "deseq2_baseMean": {
+          "rtol": 1e-12,
+          "atol": 0.0,
+          "why": "size factors and normalised means are closed-form"
+        },
+        "deseq2_log2FoldChange_lfcSE_stat": {
+          "rtol": 1e-06,
+          "atol": 1e-09,
+          "why": "PyDESeq2 fits dispersions/LFCs with iterative optimisers; a different BLAS/thread layout or platform can move results near optimiser tolerance. Observed difference here is 0."
+        },
+        "deseq2_pvalue_padj": {
+          "rtol": 1e-06,
+          "atol": 1e-15,
+          "why": "follow stat; atol for underflowed/near-zero values"
+        },
+        "ulm_scores": {
+          "rtol": 1e-06,
+          "atol": 1e-09,
+          "why": "smooth function of the DE stat; expect exact identity when the saved DE table is the input"
+        },
+        "ulm_padj": {
+          "rtol": 1e-06,
+          "atol": 1e-15,
+          "why": "PROGENy TGFb, MAPK and PI3K padj are exactly 0.0 (underflow), so rtol alone cannot be used"
+        },
+        "rank_obsm_stat_pval_padj": {
+          "rtol": 0.0001,
+          "atol": 1e-06,
+          "why": "derived from float32 PCA scores"
+        },
+        "pca_variance_ratio": {
+          "rtol": 1e-05,
+          "atol": 1e-07
+        },
+        "X_pca": "compare |X_pca| (sign-invariant), atol 1e-4; signs were identical here but are solver-dependent"
+      }
+    },
+    "figures": {
+      "count": 17,
+      "directory": "notebooks/bulk_rna/images",
+      "manifest": "notebooks/bulk_rna/images/image-manifest.json",
+      "paths": [
+        {
+          "path": "notebooks/bulk_rna/images/figure_1.png",
+          "cell_index": 8,
+          "sha256": "0ab6705d434eaa899fa092e55aa77e853d86c405a5ea14f84b43ca94adea7658"
+        },
+        {
+          "path": "notebooks/bulk_rna/images/figure_2.png",
+          "cell_index": 11,
+          "sha256": "27b9538c1cf8c6c62939e292327a14e9b400044499785a1ebbaa317e0b60cb50"
+        },
+        {
+          "path": "notebooks/bulk_rna/images/figure_3.png",
+          "cell_index": 19,
+          "sha256": "ed5133fb84a9ee8f8dc229d9543af4a99f6a67dcd782eab0f761e89c8ffa2e79"
+        },
+        {
+          "path": "notebooks/bulk_rna/images/figure_4.png",
+          "cell_index": 19,
+          "sha256": "05d4f5b59caf3715c9076d0eff632b3e391a87b06cd42aa9689b026425019c7a"
+        },
+        {
+          "path": "notebooks/bulk_rna/images/figure_5.png",
+          "cell_index": 21,
+          "sha256": "430360193da00895f1bb94401db2ba56a241df16f56d65cf636d2c9dabae87ec"
+        },
+        {
+          "path": "notebooks/bulk_rna/images/figure_6.png",
+          "cell_index": 26,
+          "sha256": "1a952a400fd706340f058475ca12f774d41a3fc6ab3a06230fa027cee2c2e625"
+        },
+        {
+          "path": "notebooks/bulk_rna/images/figure_7.png",
+          "cell_index": 34,
+          "sha256": "484eff7015a6d4b454a4858d2d8ca577cf387ff755f035665c7136ea78606cd8"
+        },
+        {
+          "path": "notebooks/bulk_rna/images/figure_8.png",
+          "cell_index": 36,
+          "sha256": "7f2b06faa77a40074de5c4abffdc0809aafa2c1e5065b8a3fbb38d4009421fed"
+        },
+        {
+          "path": "notebooks/bulk_rna/images/figure_9.png",
+          "cell_index": 38,
+          "sha256": "0901a1d0d05da2ffdd272ba11f789c9818543dc9cabf00bbdf7029104ee99e3c"
+        },
+        {
+          "path": "notebooks/bulk_rna/images/figure_10.png",
+          "cell_index": 44,
+          "sha256": "c6ebede059ba5222008b4d646980266b927677260e02fcae944f8a0a8deab297"
+        },
+        {
+          "path": "notebooks/bulk_rna/images/figure_11.png",
+          "cell_index": 46,
+          "sha256": "50ebdeeefad88e15242fe29a2bb71ed7677788a39d1e8a86e8a2783c4dccdda9"
+        },
+        {
+          "path": "notebooks/bulk_rna/images/figure_12.png",
+          "cell_index": 48,
+          "sha256": "e3dca8c7ea41b32cc43fb93a4adeb6d83430e1313c53afb9c7bb9d7ac560b249"
+        },
+        {
+          "path": "notebooks/bulk_rna/images/figure_13.png",
+          "cell_index": 50,
+          "sha256": "6625d855776c55f64c044777df576e370b2fce6fd1967e4e7976affa8763b275"
+        },
+        {
+          "path": "notebooks/bulk_rna/images/figure_14.png",
+          "cell_index": 50,
+          "sha256": "f7d5b2417119466bf14bd0c51f710370beb803154ceec0bdc5046c778662dd8e"
+        },
+        {
+          "path": "notebooks/bulk_rna/images/figure_15.png",
+          "cell_index": 56,
+          "sha256": "04a9de69e96c123cd59615940172ddc3a82f2f2b431cff73385ec5cd36e5e4e9"
+        },
+        {
+          "path": "notebooks/bulk_rna/images/figure_16.png",
+          "cell_index": 58,
+          "sha256": "cbe32b6895bace3a41dfd1924870799c1d618ea77159794a30a623055b42d7af"
+        },
+        {
+          "path": "notebooks/bulk_rna/images/figure_17.png",
+          "cell_index": 60,
+          "sha256": "1093f5f42f170d27c57f4dea6301bb80faaaa0f07ba120f8903592a2d06f0fb8"
+        }
+      ],
+      "pixel_identical_to_upstream_stored": "15/17",
+      "pixel_identical_between_two_papermill_runs": "15/17",
+      "non_identical": "figure_9.png (cell 38 volcano SRF) and figure_12.png (cell 48 source_targets TGFb): same points and same label texts, different label positions",
+      "run_comparison_file": "notebooks/bulk_rna/replay/notebook_run_comparison.json",
+      "determinism_probe": "notebooks/bulk_rna/replay/figure_determinism.json",
+      "note": "figure_1.png (cell 8 obsbar) is retained although obsbar is not a selected tool."
+    },
+    "flakiness_and_test_risks": [
+      "Network: GEO, Zenodo and OmniPath (omnipathdb.org plus static.omnipathdb.org) are live downloads and the networks drift. Tests should load data/networks/*.parquet and data/hsctgfb_as_returned.h5ad, not re-download.",
+      "adjustText label layout in dc.pl.volcano and dc.pl.source_targets is not reproducible between processes, even with the same PYTHONHASHSEED. Likely cause from source reading: adjustText's default 1 s wall-clock limit, which decoupler does not override. Do not pixel-compare these figures; compare the data and label texts instead.",
+      "PyDESeq2 wall time varies widely with load and n_cpus: 28.9 s in the notebook, 27.8 to 79.4 s at n_cpus=8 in replays, 125 s at n_cpus=1. Use generous timeouts. Results did not change.",
+      "DeseqDataSet(adata=...) shares and mutates the input AnnData.uns. It adds _squared_logres, disp_function_type, prior_disp_var and trend_coeffs (a pandas Series); X is unchanged. After that, AnnData.write_h5ad on the input fails with IORegistryError on uns/trend_coeffs. This is why the capture hook could not save the cell-23 state. Wrappers should pass adata.copy().",
+      "pandas 3: AnnData built from a DataFrame has read-only X (stage-1 note). That does not apply here because hsctgfb casts to float and h5ad loads are writeable. read_csv is round-trip precise by default; under pandas<3 pass float_precision='round_trip'.",
+      "Float32 values: X_pca and the rank_obsm stat/pval/padj come from float32 PCA. Compare them in float32 or with the looser tolerances above.",
+      "dc.pl.leading_edge orders genes with np.argsort(-stat), which is not a stable sort. Tied stats could reorder across numpy versions. Exact ordered lists matched here.",
+      "Numba JIT: first calls compile, and cache=True writes .nbi/.nbc files into site-packages/decoupler/mt/__pycache__. This stage added one, _gsea._esrank-37.py313.nbi. Run tests serially or give first calls time to compile.",
+      "Cell 2 prints a TqdmWarning (ipywidgets not installed). It is cosmetic; text comparisons should ignore it."
+    ],
+    "limitations": [
+      "The network snapshots are the DataFrames the decoupler 2.3.1 loaders returned inside the kernel, after loader post-processing. They are not the raw HTTP payloads. The raw GEO .tsv.gz sha256 was not recorded; the AnnData h5ad sha256 and a content hash are.",
+      "Download time is taken from papermill's start and end times for the loader cells, plus the hook capture timestamps. It includes post-processing and capture time.",
+      "Capture used an IPython startup file under a scratch IPYTHONDIR, so the kernel ran with a fresh IPython profile. No user ipython_config.py exists, so behaviour is otherwise unchanged. The hook prints nothing and adds no names to the user namespace, and no notebook cell was modified. Its cost was about 7 s of wall time.",
+      "The capture of adata after cell 23 failed (see DeseqDataSet side effect). It is not needed for any reference, and the replay records the mutation directly.",
+      "Tolerances are recommendations. Every observed difference is exactly 0, so cross-platform and BLAS variation was not measured.",
+      "Figures of cells 38 and 48 are not pixel-reproducible (see flakiness)."
+    ],
+    "attempts": [
+      {
+        "attempt": 1,
+        "papermill_exit_status": 0,
+        "start_utc": "2026-10-27T22:57:23Z",
+        "wall_time_s": 71.2,
+        "result": "notebook succeeded, 0 cell errors. Capture hook failed: anndata 0.13 exposes .X as layers[None] and the fingerprint concatenated None, so no objects were captured. The executed notebook is kept as notebooks/bulk_rna/attempts/attempt1_bulk_rna_executed.ipynb and used for the run-to-run comparison.",
+        "change_for_next": "skip the None layer key; isolate hook errors per variable"
+      },
+      {
+        "attempt": 2,
+        "papermill_exit_status": 0,
+        "start_utc": "2026-10-27T22:59:27Z",
+        "wall_time_s": 78.41,
+        "result": "notebook succeeded, 0 cell errors. 24 captures written; 1 capture write failed (adata after cell 23, non-essential). Promoted to final."
+      }
+    ],
+    "attempts_used": 2,
+    "scratch_space": [
+      "tmp/outputs/bulk_rna/ (attempt1/, attempt2/ papermill outputs and cwd, ipythondir/ capture profile, figprobe/ probe PNGs)",
+      "/tmp/claude-1000/-home-asu-Science-Paper2Agent/d2536f51-2133-41ea-8332-1193e4e1d01d/scratchpad/hooktest and write_bulk_rna_report.py (outside project)"
+    ],
+    "packages_installed": "none",
+    "blockers": []
+  }
+}

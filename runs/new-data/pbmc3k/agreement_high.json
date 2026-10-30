@@ -1,0 +1,62 @@
+{
+  "per_group": [
+    {
+      "louvain": "CD4 T cells",
+      "n": 1144,
+      "agree": 1137,
+      "fraction": 0.9939
+    },
+    {
+      "louvain": "CD8 T cells",
+      "n": 316,
+      "agree": 290,
+      "fraction": 0.9177
+    },
+    {
+      "louvain": "NK cells",
+      "n": 154,
+      "agree": 138,
+      "fraction": 0.8961
+    },
+    {
+      "louvain": "B cells",
+      "n": 342,
+      "agree": 337,
+      "fraction": 0.9854
+    },
+    {
+      "louvain": "CD14+ Monocytes",
+      "n": 480,
+      "agree": 475,
+      "fraction": 0.9896
+    },
+    {
+      "louvain": "FCGR3A+ Monocytes",
+      "n": 150,
+      "agree": 150,
+      "fraction": 1.0
+    },
+    {
+      "louvain": "Dendritic cells",
+      "n": 37,
+      "agree": 37,
+      "fraction": 1.0
+    },
+    {
+      "louvain": "Megakaryocytes",
+      "n": 15,
+      "agree": 14,
+      "fraction": 0.9333
+    }
+  ],
+  "overall": {
+    "agree": 2578,
+    "n": 2638,
+    "fraction": 0.9772554965883244
+  },
+  "per_cell_predicted_labels": {
+    "agree": 2542,
+    "n": 2638,
+    "fraction": 0.9636087945413192
+  }
+}

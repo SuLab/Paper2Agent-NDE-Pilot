@@ -1,0 +1,74 @@
+{
+  "validator": "paper2agent-workflow",
+  "schema_version": 1,
+  "success": true,
+  "through": "complete",
+  "errors": [],
+  "passed_assignments": [
+    {
+      "role": "environment",
+      "task": "project",
+      "run_id": "environment-attempt-2"
+    },
+    {
+      "role": "executor",
+      "task": "bulk_rna",
+      "run_id": "executor-bulk_rna-attempt-1"
+    },
+    {
+      "role": "implementer",
+      "task": "bulk_enrichment",
+      "run_id": "implementer-bulk_enrichment-attempt-1"
+    },
+    {
+      "role": "scanner",
+      "task": "project",
+      "run_id": "scanner-attempt-1"
+    },
+    {
+      "role": "verifier",
+      "task": "bulk_enrichment",
+      "run_id": "verifier-bulk_enrichment-attempt-2"
+    }
+  ],
+  "exclusions": [],
+  "scope": "Validates recorded state and artifact consistency; does not authenticate host identities or establish numerical/scientific correctness.",
+  "expected_assignments": [
+    {
+      "role": "environment",
+      "task": "project"
+    },
+    {
+      "role": "executor",
+      "task": "bulk_rna"
+    },
+    {
+      "role": "implementer",
+      "task": "bulk_enrichment"
+    },
+    {
+      "role": "scanner",
+      "task": "project"
+    },
+    {
+      "role": "verifier",
+      "task": "bulk_enrichment"
+    }
+  ],
+  "active_tutorials": [
+    "bulk_rna"
+  ],
+  "active_modules": [
+    "bulk_enrichment"
+  ],
+  "exposed_tools": [
+    "decoupler_filter_genes_by_expression",
+    "decoupler_inspect_source_targets",
+    "decoupler_rank_pcs_by_metadata",
+    "decoupler_score_activities_ulm",
+    "pydeseq2_test_differential_expression"
+  ],
+  "completion_files_checked": 10,
+  "project_root": "/home/asu/Science/paper2agent-runs/decoupler",
+  "state": "/home/asu/Science/paper2agent-runs/decoupler/reports/agent-runs.json"
+}

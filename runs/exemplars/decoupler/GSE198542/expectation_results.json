@@ -1,0 +1,343 @@
+{
+ "expectations": {
+  "E1": {
+   "pass": true,
+   "evidence": {
+    "INTERFERON_ALPHA_RESPONSE": {
+     "value": 28.441,
+     "padj": 0.0
+    }
+   }
+  },
+  "E2": {
+   "pass": true,
+   "evidence": {
+    "STAT1": {
+     "value": 16.151,
+     "padj": 0.0
+    },
+    "STAT2": {
+     "value": 10.406,
+     "padj": 2.0409682285751224e-23
+    },
+    "IRF9": {
+     "value": 11.549,
+     "padj": 1.0861494977371914e-28
+    }
+   }
+  },
+  "E3": {
+   "pass": true,
+   "evidence": {
+    "MX1": {
+     "value": 3.267,
+     "padj": 1.2423600098000228e-27
+    },
+    "OAS1": {
+     "value": 2.784,
+     "padj": 6.4561030579905046e-24
+    }
+   }
+  },
+  "E4": {
+   "pass": false,
+   "evidence": {
+    "a_hallmark_ifna": [
+     true,
+     {
+      "WT": 28.441,
+      "MUT": 10.962
+     }
+    ],
+    "b_isgf3_mean": [
+     false,
+     {
+      "WT": 12.702,
+      "MUT": 7.035
+     }
+    ],
+    "c_MX1_OAS1_lfc": [
+     false,
+     {
+      "MX1": {
+       "WT": 3.267,
+       "MUT": 3.565
+      },
+      "OAS1": {
+       "WT": 2.784,
+       "MUT": 0.274
+      }
+     }
+    ]
+   }
+  }
+ },
+ "verified_sensible": false,
+ "report_only": {
+  "WT": {
+   "genes_kept": 15028,
+   "de_genes_padj_0.05": 5880,
+   "pc_variance_ratio_top4": [
+    {
+     "PC": "PC1",
+     "variance": 8682.694,
+     "variance_ratio": 0.578
+    },
+    {
+     "PC": "PC2",
+     "variance": 2803.66,
+     "variance_ratio": 0.187
+    },
+    {
+     "PC": "PC3",
+     "variance": 1577.436,
+     "variance_ratio": 0.105
+    },
+    {
+     "PC": "PC4",
+     "variance": 1295.346,
+     "variance_ratio": 0.086
+    }
+   ],
+   "pc_metadata_associations_padj_0.05": [
+    {
+     "obsm": "PC1",
+     "obs": "condition",
+     "stat": 311.4005,
+     "pval": 0.0001,
+     "padj": 0.0006
+    }
+   ],
+   "top_collectri": {
+    "up": [
+     "STAT1 (+16.15)",
+     "IRF1 (+15.03)",
+     "NFKB (+14.22)",
+     "RELA (+13.97)",
+     "NFKB1 (+13.71)",
+     "IRF9 (+11.55)",
+     "REL (+11.10)",
+     "IRF2 (+10.62)",
+     "STAT2 (+10.41)",
+     "JUN (+10.27)"
+    ],
+    "down": [
+     "TRERF1 (-5.48)",
+     "NAB2 (-4.07)",
+     "HDAC1 (-2.75)",
+     "SPDEF (-2.67)",
+     "DLX2 (-2.52)",
+     "HDAC9 (-2.34)",
+     "ETV3 (-2.21)",
+     "KDM5C (-2.07)",
+     "PPARG (-1.96)",
+     "ZMYND8 (-1.95)"
+    ]
+   },
+   "n_tfs_scored": 647,
+   "top_progeny": {
+    "up": [
+     "JAK-STAT (+48.61)",
+     "NFkB (+47.19)",
+     "TNFa (+31.86)",
+     "PI3K (+24.74)",
+     "VEGF (+15.61)"
+    ],
+    "down": [
+     "Hypoxia (-4.33)",
+     "Trail (-0.79)",
+     "p53 (+1.40)",
+     "WNT (+2.81)",
+     "Estrogen (+3.41)"
+    ]
+   },
+   "top_hallmark": {
+    "up": [
+     "INTERFERON_GAMMA_RESPONSE (+35.31)",
+     "INTERFERON_ALPHA_RESPONSE (+28.44)",
+     "INFLAMMATORY_RESPONSE (+19.18)",
+     "TNFA_SIGNALING_VIA_NFKB (+18.67)",
+     "COMPLEMENT (+10.73)"
+    ],
+    "down": [
+     "BILE_ACID_METABOLISM (-1.74)",
+     "MYOGENESIS (-1.34)",
+     "SPERMATOGENESIS (-0.83)",
+     "WNT_BETA_CATENIN_SIGNALING (-0.59)",
+     "PEROXISOME (-0.38)"
+    ]
+   },
+   "IRF3_axis": {
+    "IFNB1": {
+     "value": 8.015,
+     "padj": 1.4600202977650272e-08
+    },
+    "ISG15": {
+     "value": 4.503,
+     "padj": 5.772260725246768e-50
+    },
+    "IFIT1": {
+     "value": 4.743,
+     "padj": 3.4048360300294224e-86
+    },
+    "CXCL10": {
+     "value": 9.64,
+     "padj": 0.0
+    },
+    "collectri IRF3": {
+     "value": 9.844,
+     "padj": 5.001371070907504e-21
+    }
+   },
+   "NFkB": {
+    "collectri RELA": {
+     "value": 13.966,
+     "padj": 7.653892212142151e-42
+    },
+    "progeny NFkB": {
+     "value": 47.19,
+     "padj": 0.0
+    }
+   }
+  },
+  "MUT": {
+   "genes_kept": 14725,
+   "de_genes_padj_0.05": 8451,
+   "pc_variance_ratio_top4": [
+    {
+     "PC": "PC1",
+     "variance": 9786.96,
+     "variance_ratio": 0.665
+    },
+    {
+     "PC": "PC2",
+     "variance": 1643.534,
+     "variance_ratio": 0.112
+    },
+    {
+     "PC": "PC3",
+     "variance": 1382.39,
+     "variance_ratio": 0.094
+    },
+    {
+     "PC": "PC4",
+     "variance": 1134.137,
+     "variance_ratio": 0.077
+    }
+   ],
+   "pc_metadata_associations_padj_0.05": [
+    {
+     "obsm": "PC3",
+     "obs": "extraction_date",
+     "stat": 426.1197,
+     "pval": 0.0,
+     "padj": 0.0003
+    },
+    {
+     "obsm": "PC1",
+     "obs": "condition",
+     "stat": 227.4119,
+     "pval": 0.0001,
+     "padj": 0.0006
+    }
+   ],
+   "top_collectri": {
+    "up": [
+     "RELA (+13.50)",
+     "NFKB1 (+12.74)",
+     "NFKB (+11.44)",
+     "STAT1 (+10.03)",
+     "CREB1 (+9.94)",
+     "REL (+9.81)",
+     "IRF1 (+9.18)",
+     "JUN (+7.97)",
+     "STAT3 (+7.06)",
+     "RELB (+6.90)"
+    ],
+    "down": [
+     "HDAC1 (-3.67)",
+     "SPDEF (-3.42)",
+     "HDAC9 (-3.17)",
+     "ETV3 (-3.12)",
+     "LYL1 (-2.82)",
+     "ZMYND8 (-2.52)",
+     "NAB2 (-2.36)",
+     "SMARCA4 (-2.16)",
+     "NRL (-2.16)",
+     "TRERF1 (-2.11)"
+    ]
+   },
+   "n_tfs_scored": 638,
+   "top_progeny": {
+    "up": [
+     "NFkB (+46.17)",
+     "TNFa (+32.77)",
+     "PI3K (+20.94)",
+     "JAK-STAT (+20.47)",
+     "MAPK (+19.70)"
+    ],
+    "down": [
+     "Trail (-1.58)",
+     "WNT (-0.24)",
+     "Hypoxia (+1.34)",
+     "p53 (+3.06)",
+     "Androgen (+3.78)"
+    ]
+   },
+   "top_hallmark": {
+    "up": [
+     "TNFA_SIGNALING_VIA_NFKB (+24.26)",
+     "INTERFERON_GAMMA_RESPONSE (+17.82)",
+     "INFLAMMATORY_RESPONSE (+16.12)",
+     "INTERFERON_ALPHA_RESPONSE (+10.96)",
+     "UV_RESPONSE_UP (+8.57)"
+    ],
+    "down": [
+     "PANCREAS_BETA_CELLS (-1.15)",
+     "BILE_ACID_METABOLISM (-1.07)",
+     "HEME_METABOLISM (-0.69)",
+     "PEROXISOME (-0.57)",
+     "COAGULATION (+0.23)"
+    ]
+   },
+   "IRF3_axis": {
+    "IFNB1": {
+     "value": 12.333,
+     "padj": 1.6771294045521335e-09
+    },
+    "ISG15": {
+     "value": 4.721,
+     "padj": 6.78257611633571e-84
+    },
+    "IFIT1": {
+     "value": 3.933,
+     "padj": 1.8774957407560233e-79
+    },
+    "CXCL10": {
+     "value": 5.771,
+     "padj": 4.064475678457758e-31
+    },
+    "collectri IRF3": {
+     "value": 5.288,
+     "padj": 2.8652711989707313e-06
+    }
+   },
+   "NFkB": {
+    "collectri RELA": {
+     "value": 13.502,
+     "padj": 1.716055042524836e-38
+    },
+    "progeny NFkB": {
+     "value": 46.167,
+     "padj": 0.0
+    }
+   }
+  }
+ },
+ "post_hoc_not_scored": {
+  "added_after_scoring": "2026-10-29, after E4 failed; does not change the pass/fail result",
+  "observation": "Mean CPM of ISGF3-dependent genes in ZIKV-infected cells, WT vs IFNAR2-deficient: MX1 3097 vs 83, MX2 804 vs 23, OAS1 973 vs 41, IFI27 310 vs 3.9, IFI44L 635 vs 2.3, RSAD2 2704 vs 17. Mock baselines are near zero in IFNAR2-deficient cells (MX1 7.4 vs 387 CPM), so a large log2 fold change in MUT (MX1 +3.6) comes from a very low baseline.",
+  "interpretation": "Absolute ISG expression after infection is 20-100x lower in IFNAR2-deficient cells, consistent with the paper's 'profound defect of IFN-I signalling'. The pre-declared E4 readouts (fold change and contrast-wise ulm scores) compare each genotype to its own mock, so they miss a defect that also lowers the baseline. Residual MX1 induction in MUT may come from IFN-lambda (IFNL1 induced, IFNLR1 at ~7 CPM): hypothesis, not tested.",
+  "lesson_for_future_expectations": "For a genotype negative control, declare a readout on absolute expression in infected cells (or a genotype x infection interaction), not only within-genotype fold changes."
+ }
+}

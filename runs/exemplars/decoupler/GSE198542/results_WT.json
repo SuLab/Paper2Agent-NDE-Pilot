@@ -1,0 +1,756 @@
+{
+  "server": "/home/asu/Science/paper2agent-runs/exemplars/servers/decoupler-mcp/src/decoupler_mcp.py",
+  "python": "/home/asu/Science/paper2agent-runs/exemplars/servers/decoupler-mcp/.venv/bin/python",
+  "tools": [
+    "decoupler_filter_genes_by_expression",
+    "decoupler_inspect_source_targets",
+    "decoupler_rank_pcs_by_metadata",
+    "decoupler_score_activities_ulm",
+    "pydeseq2_test_differential_expression"
+  ],
+  "calls": [
+    {
+      "name": "filter",
+      "tool": "decoupler_filter_genes_by_expression",
+      "arguments": {
+        "data_path": "/home/asu/Science/paper2agent-runs/exemplars/decoupler/GSE198542/GSE198542_WT_zikv_vs_mock.h5ad",
+        "group_key": "condition",
+        "output_dir": "/home/asu/Science/paper2agent-runs/exemplars/decoupler/GSE198542/mcp_runs"
+      },
+      "seconds": 0.8,
+      "result": {
+        "message": "Kept 15028 of 37661 genes (22633 removed) across 6 samples.",
+        "reference": "https://github.com/scverse/decoupler-tutorials/blob/306be6673a5df5baf780e44ea929391616dbe5d8/bulk/rna.ipynb",
+        "artifacts": [
+          {
+            "description": "filtered raw-count AnnData (obs kept, genes subset)",
+            "path": "/home/asu/Science/paper2agent-runs/exemplars/decoupler/GSE198542/mcp_runs/filter_by_expr_20261029-164034_a9f7e02e/filtered_counts.h5ad"
+          },
+          {
+            "description": "log10 total counts vs number of samples with threshold lines",
+            "path": "/home/asu/Science/paper2agent-runs/exemplars/decoupler/GSE198542/mcp_runs/filter_by_expr_20261029-164034_a9f7e02e/filter_by_expr_thresholds.png"
+          }
+        ],
+        "n_samples": 6,
+        "n_genes_before": 37661,
+        "n_genes_after": 15028,
+        "n_genes_removed": 22633,
+        "group_sizes": {
+          "mock": 3,
+          "ZIKV": 3
+        },
+        "parameters": {
+          "group_key": "condition",
+          "min_count": 10,
+          "min_total_count": 15,
+          "large_n": 10,
+          "min_prop": 0.7
+        }
+      }
+    },
+    {
+      "name": "pcs",
+      "tool": "decoupler_rank_pcs_by_metadata",
+      "arguments": {
+        "data_path": "/home/asu/Science/paper2agent-runs/exemplars/decoupler/GSE198542/mcp_runs/filter_by_expr_20261029-164034_a9f7e02e/filtered_counts.h5ad",
+        "obs_keys": [
+          "condition",
+          "extraction_date"
+        ],
+        "color_keys": [
+          "condition",
+          "extraction_date"
+        ],
+        "output_dir": "/home/asu/Science/paper2agent-runs/exemplars/decoupler/GSE198542/mcp_runs"
+      },
+      "seconds": 3.9,
+      "result": {
+        "message": "PCA with 5 PCs on 6 samples x 15028 genes; 1 of 10 PC-metadata tests have padj < 0.05.",
+        "reference": "https://github.com/scverse/decoupler-tutorials/blob/306be6673a5df5baf780e44ea929391616dbe5d8/bulk/rna.ipynb",
+        "artifacts": [
+          {
+            "description": "PC x metadata association table (obsm, obs, stat, pval, padj; ANOVA or Spearman, BH)",
+            "path": "/home/asu/Science/paper2agent-runs/exemplars/decoupler/GSE198542/mcp_runs/rank_pcs_20261029-164037_4d50bf0b/pc_metadata_associations.csv"
+          },
+          {
+            "description": "PCA explained variance and variance ratio per PC",
+            "path": "/home/asu/Science/paper2agent-runs/exemplars/decoupler/GSE198542/mcp_runs/rank_pcs_20261029-164037_4d50bf0b/pca_variance_ratio.csv"
+          },
+          {
+            "description": "PC scores per sample",
+            "path": "/home/asu/Science/paper2agent-runs/exemplars/decoupler/GSE198542/mcp_runs/rank_pcs_20261029-164037_4d50bf0b/pca_scores.csv"
+          },
+          {
+            "description": "PCA variance ratio plot",
+            "path": "/home/asu/Science/paper2agent-runs/exemplars/decoupler/GSE198542/mcp_runs/rank_pcs_20261029-164037_4d50bf0b/pca_variance_ratio.png"
+          },
+          {
+            "description": "PC scores and -log10 adjusted p-value heatmap",
+            "path": "/home/asu/Science/paper2agent-runs/exemplars/decoupler/GSE198542/mcp_runs/rank_pcs_20261029-164037_4d50bf0b/pc_metadata_association_heatmap.png"
+          },
+          {
+            "description": "PCA scatter coloured by metadata",
+            "path": "/home/asu/Science/paper2agent-runs/exemplars/decoupler/GSE198542/mcp_runs/rank_pcs_20261029-164037_4d50bf0b/pca_scatter.png"
+          }
+        ],
+        "n_samples": 6,
+        "n_genes": 15028,
+        "n_pcs": 5,
+        "variance_ratio": [
+          0.5777677406074726,
+          0.18656241742024973,
+          0.1049664922827046,
+          0.08619552531794662,
+          0.044507824371626786
+        ],
+        "tested_obs_keys": [
+          "condition",
+          "extraction_date"
+        ],
+        "color_keys": [
+          "condition",
+          "extraction_date"
+        ],
+        "n_tests": 10,
+        "significant_associations": [
+          {
+            "obsm": "PC1",
+            "obs": "condition",
+            "stat": 311.4005432128906,
+            "padj": 0.0006057198042981327
+          }
+        ]
+      }
+    },
+    {
+      "name": "de",
+      "tool": "pydeseq2_test_differential_expression",
+      "arguments": {
+        "data_path": "/home/asu/Science/paper2agent-runs/exemplars/decoupler/GSE198542/mcp_runs/filter_by_expr_20261029-164034_a9f7e02e/filtered_counts.h5ad",
+        "condition_key": "condition",
+        "group": "ZIKV",
+        "reference": "mock",
+        "design": "~condition",
+        "n_cpus": 4,
+        "output_dir": "/home/asu/Science/paper2agent-runs/exemplars/decoupler/GSE198542/mcp_runs"
+      },
+      "seconds": 74.6,
+      "result": {
+        "message": "PyDESeq2 Wald test condition: ZIKV vs mock on 6 samples x 15028 genes; 5880 genes with padj < 0.05.",
+        "reference": "https://github.com/scverse/decoupler-tutorials/blob/306be6673a5df5baf780e44ea929391616dbe5d8/bulk/rna.ipynb",
+        "artifacts": [
+          {
+            "description": "PyDESeq2 results_df (gene index; baseMean, log2FoldChange, lfcSE, stat, pvalue, padj)",
+            "path": "/home/asu/Science/paper2agent-runs/exemplars/decoupler/GSE198542/mcp_runs/deseq2_20261029-164151_84ac2b47/deseq2_results.csv"
+          },
+          {
+            "description": "volcano plot of log2FoldChange vs -log10 padj",
+            "path": "/home/asu/Science/paper2agent-runs/exemplars/decoupler/GSE198542/mcp_runs/deseq2_20261029-164151_84ac2b47/deseq2_volcano.png"
+          }
+        ],
+        "design": "~condition",
+        "contrast": [
+          "condition",
+          "ZIKV",
+          "mock"
+        ],
+        "n_samples": 6,
+        "samples_per_level": {
+          "ZIKV": 3,
+          "mock": 3
+        },
+        "n_genes": 15028,
+        "n_missing": {
+          "baseMean": 0,
+          "log2FoldChange": 0,
+          "lfcSE": 0,
+          "stat": 0,
+          "pvalue": 0,
+          "padj": 0
+        },
+        "n_padj_lt_0.05": 5880,
+        "n_padj_lt_0.05_up": 3173,
+        "n_padj_lt_0.05_down": 2707,
+        "top_up": [
+          {
+            "gene": "CXCL10",
+            "log2FoldChange": 9.640203268809994,
+            "stat": 38.489102981074105,
+            "padj": 0.0
+          },
+          {
+            "gene": "CCL8",
+            "log2FoldChange": 7.11090010868732,
+            "stat": 30.713755233487376,
+            "padj": 2.8020676700711894e-203
+          },
+          {
+            "gene": "IL1RN",
+            "log2FoldChange": 8.466706832562682,
+            "stat": 29.80150231191674,
+            "padj": 1.8711774561275358e-191
+          },
+          {
+            "gene": "TNFSF10",
+            "log2FoldChange": 7.397315235553295,
+            "stat": 28.211347918062213,
+            "padj": 1.594536445883864e-171
+          },
+          {
+            "gene": "CCL2",
+            "log2FoldChange": 4.300821407285727,
+            "stat": 24.344917790511992,
+            "padj": 1.972365372144782e-127
+          }
+        ],
+        "top_down": [
+          {
+            "gene": "WDR91",
+            "log2FoldChange": -2.015217904079166,
+            "stat": -14.502141940095989,
+            "padj": 2.7573464123848848e-45
+          },
+          {
+            "gene": "ATG16L2",
+            "log2FoldChange": -2.4914629739974896,
+            "stat": -13.999110737819969,
+            "padj": 2.964897952477821e-42
+          },
+          {
+            "gene": "CCDC9B",
+            "log2FoldChange": -2.420888913459963,
+            "stat": -13.434300036200938,
+            "padj": 6.21784383238156e-39
+          },
+          {
+            "gene": "P2RX1",
+            "log2FoldChange": -4.238851058229518,
+            "stat": -13.40670477244556,
+            "padj": 8.926180273165851e-39
+          },
+          {
+            "gene": "ABCC5",
+            "log2FoldChange": -2.8113966172625457,
+            "stat": -12.977624332862641,
+            "padj": 2.2389718881733955e-36
+          }
+        ],
+        "pydeseq2_version": "0.5.4",
+        "n_cpus": 4
+      }
+    },
+    {
+      "name": "ulm_collectri",
+      "tool": "decoupler_score_activities_ulm",
+      "arguments": {
+        "de_results_path": "/home/asu/Science/paper2agent-runs/exemplars/decoupler/GSE198542/mcp_runs/deseq2_20261029-164151_84ac2b47/deseq2_results.csv",
+        "network": "collectri",
+        "contrast_name": "WT.ZIKV.vs.mock",
+        "output_dir": "/home/asu/Science/paper2agent-runs/exemplars/decoupler/GSE198542/mcp_runs"
+      },
+      "seconds": 13.7,
+      "result": {
+        "message": "ulm with collectri (downloaded with decoupler.op.collectri(organism='human')): 647 sources scored, 124 with padj < 0.05.",
+        "reference": "https://github.com/scverse/decoupler-tutorials/blob/306be6673a5df5baf780e44ea929391616dbe5d8/bulk/rna.ipynb",
+        "artifacts": [
+          {
+            "description": "ulm scores for all sources (row 'WT.ZIKV.vs.mock', one column per source)",
+            "path": "/home/asu/Science/paper2agent-runs/exemplars/decoupler/GSE198542/mcp_runs/ulm_collectri_20261029-164206_22727ea8/collectri_ulm_scores.csv"
+          },
+          {
+            "description": "BH-adjusted ulm p-values for all sources (same layout)",
+            "path": "/home/asu/Science/paper2agent-runs/exemplars/decoupler/GSE198542/mcp_runs/ulm_collectri_20261029-164206_22727ea8/collectri_ulm_padj.csv"
+          },
+          {
+            "description": "ulm scores of sources with padj < 0.05",
+            "path": "/home/asu/Science/paper2agent-runs/exemplars/decoupler/GSE198542/mcp_runs/ulm_collectri_20261029-164206_22727ea8/collectri_ulm_scores_significant.csv"
+          },
+          {
+            "description": "network table used for scoring (provenance)",
+            "path": "/home/asu/Science/paper2agent-runs/exemplars/decoupler/GSE198542/mcp_runs/ulm_collectri_20261029-164206_22727ea8/collectri_network_used.csv"
+          },
+          {
+            "description": "bar plot of the top significant source scores",
+            "path": "/home/asu/Science/paper2agent-runs/exemplars/decoupler/GSE198542/mcp_runs/ulm_collectri_20261029-164206_22727ea8/collectri_ulm_barplot.png"
+          },
+          {
+            "description": "dot plot of significant scores sized by -log10 padj",
+            "path": "/home/asu/Science/paper2agent-runs/exemplars/decoupler/GSE198542/mcp_runs/ulm_collectri_20261029-164206_22727ea8/collectri_ulm_dotplot.png"
+          }
+        ],
+        "network": "collectri",
+        "network_origin": "downloaded with decoupler.op.collectri(organism='human')",
+        "network_rows": 42990,
+        "network_n_sources": 1185,
+        "stat_column": "stat",
+        "contrast_row": "WT.ZIKV.vs.mock",
+        "n_genes": 15028,
+        "n_sources_scored": 647,
+        "n_significant": 124,
+        "n_significant_positive": 120,
+        "n_significant_negative": 4,
+        "top_significant_sources": {
+          "positive": [
+            {
+              "source": "STAT1",
+              "score": 16.150825612529932,
+              "padj": 0.0
+            },
+            {
+              "source": "IRF1",
+              "score": 15.027465833668462,
+              "padj": 0.0
+            },
+            {
+              "source": "NFKB",
+              "score": 14.22179168115501,
+              "padj": 2.858648867222627e-43
+            },
+            {
+              "source": "RELA",
+              "score": 13.966095412973276,
+              "padj": 7.653892212142151e-42
+            },
+            {
+              "source": "NFKB1",
+              "score": 13.707392459399044,
+              "padj": 2.1377368592660814e-40
+            }
+          ],
+          "negative": [
+            {
+              "source": "TRERF1",
+              "score": -5.482827926353678,
+              "padj": 8.339083592545649e-07
+            },
+            {
+              "source": "NAB2",
+              "score": -4.067072651058344,
+              "padj": 0.0005841341335326433
+            },
+            {
+              "source": "HDAC1",
+              "score": -2.7478431808816524,
+              "padj": 0.034385401755571365
+            },
+            {
+              "source": "SPDEF",
+              "score": -2.673879463645504,
+              "padj": 0.04049859195947647
+            }
+          ]
+        },
+        "top_sources_all": {
+          "positive": [
+            {
+              "source": "STAT1",
+              "score": 16.150825612529932,
+              "padj": 0.0
+            },
+            {
+              "source": "IRF1",
+              "score": 15.027465833668462,
+              "padj": 0.0
+            },
+            {
+              "source": "NFKB",
+              "score": 14.22179168115501,
+              "padj": 2.858648867222627e-43
+            },
+            {
+              "source": "RELA",
+              "score": 13.966095412973276,
+              "padj": 7.653892212142151e-42
+            },
+            {
+              "source": "NFKB1",
+              "score": 13.707392459399044,
+              "padj": 2.1377368592660814e-40
+            }
+          ],
+          "negative": [
+            {
+              "source": "TRERF1",
+              "score": -5.482827926353678,
+              "padj": 8.339083592545649e-07
+            },
+            {
+              "source": "NAB2",
+              "score": -4.067072651058344,
+              "padj": 0.0005841341335326433
+            },
+            {
+              "source": "HDAC1",
+              "score": -2.7478431808816524,
+              "padj": 0.034385401755571365
+            },
+            {
+              "source": "SPDEF",
+              "score": -2.673879463645504,
+              "padj": 0.04049859195947647
+            },
+            {
+              "source": "DLX2",
+              "score": -2.5246203289386737,
+              "padj": 0.05725477263331413
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "ulm_progeny",
+      "tool": "decoupler_score_activities_ulm",
+      "arguments": {
+        "de_results_path": "/home/asu/Science/paper2agent-runs/exemplars/decoupler/GSE198542/mcp_runs/deseq2_20261029-164151_84ac2b47/deseq2_results.csv",
+        "network": "progeny",
+        "contrast_name": "WT.ZIKV.vs.mock",
+        "output_dir": "/home/asu/Science/paper2agent-runs/exemplars/decoupler/GSE198542/mcp_runs"
+      },
+      "seconds": 7.9,
+      "result": {
+        "message": "ulm with progeny (downloaded with decoupler.op.progeny(organism='human')): 14 sources scored, 12 with padj < 0.05.",
+        "reference": "https://github.com/scverse/decoupler-tutorials/blob/306be6673a5df5baf780e44ea929391616dbe5d8/bulk/rna.ipynb",
+        "artifacts": [
+          {
+            "description": "ulm scores for all sources (row 'WT.ZIKV.vs.mock', one column per source)",
+            "path": "/home/asu/Science/paper2agent-runs/exemplars/decoupler/GSE198542/mcp_runs/ulm_progeny_20261029-164214_b135e21b/progeny_ulm_scores.csv"
+          },
+          {
+            "description": "BH-adjusted ulm p-values for all sources (same layout)",
+            "path": "/home/asu/Science/paper2agent-runs/exemplars/decoupler/GSE198542/mcp_runs/ulm_progeny_20261029-164214_b135e21b/progeny_ulm_padj.csv"
+          },
+          {
+            "description": "ulm scores of sources with padj < 0.05",
+            "path": "/home/asu/Science/paper2agent-runs/exemplars/decoupler/GSE198542/mcp_runs/ulm_progeny_20261029-164214_b135e21b/progeny_ulm_scores_significant.csv"
+          },
+          {
+            "description": "network table used for scoring (provenance)",
+            "path": "/home/asu/Science/paper2agent-runs/exemplars/decoupler/GSE198542/mcp_runs/ulm_progeny_20261029-164214_b135e21b/progeny_network_used.csv"
+          },
+          {
+            "description": "bar plot of the top significant source scores",
+            "path": "/home/asu/Science/paper2agent-runs/exemplars/decoupler/GSE198542/mcp_runs/ulm_progeny_20261029-164214_b135e21b/progeny_ulm_barplot.png"
+          },
+          {
+            "description": "dot plot of significant scores sized by -log10 padj",
+            "path": "/home/asu/Science/paper2agent-runs/exemplars/decoupler/GSE198542/mcp_runs/ulm_progeny_20261029-164214_b135e21b/progeny_ulm_dotplot.png"
+          }
+        ],
+        "network": "progeny",
+        "network_origin": "downloaded with decoupler.op.progeny(organism='human')",
+        "network_rows": 62421,
+        "network_n_sources": 14,
+        "stat_column": "stat",
+        "contrast_row": "WT.ZIKV.vs.mock",
+        "n_genes": 15028,
+        "n_sources_scored": 14,
+        "n_significant": 12,
+        "n_significant_positive": 11,
+        "n_significant_negative": 1,
+        "top_significant_sources": {
+          "positive": [
+            {
+              "source": "JAK-STAT",
+              "score": 48.60869870390247,
+              "padj": 0.0
+            },
+            {
+              "source": "NFkB",
+              "score": 47.189884172611315,
+              "padj": 0.0
+            },
+            {
+              "source": "TNFa",
+              "score": 31.864589436377276,
+              "padj": 0.0
+            },
+            {
+              "source": "PI3K",
+              "score": 24.744012879241176,
+              "padj": 0.0
+            },
+            {
+              "source": "VEGF",
+              "score": 15.605329246618867,
+              "padj": 0.0
+            }
+          ],
+          "negative": [
+            {
+              "source": "Hypoxia",
+              "score": -4.327821216523574,
+              "padj": 2.121910802088678e-05
+            }
+          ]
+        },
+        "top_sources_all": {
+          "positive": [
+            {
+              "source": "JAK-STAT",
+              "score": 48.60869870390247,
+              "padj": 0.0
+            },
+            {
+              "source": "NFkB",
+              "score": 47.189884172611315,
+              "padj": 0.0
+            },
+            {
+              "source": "TNFa",
+              "score": 31.864589436377276,
+              "padj": 0.0
+            },
+            {
+              "source": "PI3K",
+              "score": 24.744012879241176,
+              "padj": 0.0
+            },
+            {
+              "source": "VEGF",
+              "score": 15.605329246618867,
+              "padj": 0.0
+            }
+          ],
+          "negative": [
+            {
+              "source": "Hypoxia",
+              "score": -4.327821216523574,
+              "padj": 2.121910802088678e-05
+            },
+            {
+              "source": "Trail",
+              "score": -0.7934248285495914,
+              "padj": 0.42754286527633667
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "ulm_hallmark",
+      "tool": "decoupler_score_activities_ulm",
+      "arguments": {
+        "de_results_path": "/home/asu/Science/paper2agent-runs/exemplars/decoupler/GSE198542/mcp_runs/deseq2_20261029-164151_84ac2b47/deseq2_results.csv",
+        "network": "hallmark",
+        "contrast_name": "WT.ZIKV.vs.mock",
+        "output_dir": "/home/asu/Science/paper2agent-runs/exemplars/decoupler/GSE198542/mcp_runs"
+      },
+      "seconds": 1.4,
+      "result": {
+        "message": "ulm with hallmark (downloaded with decoupler.op.hallmark(organism='human')): 50 sources scored, 25 with padj < 0.05.",
+        "reference": "https://github.com/scverse/decoupler-tutorials/blob/306be6673a5df5baf780e44ea929391616dbe5d8/bulk/rna.ipynb",
+        "artifacts": [
+          {
+            "description": "ulm scores for all sources (row 'WT.ZIKV.vs.mock', one column per source)",
+            "path": "/home/asu/Science/paper2agent-runs/exemplars/decoupler/GSE198542/mcp_runs/ulm_hallmark_20261029-164216_34a80328/hallmark_ulm_scores.csv"
+          },
+          {
+            "description": "BH-adjusted ulm p-values for all sources (same layout)",
+            "path": "/home/asu/Science/paper2agent-runs/exemplars/decoupler/GSE198542/mcp_runs/ulm_hallmark_20261029-164216_34a80328/hallmark_ulm_padj.csv"
+          },
+          {
+            "description": "ulm scores of sources with padj < 0.05",
+            "path": "/home/asu/Science/paper2agent-runs/exemplars/decoupler/GSE198542/mcp_runs/ulm_hallmark_20261029-164216_34a80328/hallmark_ulm_scores_significant.csv"
+          },
+          {
+            "description": "network table used for scoring (provenance)",
+            "path": "/home/asu/Science/paper2agent-runs/exemplars/decoupler/GSE198542/mcp_runs/ulm_hallmark_20261029-164216_34a80328/hallmark_network_used.csv"
+          },
+          {
+            "description": "bar plot of the top significant source scores",
+            "path": "/home/asu/Science/paper2agent-runs/exemplars/decoupler/GSE198542/mcp_runs/ulm_hallmark_20261029-164216_34a80328/hallmark_ulm_barplot.png"
+          },
+          {
+            "description": "dot plot of significant scores sized by -log10 padj",
+            "path": "/home/asu/Science/paper2agent-runs/exemplars/decoupler/GSE198542/mcp_runs/ulm_hallmark_20261029-164216_34a80328/hallmark_ulm_dotplot.png"
+          }
+        ],
+        "network": "hallmark",
+        "network_origin": "downloaded with decoupler.op.hallmark(organism='human')",
+        "network_rows": 7318,
+        "network_n_sources": 50,
+        "stat_column": "stat",
+        "contrast_row": "WT.ZIKV.vs.mock",
+        "n_genes": 15028,
+        "n_sources_scored": 50,
+        "n_significant": 25,
+        "n_significant_positive": 25,
+        "n_significant_negative": 0,
+        "top_significant_sources": {
+          "positive": [
+            {
+              "source": "INTERFERON_GAMMA_RESPONSE",
+              "score": 35.309899770276054,
+              "padj": 0.0
+            },
+            {
+              "source": "INTERFERON_ALPHA_RESPONSE",
+              "score": 28.441303576858047,
+              "padj": 0.0
+            },
+            {
+              "source": "INFLAMMATORY_RESPONSE",
+              "score": 19.18031366539855,
+              "padj": 0.0
+            },
+            {
+              "source": "TNFA_SIGNALING_VIA_NFKB",
+              "score": 18.672327815918393,
+              "padj": 0.0
+            },
+            {
+              "source": "COMPLEMENT",
+              "score": 10.734533150406024,
+              "padj": 8.76301391073378e-26
+            }
+          ],
+          "negative": []
+        },
+        "top_sources_all": {
+          "positive": [
+            {
+              "source": "INTERFERON_GAMMA_RESPONSE",
+              "score": 35.309899770276054,
+              "padj": 0.0
+            },
+            {
+              "source": "INTERFERON_ALPHA_RESPONSE",
+              "score": 28.441303576858047,
+              "padj": 0.0
+            },
+            {
+              "source": "INFLAMMATORY_RESPONSE",
+              "score": 19.18031366539855,
+              "padj": 0.0
+            },
+            {
+              "source": "TNFA_SIGNALING_VIA_NFKB",
+              "score": 18.672327815918393,
+              "padj": 0.0
+            },
+            {
+              "source": "COMPLEMENT",
+              "score": 10.734533150406024,
+              "padj": 8.76301391073378e-26
+            }
+          ],
+          "negative": [
+            {
+              "source": "BILE_ACID_METABOLISM",
+              "score": -1.7436571083519496,
+              "padj": 0.14507026970386505
+            },
+            {
+              "source": "MYOGENESIS",
+              "score": -1.3418091627835367,
+              "padj": 0.28074711561203003
+            },
+            {
+              "source": "SPERMATOGENESIS",
+              "score": -0.8286944228311193,
+              "padj": 0.48486965894699097
+            },
+            {
+              "source": "WNT_BETA_CATENIN_SIGNALING",
+              "score": -0.5858889670465113,
+              "padj": 0.6199543476104736
+            },
+            {
+              "source": "PEROXISOME",
+              "score": -0.38367739710665616,
+              "padj": 0.739578902721405
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "inspect_stat2",
+      "tool": "decoupler_inspect_source_targets",
+      "arguments": {
+        "de_results_path": "/home/asu/Science/paper2agent-runs/exemplars/decoupler/GSE198542/mcp_runs/deseq2_20261029-164151_84ac2b47/deseq2_results.csv",
+        "network": "collectri",
+        "source": "STAT2",
+        "scores_path": "/home/asu/Science/paper2agent-runs/exemplars/decoupler/GSE198542/mcp_runs/ulm_collectri_20261029-164206_22727ea8/collectri_ulm_scores.csv",
+        "output_dir": "/home/asu/Science/paper2agent-runs/exemplars/decoupler/GSE198542/mcp_runs"
+      },
+      "seconds": 6.6,
+      "result": {
+        "message": "Inspected STAT2 in collectri (downloaded with decoupler.op.collectri(organism='human')): 50 targets, 38 measured; leading edges: positive_weights 27 genes, negative_weights 1 genes.",
+        "reference": "https://github.com/scverse/decoupler-tutorials/blob/306be6673a5df5baf780e44ea929391616dbe5d8/bulk/rna.ipynb",
+        "artifacts": [
+          {
+            "description": "network table used (provenance)",
+            "path": "/home/asu/Science/paper2agent-runs/exemplars/decoupler/GSE198542/mcp_runs/inspect_collectri_20261029-164219_3f91ba58/collectri_network_used.csv"
+          },
+          {
+            "description": "volcano of STAT2 targets (log2FoldChange vs -log10 pvalue)",
+            "path": "/home/asu/Science/paper2agent-runs/exemplars/decoupler/GSE198542/mcp_runs/inspect_collectri_20261029-164219_3f91ba58/STAT2_targets_volcano.png"
+          },
+          {
+            "description": "STAT2 target weights vs stat",
+            "path": "/home/asu/Science/paper2agent-runs/exemplars/decoupler/GSE198542/mcp_runs/inspect_collectri_20261029-164219_3f91ba58/STAT2_source_targets.png"
+          },
+          {
+            "description": "leading-edge plot (positive_weights)",
+            "path": "/home/asu/Science/paper2agent-runs/exemplars/decoupler/GSE198542/mcp_runs/inspect_collectri_20261029-164219_3f91ba58/STAT2_leading_edge_positive_weights.png"
+          },
+          {
+            "description": "leading-edge genes (positive_weights), one per line in rank order",
+            "path": "/home/asu/Science/paper2agent-runs/exemplars/decoupler/GSE198542/mcp_runs/inspect_collectri_20261029-164219_3f91ba58/STAT2_leading_edge_positive_weights.txt"
+          },
+          {
+            "description": "leading-edge plot (negative_weights)",
+            "path": "/home/asu/Science/paper2agent-runs/exemplars/decoupler/GSE198542/mcp_runs/inspect_collectri_20261029-164219_3f91ba58/STAT2_leading_edge_negative_weights.png"
+          },
+          {
+            "description": "leading-edge genes (negative_weights), one per line in rank order",
+            "path": "/home/asu/Science/paper2agent-runs/exemplars/decoupler/GSE198542/mcp_runs/inspect_collectri_20261029-164219_3f91ba58/STAT2_leading_edge_negative_weights.txt"
+          },
+          {
+            "description": "network of ['STAT2'] and their top targets",
+            "path": "/home/asu/Science/paper2agent-runs/exemplars/decoupler/GSE198542/mcp_runs/inspect_collectri_20261029-164219_3f91ba58/STAT2_network.png"
+          }
+        ],
+        "source": "STAT2",
+        "network": "collectri",
+        "network_origin": "downloaded with decoupler.op.collectri(organism='human')",
+        "network_rows": 42990,
+        "weighted_network": true,
+        "n_targets_in_network": 50,
+        "n_targets_measured": 38,
+        "leading_edges": {
+          "positive_weights": {
+            "n_genes": 27,
+            "first_genes": [
+              "CCL2",
+              "IFIT2",
+              "PML",
+              "IRF1",
+              "IFIT3",
+              "MCL1",
+              "STAT1",
+              "IRF7",
+              "OAS1",
+              "SAMHD1"
+            ],
+            "path": "/home/asu/Science/paper2agent-runs/exemplars/decoupler/GSE198542/mcp_runs/inspect_collectri_20261029-164219_3f91ba58/STAT2_leading_edge_positive_weights.txt"
+          },
+          "negative_weights": {
+            "n_genes": 1,
+            "first_genes": [
+              "SCARB1"
+            ],
+            "path": "/home/asu/Science/paper2agent-runs/exemplars/decoupler/GSE198542/mcp_runs/inspect_collectri_20261029-164219_3f91ba58/STAT2_leading_edge_negative_weights.txt"
+          }
+        },
+        "skipped": [],
+        "network_plot_sources": [
+          "STAT2"
+        ],
+        "source_score": 10.405929311070732
+      }
+    }
+  ]
+}

@@ -1,0 +1,372 @@
+{
+ "module": "celltypist_tutorial",
+ "verifier": "independent tool verifier (fresh agent, not an implementer of this run)",
+ "generated": "2026-10-28T01:00:58+00:00",
+ "implementation_run_id": "implementer-celltypist_tutorial-attempt-1",
+ "verification_attempt": 2,
+ "interruption": "Attempt 1 was stopped at 23:43Z on the user's request while the train-model test file ran for the first time (the coordinator recorded it as cancelled attempt 1). The coordinator said the interruption came during the fixture script, but the record shows it came during the first train-test run. On resuming (attempt 2), production hashes were rechecked (unchanged), and all 10 fixture files were rechecked against tests/data/celltypist_tutorial/fixture_provenance.json (0 mismatches, none missing or untracked). The derived fixtures were checked structurally (shape, obs columns, X identical to the source, log1p(counts_like) == source X). The train tests that had been interrupted were then run in full, and every result below comes from attempt 2.",
+ "status": "verified: all 4 exposed tools pass; no production repairs; no exclusions requested",
+ "source": {
+  "repository": "Teichlab/celltypist",
+  "commit": "fe357564a6625d3b1732a022fd39f18e55696e80",
+  "installed": "celltypist 1.7.1 in celltypist-env (read-only; the implementer recorded no diff between repo/celltypist/celltypist and site-packages)",
+  "tutorial": "docs/notebook/celltypist_tutorial.ipynb",
+  "supporting": "docs/notebook/celltypist_tutorial_ml.ipynb (prob match)"
+ },
+ "production_files_tested": {
+  "src/tools/celltypist_tutorial.py": {
+   "sha256_at_start": "5a32c110d7ef55bd517d9eaa2261a523dfffc38df832bd9424d7391eae9f360b",
+   "sha256_final": "5a32c110d7ef55bd517d9eaa2261a523dfffc38df832bd9424d7391eae9f360b"
+  },
+  "src/tools/__init__.py": {
+   "sha256_at_start": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "sha256_final": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+ },
+ "read_only_shared_dependencies": {
+  "src/tools/celltypist_tutorial_ml.py": {
+   "sha256": "c6ee78ae8fea3e712ba92e845bfdc3a7c9461ec5d13c122b3cd5e8b0350718c2",
+   "use": "imported read-only in one composition test (celltypist_compare_with_reference consumes this module's annotate output_dir)"
+  },
+  "celltypist package": "celltypist-env site-packages celltypist 1.7.1 (pinned commit)",
+  "executor references": "notebooks/celltypist_tutorial/reference/, notebooks/celltypist_tutorial/images/figure_5.png, figure_6.png (unmodified)"
+ },
+ "environment": {
+  "python": "3.12.13",
+  "fastmcp": "4.0.3",
+  "scanpy": "1.12.4",
+  "anndata": "0.13.4",
+  "scikit-learn": "1.7.2",
+  "leidenalg": "0.12.0",
+  "igraph": "1.0.0",
+  "numpy": "2.5.4",
+  "pandas": "3.1.0",
+  "CELLTYPIST_FOLDER_for_tests": "/home/asu/Science/paper2agent-runs/celltypist/tests/data/celltypist_tutorial/celltypist_home (data/models holds exactly Immune_All_Low.pkl sha256 290874d35dac039d4c9218c343fde4aac1077709b72a331ce7266f6828c36502 and models.json sha256 f617fcd7863b08e6ba2dca1db959d60d6f82f06a0833897e8968c9164a18b132, byte copies of notebooks/celltypist_tutorial/data/)",
+  "cache_guard": "An autouse fixture pins celltypist.models.models_path to that cache. It also fails any test that adds or changes cache files, so no test downloaded into the shared cache."
+ },
+ "source_call_review": {
+  "celltypist_list_models": {
+   "upstream_calls": [
+    "models.get_models_index(force_update=True) only when refresh_index=True (models.py:432)",
+    "models.models_description() (models.py:520, on_the_fly=False)",
+    "models.get_default_model() (models.py:387)",
+    "models.get_model_path('models.json')"
+   ],
+   "duplicated_logic": "none",
+   "ignored_parameters": "none (refresh_index tested over the network: only models.json is fetched)",
+   "changed_defaults": "none",
+   "notes": "Returns all 61 index rows inline as `models` (about 6 KB). This goes beyond 'compact summary fields', but the list is the tool's purpose, and it is the same DataFrame as the CSV. Accepted; not repaired."
+  },
+  "celltypist_annotate_cells": {
+   "upstream_calls": [
+    "scanpy.read(h5ad) (same reader as classifier.py:308)",
+    "celltypist.annotate(adata, model, mode, p_thres, majority_voting, over_clustering=<obs key>, min_prop) (annotate.py:9)",
+    "AnnotationResult.to_table(out) (classifier.py:188)",
+    "AnnotationResult.to_adata(insert_labels=True, insert_conf=True) (classifier.py:78) -> write_h5ad",
+    "AnnotationResult.summary_frequency(by=...) (classifier.py:57)"
+   ],
+   "wrapper_logic": [
+    "_resolve_model: a string with '/' is a file path; otherwise it is a built-in name, and when that file is absent from the cache only that model is fetched with download_models(model=name) (models.py:474). Without this guard, a bare Model.load(name) on a cache with no .pkl runs download_if_required -> download_models() for all models. A test shows the bare upstream call attempting 61 downloads, while the tool attempts 0.",
+    "_h5ad_path: existing .h5ad required. This is a scope restriction: upstream also accepts csv/mtx, but those need upstream's own raw-count normalisation path, which an in-memory AnnData would skip. Documented by the implementer.",
+    "obs-column check for over_clustering_key, only when majority_voting=True (metadata-input rule)."
+   ],
+   "duplicated_logic": "none; the expression-matrix check stays upstream and surfaces as an MCP tool error",
+   "ignored_parameters": "none. mode, p_thres, majority_voting, over_clustering_key and min_prop are each shown to change results exactly as the direct upstream calls do; model is tested with built-in and custom models.",
+   "changed_defaults": "model default 'Immune_All_Low.pkl' vs upstream None -> get_default_model(), which equals 'Immune_All_Low.pkl' in the cached index (asserted). The other defaults equal inspect.signature(celltypist.annotate) (asserted).",
+   "restrictions": "custom model must be given as a path containing '/'; only .h5ad input; the upstream plain-text over-clustering-file fallback is not exposed. All are I/O scope choices, not scientific changes.",
+   "cross_module_contract": "output_dir contains exactly predicted_labels.csv, decision_matrix.csv, probability_matrix.csv (AnnotationResult.to_table, no prefix, no xlsx) and annotated.h5ad (to_adata insert_labels/insert_conf, no probabilities). predicted_labels.csv is byte-identical to a direct to_table. The matrix CSVs have identical header and index columns and values within tolerance. celltypist_compare_with_reference reproduces the executor's dotplot fraction table and crosstab from this output. Not changed."
+  },
+  "celltypist_train_model": {
+   "upstream_calls": [
+    "scanpy.read(h5ad)",
+    "celltypist.train(adata, labels=<label_key>, n_jobs, feature_selection, top_genes, random_state=seed when given) (train.py:190; kwargs -> SGDClassifier/LogisticRegression)",
+    "Model.write(<out>/<model_name>.pkl) (models.py:167)"
+   ],
+   "wrapper_logic": [
+    "label_key obs-column check (otherwise upstream would treat the string as a file path, train.py:70-73)",
+    "top_genes >= 1 and model_name without directories (I/O guards)"
+   ],
+   "duplicated_logic": "none",
+   "ignored_parameters": "none. seed, top_genes, feature_selection and label_key each reproduce exactly the direct train with the same arguments; n_jobs is passed through (code review; n_jobs=10 runs are bit-identical to the reference).",
+   "changed_defaults": "none (feature_selection False, top_genes 300, n_jobs None, matching the upstream signature)",
+   "notes": "top_genes < 1 is rejected even when feature_selection=False, where upstream ignores it. This harmless restriction is noted, not repaired."
+  },
+  "celltypist_inspect_model": {
+   "upstream_calls": [
+    "models.Model.load (models.py:74), .cell_types, .features, .description",
+    "Model.extract_top_markers(ct, top_n, only_positive) (models.py:174)",
+    "scanpy.pl.violin(adata, genes, groupby=groupby_key, rotation=90, show=False) + savefig(bbox_inches='tight') (tutorial cells 67-68)"
+   ],
+   "wrapper_logic": [
+    "cell_types required when adata_path is given (avoids one plot per model type)",
+    "genes absent from the plotted matrix are left out of the violin and reported in genes_missing_from_adata (upstream sc.pl.violin would raise); the reported markers are unchanged"
+   ],
+   "duplicated_logic": "none",
+   "ignored_parameters": "none (top_n, only_positive and cell_types tested against direct calls; for only_positive, a case where the rankings differ was used)",
+   "changed_defaults": "none (top_n 10, only_positive True, matching the upstream signature)"
+  },
+  "format_compliance": "All four tools have Annotated descriptions on every parameter, a Literal for mode, two-line docstrings (AST-checked and asserted from the MCP schema), and message/reference/artifacts dicts with absolute paths in a fresh mkdtemp directory per call. There are no Colab directives or unused imports (AST-checked).",
+  "protocol_stdout": "Zero bytes on fd 1 in a fresh process that ran train (n_jobs=4, joblib), annotate with Leiden majority voting, violin plotting, list_models and an error path. Also zero bytes in both network subprocess runs. A real stdio server round trip (list_tools + annotate with majority voting) matched the reference. celltypist logs through logging (stderr)."
+ },
+ "scientific_comparisons": [
+  {
+   "what": "celltypist_list_models CSV and returned rows",
+   "expected_from": "reference/models_description.csv + direct models.models_description()",
+   "tolerance": "exact",
+   "result": "pass (61 x 2, columns [model, description], default Immune_All_Low.pkl)"
+  },
+  {
+   "what": "annotate demo_2000 + Immune_All_Low.pkl, majority voting (tutorial cell 28)",
+   "expected_from": "reference/annotate_demo2000_ImmuneAllLow_mv (driver direct call; matrices.npz) and reference/notebook_run predicted_labels (the notebook's own labels)",
+   "tolerance": "predicted_labels/over_clustering/majority_voting exact for all 2000 cells; decision atol 1e-9, probability atol 2.5e-10 (executor replay: max(1e-9, float64 dot-product forward-error bound 1.79e-10); probability = expit(decision), slope <= 1/4)",
+   "result": "pass; 46 over-clusters; label_frequencies equal summary_frequency CSVs"
+  },
+  {
+   "what": "annotated.h5ad obs (cell_type, predicted_labels, over_clustering, majority_voting, conf_score)",
+   "expected_from": "reference obs_after_to_adata.csv (direct to_adata)",
+   "tolerance": "labels exact; conf_score atol 2.5e-10; conf_score == max(probability) exactly; X identical to input",
+   "result": "pass"
+  },
+  {
+   "what": "annotate demo_2000 without majority voting, model omitted (default)",
+   "expected_from": "reference/annotate_demo2000_ImmuneAllLow_nomv",
+   "tolerance": "as above",
+   "result": "pass"
+  },
+  {
+   "what": "seeded train demo_2000 (cell 49 + random_state=0, n_jobs=10, feature_selection=True)",
+   "expected_from": "reference/train_seeded_rs0/run1/model_arrays.npz and data/model_seeded_rs0_run1.pkl",
+   "tolerance": "exact: gene list incl. order (2652), cell types, coef_, intercept_, scaler mean_/scale_ bitwise",
+   "result": "pass"
+  },
+  {
+   "what": "extract_top_markers, seeded model, top 3 for all 10 cell types",
+   "expected_from": "reference/top_markers.json seeded_rs0_run1",
+   "tolerance": "exact",
+   "result": "pass (Mast cells: TPSB2, KRT1, SLC45A3)"
+  },
+  {
+   "what": "Immune_All_Low metadata + default top-10 markers for all 98 types",
+   "expected_from": "reference/immune_all_low_model (cell_types.csv, summary.json) + direct extract_top_markers",
+   "tolerance": "exact",
+   "result": "pass (98 types, 6639 features, description v2 2022-07-16)"
+  },
+  {
+   "what": "violin figures (tutorial cells 67 and 68)",
+   "expected_from": "images/figure_5.png, figure_6.png and a direct sc.pl.violin render",
+   "tolerance": "same image size; differing-pixel fraction (channel diff > 0.1) < 1%. Two direct renders of the same call differ by about 0.27% because scanpy's strip-plot jitter is random, and the tool vs figure_5 difference is the same size.",
+   "result": "pass; markers TPSB2, SLC45A3, CPA3 equal the notebook's cell-66 output"
+  }
+ ],
+ "changed_input_checks": [
+  {
+   "case": "different model: seeded custom .pkl on demo_400 with majority voting",
+   "expected_from": "reference/annotate_demo400_seeded_rs0_mv",
+   "result": "pass (labels exact, matrices within tolerance)"
+  },
+  {
+   "case": "train -> annotate composition: the tool-trained seeded model annotates demo_400",
+   "expected_from": "reference/annotate_demo400_seeded_rs0_mv",
+   "result": "pass"
+  },
+  {
+   "case": "prob match, p_thres=0.7, Immune_All_Low on demo_2000",
+   "expected_from": "new direct celltypist.annotate(mode='prob match', p_thres=0.7)",
+   "result": "pass (149 Unassigned, 32 multi-label; differs from p_thres=0.5, so the parameter is not ignored)"
+  },
+  {
+   "case": "prob match, p_thres=0.3 + majority voting, seeded model on demo_400",
+   "expected_from": "new direct call",
+   "result": "pass"
+  },
+  {
+   "case": "user over_clustering_key='my_clusters' + min_prop=0.6 on a fixture without 'cell_type'",
+   "expected_from": "new direct call",
+   "result": "pass (over_clustering equals the user column; 210 cells 'Heterogeneous'; 7 clusters; no Leiden graph built; input file unchanged)"
+  },
+  {
+   "case": "<= 50 cells with majority_voting=True",
+   "expected_from": "new direct call",
+   "result": "pass (upstream skips majority voting; reported in message/fields; same 4 contract files)"
+  },
+  {
+   "case": "train with renamed label column: label_key='coarse_group' (4 user lineage labels; the fixture has no 'cell_type'), feature_selection, top_genes=100, seed=1, n_jobs=10",
+   "expected_from": "new direct celltypist.train with the same arguments",
+   "result": "pass (exact arrays; 388 features)"
+  },
+  {
+   "case": "train without feature selection, label_key='author_label'",
+   "expected_from": "new direct celltypist.train",
+   "result": "pass (exact arrays)"
+  },
+  {
+   "case": "inspect top_n=7, only_positive=False, cell_types=[Plasma cells, pDC]",
+   "expected_from": "new direct extract_top_markers",
+   "result": "pass; the Plasma cells ranking differs from only_positive=True"
+  },
+  {
+   "case": "inspect violin on the annotate tool's annotated.h5ad grouped by majority_voting (cell 68)",
+   "expected_from": "reference/notebook_run/demo400_custom_asrun_mv majority_voting + figure_6.png",
+   "result": "pass"
+  },
+  {
+   "case": "inspect violin with a marker gene removed from the AnnData",
+   "expected_from": "direct extract_top_markers",
+   "result": "pass (gene reported in genes_missing_from_adata, remaining genes plotted)"
+  }
+ ],
+ "error_checks": [
+  "missing input file (annotate, train, inspect adata_path) -> MCP tool error 'No such file'",
+  "missing custom model file -> 'No such model file'",
+  "non-h5ad input -> 'Expected an AnnData .h5ad file'",
+  "missing label column (train label_key='cell_type' on the renamed fixture) -> \"label_key 'cell_type' is not an obs column\", listing the user columns",
+  "missing over_clustering_key / groupby_key columns -> obs-column errors; groupby_key or cell_types missing with adata_path -> clear errors",
+  "unknown built-in model name with the seeded cache -> upstream ValueError 'No models match the celltypist model repertoire'; 0 network requests (requests recorder)",
+  "unknown name on an index-only cache (no .pkl) -> same error with 0 requests and no files added; bare upstream Model.load attempts 61 downloads under the same conditions",
+  "non-normalised input (expm1 counts, no .raw): annotate -> upstream \"Invalid expression matrix in `.X`...\"; train -> upstream 'Invalid expression matrix, expect log1p normalized expression to 10000 counts per cell'. The text matches a direct upstream call and is surfaced as an MCP tool error.",
+  "top_genes larger than the expressed genes -> upstream feature-selection ValueError surfaced; top_genes=0 and model_name='../escape' -> wrapper input errors",
+  "unknown cell type in inspect -> upstream \"'Unicorn cells' is not found\"",
+  "invalid mode 'best' -> schema (Literal) validation error",
+  "On every error path, no output directory is created and the input files keep their sha256"
+ ],
+ "input_immutability": "sha256 of demo_2000, demo_400, demo_400_user_meta, demo_400_counts_like and an annotate-produced annotated.h5ad is unchanged after the tool calls that read them",
+ "repeated_calls": "list_models, annotate, train (seeded) and inspect each write a new output_dir and new artifact paths on repeated identical calls, with identical content (seeded train arrays identical)",
+ "network_checks": {
+  "network_up": "HEAD https://celltypist.cog.sanger.ac.uk/models/models.json -> 200",
+  "empty_cache_by_name": "Run in a fresh subprocess with CELLTYPIST_FOLDER=tmp/verify_celltypist_tutorial/net_empty_cache_*. annotate(model='Immune_All_Low.pkl') leaves the cache holding exactly [Immune_All_Low.pkl, models.json]. The downloaded file's sha256 is 290874d3..., the same build as the seeded copy. Results equal a direct call on the downloaded file. An unknown name afterwards errors without adding files.",
+  "refresh_index": "refresh_index=True in a fresh empty cache fetches only models.json; the listing equals the downloaded index",
+  "transient_failure": "In the full-suite run (exit 1), test_by_name_load_on_empty_cache_downloads_only_requested_model failed because the subprocess record shows upstream _requests_get(timeout=30) hit 'Read timed out' on the 2.8 MB model download. download_models logged the error and continued, and the wrapper guard raised \"Built-in model 'Immune_All_Low.pkl' could not be downloaded\" as an MCP tool error. The cache held only models.json, so nothing else was downloaded. The same URL then downloaded in 3.2 s with curl, and the unchanged test passed on rerun (exit 0). This was a transient network/server timeout under upstream's fixed 30 s timeout, not a wrapper defect; no assertion was relaxed. Evidence: tmp/verify_celltypist_tutorial/net_empty_cache_run_de_pumcy/{result.json,stderr.txt}."
+ },
+ "pytest_runs": [
+  {
+   "command": "cd $PROJECT_ROOT && \"$PROJECT_PYTHON\" -m pytest tests/code/celltypist_tutorial -v -p no:cacheprovider -rA --durations=15 --junitxml=tests/logs/celltypist_tutorial/junit_final.xml",
+   "exit": 1,
+   "totals": {
+    "collected": 50,
+    "passed": 49,
+    "failed": 1,
+    "skipped": 0
+   },
+   "wall_s": 441.13,
+   "failed": [
+    "test_celltypist_annotate_cells.py::test_by_name_load_on_empty_cache_downloads_only_requested_model (transient read timeout; see network_checks.transient_failure)"
+   ],
+   "log": "tests/logs/celltypist_tutorial/pytest_final.log",
+   "log_sha256": "af7ee17d41fc887faa051f01820dc374e4112be52929d2debc5d74829590cc23"
+  },
+  {
+   "command": "cd $PROJECT_ROOT && \"$PROJECT_PYTHON\" -m pytest \"tests/code/celltypist_tutorial/test_celltypist_annotate_cells.py::test_by_name_load_on_empty_cache_downloads_only_requested_model\" -v -p no:cacheprovider -rA -s --junitxml=tests/logs/celltypist_tutorial/junit_network_rerun.xml",
+   "exit": 0,
+   "totals": {
+    "collected": 1,
+    "passed": 1,
+    "failed": 0
+   },
+   "wall_s": 20.0,
+   "log": "tests/logs/celltypist_tutorial/pytest_network_rerun.log",
+   "log_sha256": "c8027dc9cd823ccb5fff8aca51e528f1d738dfbc2ad5eb891c2ea11fcb6898f6"
+  },
+  {
+   "command": "cd $PROJECT_ROOT && \"$PROJECT_PYTHON\" -m pytest tests/code --collect-only -q -p no:cacheprovider",
+   "exit": 0,
+   "totals": {
+    "collected": 90
+   },
+   "purpose": "checks coexistence with tests/code/celltypist_tutorial_ml (collection only; that module's tests were not executed)"
+  }
+ ],
+ "effective_totals": {
+  "tests": 50,
+  "passed": 50,
+  "note": "49 passed in the full run plus the 1 network test that passed on its rerun"
+ },
+ "per_tool": {
+  "celltypist_list_models": {
+   "test_file": "tests/code/celltypist_tutorial/test_celltypist_list_models.py",
+   "tests": 4,
+   "passed": 4,
+   "status": "pass"
+  },
+  "celltypist_annotate_cells": {
+   "test_file": "tests/code/celltypist_tutorial/test_celltypist_annotate_cells.py",
+   "tests": 23,
+   "passed": "22 in full run + 1 network test passed on rerun",
+   "status": "pass"
+  },
+  "celltypist_train_model": {
+   "test_file": "tests/code/celltypist_tutorial/test_celltypist_train_model.py",
+   "tests": 12,
+   "passed": 12,
+   "status": "pass"
+  },
+  "celltypist_inspect_model": {
+   "test_file": "tests/code/celltypist_tutorial/test_celltypist_inspect_model.py",
+   "tests": 11,
+   "passed": 11,
+   "status": "pass"
+  }
+ },
+ "attempts": [
+  {
+   "attempt": 1,
+   "status": "cancelled by user pause (23:43Z)",
+   "work": "fixtures built; list_models 4/4 and annotate 23/23 passed in development runs; the train test run was interrupted",
+   "production_changes": "none"
+  },
+  {
+   "attempt": 2,
+   "status": "complete",
+   "work": "partial files revalidated; train 12/12; inspect test file written. 1 test-design fix: the only_positive sensitivity check first used Mast cells, where the absolute and positive top-7 rankings coincide, so it could not detect an ignored flag. It now uses Plasma cells, where they differ. The tool output matched the direct call in both versions, and no assertion was weakened. Full run, network rerun, collect-only, and stdio acceptance helper run.",
+   "production_changes": "none"
+  }
+ ],
+ "repairs": [],
+ "tool_attempts_used": {
+  "celltypist_list_models": 0,
+  "celltypist_annotate_cells": 0,
+  "celltypist_train_model": 0,
+  "celltypist_inspect_model": 0
+ },
+ "exclusions_requested": [],
+ "acceptance": {
+  "file": "reports/mcp-acceptance-celltypist_tutorial.json",
+  "sha256": "5dd37af5d14d7fbcb8471bf80ffd87ae5d91dc5b439fefb1730ad90df6ba0a82",
+  "cases": 24,
+  "error_cases": 10,
+  "positive_cases_per_tool": {
+   "celltypist_list_models": 2,
+   "celltypist_annotate_cells": 5,
+   "celltypist_train_model": 3,
+   "celltypist_inspect_model": 4
+  },
+  "assumed_cache": "CELLTYPIST_FOLDER must point to a seeded copy of tests/data/celltypist_tutorial/celltypist_home (data/models/Immune_All_Low.pkl sha256 290874d35dac039d4c9218c343fde4aac1077709b72a331ce7266f6828c36502 and models.json sha256 f617fcd7863b08e6ba2dca1db959d60d6f82f06a0833897e8968c9164a18b132), exported before the server starts (celltypist reads it at import). With an empty cache, by-name cases need the network: list_models fetches models.json and Immune_All_Low cases fetch that model.",
+  "fixtures": "absolute paths under tests/data/celltypist_tutorial/{inputs,models}",
+  "artifact_root": "/home/asu/Science/paper2agent-runs/celltypist/tmp/verify_celltypist_tutorial/acceptance_outputs (each call creates its own mkdtemp subdirectory there)",
+  "self_check": "verify_mcp_server.py --require-all-tools ran against a throwaway stdio launcher (tmp/verify_celltypist_tutorial/acceptance_run/server.py) with CELLTYPIST_FOLDER=tmp/verify_celltypist_tutorial/acceptance_run/celltypist_home (a seeded copy) and --call-timeout 600. Result: exit 0, success=true, 24/24 cases, cache unchanged afterwards. Report: tmp/verify_celltypist_tutorial/acceptance_run/acceptance_report.json. The final server and clean-runtime validation remain the coordinator's.",
+  "runtime_note": "The longest cases are annotate demo_2000 (about 5-10 s), seeded train on demo_2000 (about 12 s) and the cell-67 violin; all finished well within --call-timeout 600 here."
+ },
+ "test_artifacts": {
+  "tests": {
+   "tests/code/celltypist_tutorial/_celltypist_tutorial_support.py": "7bd3a3cf0c897e6a62f8b50bdab36a5465efedbe815ac05a7e1ee13a482d7c1a",
+   "tests/code/celltypist_tutorial/_stdio_server.py": "eee8106d3094aaf93d12aeeabecd68ea621300d837da303509d2cc854f8fad5f",
+   "tests/code/celltypist_tutorial/_tool_subprocess.py": "4d769eea30b104a3c4f6ca516345c2399876c14d5340b2193bb9d66733ff791e",
+   "tests/code/celltypist_tutorial/conftest.py": "ee5c190bbb5188466ad7b62e0d3babf4161612cb28a37ca4adb9fe385e184cc4",
+   "tests/code/celltypist_tutorial/test_celltypist_annotate_cells.py": "7acc3e77c6c0c948eac6877d32078971f79ff2bfdb1bd12a64d69fc7f6fcde58",
+   "tests/code/celltypist_tutorial/test_celltypist_inspect_model.py": "6b7a0b140ce80a3e63a5b3d110e2d63cca00a87d759fc02e00cc8eaf9331c6d7",
+   "tests/code/celltypist_tutorial/test_celltypist_list_models.py": "144d146965b7c296287d2b4f5e892f3f5242f1c45d857cbe2978626936f8f862",
+   "tests/code/celltypist_tutorial/test_celltypist_train_model.py": "9b31f588232e03f1c8fa2b8f11b4020a048d5a777b04ac9e67665e23ede8e7f5"
+  },
+  "fixtures": "tests/data/celltypist_tutorial/ (make_fixtures.py sha256 30d4b16a48e8d0f8ffb3452e3c13b1801bcbc238593caa82f753b289977de841; fixture_provenance.json lists 10 files with sha256)",
+  "results": "tests/results/celltypist_tutorial/ (tool outputs)",
+  "logs": "tests/logs/celltypist_tutorial/"
+ },
+ "limitations": [
+  "Exactness relies on this machine and these versions: majority voting/Leiden IDs depend on scanpy 1.12.4, igraph 1.0.0 and leidenalg 0.12.0, and seeded training is bit-identical only at the same n_jobs and BLAS threading. Expect small numerical drift and possible cluster relabelling elsewhere; acceptance cases avoid floating-point fields and Leiden-dependent labels except n_over_clusters=20 for demo_400.",
+  "The demo_400 Leiden over-cluster count (20) in one acceptance case depends on the same library versions; the scientific tests compare it with the executor reference.",
+  "Violin figures are compared structurally and by pixel fraction, not pixel-exactly, because scanpy's strip-plot jitter is random.",
+  "Network tests depend on celltypist.cog.sanger.ac.uk; upstream's fixed 30 s download timeout produced one transient failure (see network_checks).",
+  "Only .h5ad inputs are exposed (scope choice); csv/mtx inputs and the plain-text over-clustering file of upstream annotate are not exposed.",
+  "test_plain_logistic_regression_without_feature_selection takes about 235 s (lbfgs on about 16k genes, run for both the tool and the direct call); the full suite takes about 7.5 min.",
+  "Stale development outputs from attempt 1 remain under tests/results/celltypist_tutorial/shared_* and tmp/verify_celltypist_tutorial/. A cleanup `rm -rf` was blocked by a safety check and was not retried; they can be deleted by hand if wanted, and nothing depends on them."
+ ]
+}

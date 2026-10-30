@@ -1,0 +1,39 @@
+{
+  "author": "coordinator",
+  "kind": "cancellation_note",
+  "module": "celltypist_tutorial",
+  "agent_id": "ac96d80c1da909d21",
+  "started_at": "2026-10-27T23:30:37.653Z",
+  "stopped_at": "2026-10-27T23:43:26.413Z",
+  "status": "cancelled",
+  "reason": "User asked to pause the analysis until 17:40 PDT; coordinator stopped the verifier agent mid-work with TaskStop. No verification report or acceptance cases had been written; no pytest outcome is claimed for this attempt.",
+  "production_files_at_stop": {
+    "src/tools/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/tools/celltypist_tutorial.py": "5a32c110d7ef55bd517d9eaa2261a523dfffc38df832bd9424d7391eae9f360b",
+    "src/tools/celltypist_tutorial_ml.py": "c6ee78ae8fea3e712ba92e845bfdc3a7c9461ec5d13c122b3cd5e8b0350718c2"
+  },
+  "production_files_unchanged_from_implementer": true,
+  "partial_files_left_on_disk": [
+    "tests/code/celltypist_tutorial/_celltypist_tutorial_support.py",
+    "tests/code/celltypist_tutorial/_stdio_server.py",
+    "tests/code/celltypist_tutorial/_tool_subprocess.py",
+    "tests/code/celltypist_tutorial/conftest.py",
+    "tests/code/celltypist_tutorial/test_celltypist_annotate_cells.py",
+    "tests/code/celltypist_tutorial/test_celltypist_list_models.py",
+    "tests/code/celltypist_tutorial/test_celltypist_train_model.py",
+    "tests/data/celltypist_tutorial/celltypist_home/data/models/Immune_All_Low.pkl",
+    "tests/data/celltypist_tutorial/celltypist_home/data/models/models.json",
+    "tests/data/celltypist_tutorial/fixture_provenance.json",
+    "tests/data/celltypist_tutorial/inputs/demo_2000_cells.h5ad",
+    "tests/data/celltypist_tutorial/inputs/demo_400_cells.h5ad",
+    "tests/data/celltypist_tutorial/inputs/demo_400_counts_like.h5ad",
+    "tests/data/celltypist_tutorial/inputs/demo_400_first40.h5ad",
+    "tests/data/celltypist_tutorial/inputs/demo_400_user_meta.h5ad",
+    "tests/data/celltypist_tutorial/inputs/not_anndata.csv",
+    "tests/data/celltypist_tutorial/make_fixtures.py",
+    "tests/data/celltypist_tutorial/models/model_from_immune2000.pkl",
+    "tests/data/celltypist_tutorial/models/model_seeded_rs0_run1.pkl"
+  ],
+  "partial_file_count": 19,
+  "resumption": "Same agent resumed via SendMessage as attempt 2, continuing from its transcript."
+}

@@ -1,0 +1,204 @@
+{
+ "expectations": {
+  "E1": {
+   "pass": true,
+   "evidence": {
+    "NFKB1": {
+     "value": 7.156,
+     "padj": 5.761567889450703e-10
+    },
+    "RELA": {
+     "value": 5.728,
+     "padj": 7.621035820193356e-07
+    }
+   }
+  },
+  "E2": {
+   "pass": true,
+   "evidence": {
+    "ATF4": {
+     "value": 3.838,
+     "padj": 0.0025476671289652586
+    }
+   }
+  },
+  "E3": {
+   "pass": true,
+   "evidence": {
+    "IL6": {
+     "value": 2.437,
+     "padj": 2.625186374319991e-16
+    },
+    "TNF": {
+     "value": 1.101,
+     "padj": 5.833234994600258e-06
+    },
+    "CXCL8": {
+     "value": 1.255,
+     "padj": 9.237176448619763e-23
+    }
+   }
+  },
+  "E4": {
+   "pass": true,
+   "evidence": {
+    "hallmark INTERFERON_ALPHA_RESPONSE": {
+     "value": -0.569,
+     "padj": 0.6186674237251282
+    },
+    "collectri STAT2": {
+     "value": 2.226,
+     "padj": 0.15033726394176483
+    },
+    "collectri IRF9": {
+     "value": -0.481,
+     "padj": 0.8064574599266052
+    },
+    "IFNB1": "removed by filtering",
+    "IFNL1": "removed by filtering"
+   }
+  }
+ },
+ "verified_sensible": true,
+ "report_only": {
+  "genes_kept": 15776,
+  "de_genes_padj_0.05": 2115,
+  "pc_variance_ratio_top4": [
+   {
+    "PC": "PC1",
+    "variance": 5922.431,
+    "variance_ratio": 0.375
+   },
+   {
+    "PC": "PC2",
+    "variance": 3792.641,
+    "variance_ratio": 0.24
+   },
+   {
+    "PC": "PC3",
+    "variance": 2504.08,
+    "variance_ratio": 0.159
+   },
+   {
+    "PC": "PC4",
+    "variance": 1890.4,
+    "variance_ratio": 0.12
+   }
+  ],
+  "pc_metadata_associations_padj_0.05": [
+   {
+    "obsm": "PC1",
+    "obs": "condition",
+    "stat": 97.6408,
+    "pval": 0.0006,
+    "padj": 0.0029
+   }
+  ],
+  "top_collectri": {
+   "up": [
+    "NFKB1 (+7.16)",
+    "NFKB2 (+6.90)",
+    "REL (+6.75)",
+    "NFKBIZ (+6.73)",
+    "CEBPD (+6.33)",
+    "ELF3 (+6.33)",
+    "EHF (+6.09)",
+    "JUN (+5.77)",
+    "RELA (+5.73)",
+    "NFKBIB (+5.52)"
+   ],
+   "down": [
+    "NFE2 (-5.06)",
+    "PPARA (-5.05)",
+    "NR1H3 (-5.02)",
+    "NR1H2 (-4.92)",
+    "NR3C1 (-4.55)",
+    "KLF15 (-4.44)",
+    "USF2 (-4.43)",
+    "NFAT5 (-4.34)",
+    "USF1 (-4.28)",
+    "PPARG (-4.26)"
+   ]
+  },
+  "n_tfs_scored": 664,
+  "top_progeny": {
+   "up": [
+    "TNFa (+29.02)",
+    "NFkB (+26.72)",
+    "MAPK (+22.40)",
+    "EGFR (+21.04)",
+    "PI3K (+19.07)"
+   ],
+   "down": [
+    "Hypoxia (-5.45)",
+    "p53 (-2.35)",
+    "Trail (-1.61)",
+    "Androgen (+1.53)",
+    "WNT (+1.87)"
+   ]
+  },
+  "top_hallmark": {
+   "up": [
+    "TNFA_SIGNALING_VIA_NFKB (+8.70)",
+    "UNFOLDED_PROTEIN_RESPONSE (+6.99)",
+    "KRAS_SIGNALING_UP (+6.80)",
+    "INFLAMMATORY_RESPONSE (+5.86)",
+    "MYC_TARGETS_V1 (+5.74)"
+   ],
+   "down": [
+    "ADIPOGENESIS (-5.49)",
+    "BILE_ACID_METABOLISM (-4.81)",
+    "XENOBIOTIC_METABOLISM (-4.79)",
+    "KRAS_SIGNALING_DN (-4.59)",
+    "P53_PATHWAY (-3.82)"
+   ]
+  },
+  "ranks_of_NFKB1_RELA_ATF4": {
+   "NFKB1": 1,
+   "RELA": 9,
+   "ATF4": 20
+  },
+  "superseded_NDE_hypothesis_interferon_STAT_IRF": {
+   "collectri": {
+    "STAT1": {
+     "value": -0.502,
+     "padj": 0.8040202260017395
+    },
+    "STAT2": {
+     "value": 2.226,
+     "padj": 0.15033726394176483
+    },
+    "IRF1": {
+     "value": 2.465,
+     "padj": 0.09472836554050446
+    },
+    "IRF3": {
+     "value": 2.582,
+     "padj": 0.07772640883922577
+    },
+    "IRF7": {
+     "value": -0.401,
+     "padj": 0.8445273637771606
+    },
+    "IRF9": {
+     "value": -0.481,
+     "padj": 0.8064574599266052
+    }
+   },
+   "progeny JAK-STAT": {
+    "value": 4.002,
+    "padj": 9.805105946725234e-05
+   },
+   "hallmark": {
+    "INTERFERON_ALPHA_RESPONSE": {
+     "value": -0.569,
+     "padj": 0.6186674237251282
+    },
+    "INTERFERON_GAMMA_RESPONSE": {
+     "value": 1.543,
+     "padj": 0.19826512038707733
+    }
+   }
+  }
+ }
+}

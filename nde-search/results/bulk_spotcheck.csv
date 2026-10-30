@@ -1,0 +1,21 @@
+Series,Verdict,Reason
+GSE182629,Usable,"Ion treatments vs control, 2 replicates each; NCBI counts"
+GSE328872,Usable,"Two cell lines, 3 vs 3; authors' gene counts"
+GSE313879,Usable,"CD69-overexpressing vs control, 3 vs 3; authors' count matrix"
+GSE225731,Usable,74 rheumatoid arthritis synovial biopsies; groups such as ACPA-positive vs negative; NCBI counts
+GSE174850,Usable,Osimertinib vs vehicle; NCBI counts
+GSE252773,Usable,"SIRT1 inhibitor vs control in 3 cell lines, 3 vs 3 each; authors' read counts"
+GSE206928,Usable,"circRNA knockdown or overexpression vs control, 3 vs 3; NCBI counts"
+GSE108322,Usable,"Glioma stem vs matched non-stem cells, 3 pairs; NCBI counts"
+GSE279160,Usable,"Drug combinations vs DMSO, 2 each; authors' count matrix"
+GSE243515,Usable,"RBM8A knockdown vs control, 3 vs 3; authors' read counts"
+GSE70909,Usable,"Oil and dispersant exposures vs control, 3 each; NCBI counts"
+GSE108693,Usable,"Estrogen-receptor knockdown vs control, 3 vs 3; NCBI counts"
+GSE196877,Usable,"Hormone treatments vs vehicle, 3 each; NCBI counts"
+GSE134422,Usable,Normal liver (3) vs NASH (2) or cirrhosis (2); NCBI counts
+GSE272276,Unclear,"rIGLL5 vs mock, 3 vs 3; the authors' expression file may not be raw counts"
+GSE205653,Not usable,"3 patient-derived cell lines, no comparison; normalised counts only"
+GSE108072,Not usable,88 islet donors with no group information in the sample sheet
+GSE183040,Not usable,Multi-omics prostate cancer study; no RNA-seq count matrix among its GEO files
+GSE208632,Not usable,Mouse only; the human tag was inferred from the linked paper
+GSE297084,Not usable,Mouse only; the human tag was inferred from the linked paper

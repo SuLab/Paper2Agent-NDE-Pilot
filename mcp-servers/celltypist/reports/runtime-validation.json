@@ -1,0 +1,33 @@
+{
+  "project": "celltypist",
+  "server": "src/celltypist_mcp.py",
+  "server_sha256": "4f65b0afafd53dc8f4ed63af387732c641c3135243d229f1cdc38e64553f78f2",
+  "requirements": "src/requirements.txt",
+  "requirements_sha256": "0c03ac91b311c6ae890e86637c442b1e70ed3c7414514eb8d3e7125b0c5b816e",
+  "project_environment": {
+    "python": "/home/asu/Science/paper2agent-runs/celltypist/celltypist-env/bin/python",
+    "python_version": "3.12.13",
+    "fastmcp": "4.0.3",
+    "cases_passed": "33/33",
+    "env": "CELLTYPIST_FOLDER=tmp/acceptance/project_home (seeded copy of tests/data/celltypist_tutorial/celltypist_home)",
+    "scientific_tests": "pytest tests/code: 90 passed (exit 0, 417.5 s), CELLTYPIST_FOLDER=tests/data/celltypist_tutorial/celltypist_home"
+  },
+  "clean_environment": {
+    "path": "/tmp/claude-1000/-home-asu-Science-Paper2Agent/d2536f51-2133-41ea-8332-1193e4e1d01d/scratchpad/ct-clean-qLaZ",
+    "created_with": "uv venv --python <project python 3.12.13>; uv pip install -r src/requirements.txt (exit 0); uv pip check (exit 0, 122 packages)",
+    "celltypist_source": "git+https://github.com/Teichlab/celltypist@fe357564a6625d3b1732a022fd39f18e55696e80 (direct_url.json commit_id verified)",
+    "python": "/tmp/claude-1000/-home-asu-Science-Paper2Agent/d2536f51-2133-41ea-8332-1193e4e1d01d/scratchpad/ct-clean-qLaZ/env/bin/python",
+    "python_version": "3.12.13",
+    "cases_passed": "33/33",
+    "env": "CELLTYPIST_FOLDER=<clean>/home seeded with Immune_All_Low.pkl + models.json",
+    "scientific_tests": "pytest + pytest-asyncio added to the clean env for testing only; pytest tests/code: 90 passed (exit 0, 385.5 s)"
+  },
+  "external_requirements": [
+    "Network access to celltypist.cog.sanger.ac.uk for built-in models not already cached",
+    "git + GitHub access at install time (celltypist pinned by commit)"
+  ],
+  "limitations": [
+    "Linux x86_64 only tested",
+    "Majority-voting over-clustering exact only for pinned scanpy/leidenalg/igraph"
+  ]
+}

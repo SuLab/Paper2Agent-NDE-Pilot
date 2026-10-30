@@ -1,0 +1,21 @@
+NDE record,GEO series checked,Verdict,Files or reason
+GSE110154,same,Matrix,"Per-cell CSV tables (1,860 cells); cell-type labels in the sample sheet"
+SRP486563 (SRA),GSE254498,Matrix,10x .mtx
+SRP551546 (SRA),GSE284317,Matrix,CSV count matrix
+PRJNA1117352,GSE268426,Matrix,10x .h5
+SRP359535 (SRA),GSE196518,Matrix (archive not opened),Per-sample processed-data archives
+GSE161195,same,Matrix,Per-sample text tables
+GSE313659,same,Matrix (archive not opened),Per-sample archives
+GSE179135,same,Matrix (archive not opened),Per-sample archives
+GSE233277,same,Matrix,10x .mtx; healthy children vs nephrotic syndrome
+PRJNA838978,GSE203191,Matrix,10x .h5
+GSE110623,same,"Matrix, but mouse","Drop-seq count table; mouse only, tagged human"
+PRJNA947560,GSE227952,Matrix,BD Rhapsody CSV
+PRJNA1154975,GSE276139,Matrix,10x .mtx
+SRP287809 (SRA),GSE159677,Matrix (archive not opened),10x filtered matrices in archives
+PRJNA1294240,GSE303152,Matrix,10x .mtx and .h5
+PRJNA1158223,GSE276610,Matrix,10x .mtx; current smokers vs never-smokers
+PRJNA946020,none found,Reads only,No linked GEO series
+SRP390058 (SRA),none found,Reads only,No linked GEO series
+GSE220904,same,Not single-cell RNA,Single-nucleus DNA methylation and chromatin conformation
+GSE319983,same,Not single-cell RNA,Bulk RNA-modification (MeRIP-seq) series

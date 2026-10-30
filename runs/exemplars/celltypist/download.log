@@ -1,0 +1,20 @@
+e48f7b4d8d2755df943ceb470003737a  zenodo19581815/download/10x-Multiome-Pbmc10k-RNA.h5ad
+69f00904fb9ff21e1d8e83afd63aa441  zenodo20988712/download/test_RNA.h5ad
+GSE206289/download:
+total 1083252
+drwxr-xr-x 2 asu asu       4096 Oct 29 16:38 .
+drwxr-xr-x 3 asu asu       4096 Oct 29 16:38 ..
+-rw-r--r-- 1 asu asu       6547 Oct 29 16:38 GSE206289_family.soft.gz
+-rw-r--r-- 1 asu asu 1109227079 Oct 29 16:38 GSE206289_pCoV40_cleaned_12062021.h5ad.gz
+
+zenodo19581815/download:
+total 49492
+drwxr-xr-x 2 asu asu     4096 Oct 29 16:38 .
+drwxr-xr-x 3 asu asu     4096 Oct 29 16:38 ..
+-rw-r--r-- 1 asu asu 50668504 Oct 29 16:38 10x-Multiome-Pbmc10k-RNA.h5ad
+
+zenodo20988712/download:
+total 91592
+drwxr-xr-x 2 asu asu     4096 Oct 29 16:38 .
+drwxr-xr-x 3 asu asu     4096 Oct 29 16:38 ..
+-rw-r--r-- 1 asu asu 93778679 Oct 29 16:40 test_RNA.h5ad

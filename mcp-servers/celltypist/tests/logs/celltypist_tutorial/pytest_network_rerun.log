@@ -1,0 +1,50 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.13, pytest-9.2.0, pluggy-1.7.0 -- /home/asu/Science/paper2agent-runs/celltypist/celltypist-env/bin/python
+rootdir: /home/asu/Science/paper2agent-runs/celltypist
+configfile: pytest.ini
+plugins: zarr-3.4.2, asyncio-1.4.1, platformdirs-4.13.6, fast-array-utils-1.5.1, anyio-4.15.1
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=function, asyncio_default_test_loop_scope=function
+collecting ... collected 1 item
+
+tests/code/celltypist_tutorial/test_celltypist_annotate_cells.py::test_by_name_load_on_empty_cache_downloads_only_requested_model 🔬 Input data has 40 cells and 18950 genes
+🔗 Matching reference genes in the model
+🧬 5645 features used for prediction
+⚖️ Scaling input data
+🖋️ Predicting labels
+✅ Prediction done!
+downloaded Immune_All_Low.pkl sha256: 290874d35dac039d4c9218c343fde4aac1077709b72a331ce7266f6828c36502
+PASSED
+
+=============================== warnings summary ===============================
+celltypist-env/lib/python3.12/site-packages/celltypist/classifier.py:11
+  /home/asu/Science/paper2agent-runs/celltypist/celltypist-env/lib/python3.12/site-packages/celltypist/classifier.py:11: FutureWarning: `__version__` is deprecated, use `importlib.metadata.version('scanpy')` instead
+    from scanpy import __version__ as scv
+
+tests/code/celltypist_tutorial/test_celltypist_annotate_cells.py::test_by_name_load_on_empty_cache_downloads_only_requested_model
+  /home/asu/Science/paper2agent-runs/celltypist/celltypist-env/lib/python3.12/site-packages/anndata/compat/__init__.py:249: Pandas4Warning: The 'future.infer_string' option is deprecated and will be removed in pandas 4.0. Inferring str dtype for string data has been the default since pandas 3.0, and it will no longer be possible to disable it.
+    return a if pd.options.future.infer_string else a.astype(object)
+
+tests/code/celltypist_tutorial/test_celltypist_annotate_cells.py::test_by_name_load_on_empty_cache_downloads_only_requested_model
+  /home/asu/Science/paper2agent-runs/celltypist/celltypist-env/lib/python3.12/site-packages/sklearn/base.py:442: InconsistentVersionWarning: Trying to unpickle estimator LogisticRegression from version 0.24.1 when using version 1.7.2. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+  https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+    warnings.warn(
+
+tests/code/celltypist_tutorial/test_celltypist_annotate_cells.py::test_by_name_load_on_empty_cache_downloads_only_requested_model
+  /home/asu/Science/paper2agent-runs/celltypist/celltypist-env/lib/python3.12/site-packages/sklearn/base.py:442: InconsistentVersionWarning: Trying to unpickle estimator StandardScaler from version 0.24.1 when using version 1.7.2. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+  https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+    warnings.warn(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+==================================== PASSES ====================================
+_______ test_by_name_load_on_empty_cache_downloads_only_requested_model ________
+------------------------------ Captured log call -------------------------------
+INFO     celltypist.logger:classifier.py:332 🔬 Input data has 40 cells and 18950 genes
+INFO     celltypist.logger:classifier.py:358 🔗 Matching reference genes in the model
+INFO     celltypist.logger:classifier.py:364 🧬 5645 features used for prediction
+INFO     celltypist.logger:classifier.py:370 ⚖️ Scaling input data
+INFO     celltypist.logger:classifier.py:381 🖋️ Predicting labels
+INFO     celltypist.logger:classifier.py:383 ✅ Prediction done!
+- generated xml file: /home/asu/Science/paper2agent-runs/celltypist/tests/logs/celltypist_tutorial/junit_network_rerun.xml -
+=========================== short test summary info ============================
+PASSED tests/code/celltypist_tutorial/test_celltypist_annotate_cells.py::test_by_name_load_on_empty_cache_downloads_only_requested_model
+======================== 1 passed, 4 warnings in 20.00s ========================

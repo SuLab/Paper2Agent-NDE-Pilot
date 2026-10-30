@@ -1,0 +1,1 @@
+{"gse": "GSE198542", "condition": {"field": "zikv", "levels": {"MOCK": "mock", "ZIKV": "ZIKV"}}, "covariates": {"extraction_date": "extraction date"}, "subset": {"ifnar2": "positive"}}

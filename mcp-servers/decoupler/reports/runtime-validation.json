@@ -1,0 +1,31 @@
+{
+  "project": "decoupler",
+  "server": "src/decoupler_mcp.py",
+  "server_sha256": "45b614daa1c5a029a8a5bebbaf080ce56c3a43df561e696c7465c8a3b0c2b9f6",
+  "requirements": "src/requirements.txt",
+  "requirements_sha256": "ccb109de418c87840db17afdbf6a2d656f32539a41d623558e567316612f3888",
+  "project_environment": {
+    "python": "/home/asu/Science/paper2agent-runs/decoupler/decoupler-env/bin/python",
+    "python_version": "3.13.12",
+    "fastmcp": "4.0.3",
+    "cases_passed": "27/27",
+    "scientific_tests": "verifier attempt 2: pytest tests/code/bulk_enrichment 74 passed (exit 0, 514 s, incl. 3 live-download tests)"
+  },
+  "clean_environment": {
+    "path": "/tmp/claude-1000/-home-asu-Science-Paper2Agent/d2536f51-2133-41ea-8332-1193e4e1d01d/scratchpad/dc-clean-XDQP",
+    "created_with": "uv venv --python <project python 3.13.12>; uv pip install -r src/requirements.txt (exit 0); uv pip check (exit 0, 128 packages)",
+    "decoupler_source": "git+https://github.com/scverse/decoupler@27a1be7c75d88306bf3c2e4d0e7fb4b42d48f78a (direct_url.json commit_id verified)",
+    "python": "/tmp/claude-1000/-home-asu-Science-Paper2Agent/d2536f51-2133-41ea-8332-1193e4e1d01d/scratchpad/dc-clean-XDQP/env/bin/python",
+    "python_version": "3.13.12",
+    "cases_passed": "27/27",
+    "scientific_tests": "pytest + pytest-asyncio added to the clean env for testing only; pytest tests/code: 74 passed (exit 0, 381 s), incl. live-download tests"
+  },
+  "external_requirements": [
+    "Network access to zenodo.org (CollecTRI), omnipathdb.org (PROGENy) and static.omnipathdb.org (Hallmark) unless network_path snapshots are supplied",
+    "git + GitHub access at install time (decoupler pinned by commit)"
+  ],
+  "limitations": [
+    "Linux x86_64 only tested",
+    "Exact comparisons use 2026-10-27 network snapshots; live resources may drift"
+  ]
+}

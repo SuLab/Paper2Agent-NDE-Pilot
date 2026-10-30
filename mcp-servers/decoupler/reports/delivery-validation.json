@@ -1,0 +1,330 @@
+{
+  "stage": 6,
+  "role": "independent delivery verifier (Paper2MCP stage 6, output-delivery.md 'Validate the ZIP itself' steps 1-5)",
+  "identity": "Fresh agent, the same one that served as independent tool verifier for bulk_enrichment (verifier attempt 2). It never acted as an implementer, environment owner or packager for this run.",
+  "written_utc": "2026-10-28T01:34:40.969948+00:00",
+  "success": true,
+  "archive": {
+    "path": "/home/asu/Science/paper2agent-runs/decoupler/dist/decoupler-mcp.zip",
+    "sha256": "94ff548cca676a3a837314753e3a873bbb1d527b6d12497429a39b76afe3cf57",
+    "sha256_expected_by_coordinator": "94ff548cca676a3a837314753e3a873bbb1d527b6d12497429a39b76afe3cf57",
+    "sha256_matches": true,
+    "zip_integrity_testzip": "ok (no bad entries)",
+    "entries": "6 files + 4 directories under one top-level decoupler-mcp/",
+    "symlinks": "none",
+    "modified_by_verifier": false
+  },
+  "packaged_files": [
+    {
+      "path": "decoupler-mcp/USAGE.md",
+      "bytes": 10178,
+      "sha256": "d9996c9408669c47da14874394174e8fecafe0d063a3d00170041c8439b966d3",
+      "matches_archive": true,
+      "equals_workspace_src": null
+    },
+    {
+      "path": "decoupler-mcp/src/decoupler_mcp.py",
+      "bytes": 515,
+      "sha256": "45b614daa1c5a029a8a5bebbaf080ce56c3a43df561e696c7465c8a3b0c2b9f6",
+      "matches_archive": true,
+      "equals_workspace_src": true
+    },
+    {
+      "path": "decoupler-mcp/src/requirements.txt",
+      "bytes": 2606,
+      "sha256": "ccb109de418c87840db17afdbf6a2d656f32539a41d623558e567316612f3888",
+      "matches_archive": true,
+      "equals_workspace_src": true
+    },
+    {
+      "path": "decoupler-mcp/src/tools/bulk_enrichment.py",
+      "bytes": 32577,
+      "sha256": "9a29baf1f90634a490a818f2e8f835061205fbd42838e3f0d565f1a93833a039",
+      "matches_archive": true,
+      "equals_workspace_src": true
+    },
+    {
+      "path": "decoupler-mcp/src/tools/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "matches_archive": true,
+      "equals_workspace_src": true
+    },
+    {
+      "path": "decoupler-mcp/THIRD_PARTY/decoupler-LICENSE.txt",
+      "bytes": 1918,
+      "sha256": "e49baa79a16f22565a929f3e66f273f24a431d00da16b6564012a6903e8e49bd",
+      "matches_archive": true,
+      "equals_workspace_src": null
+    }
+  ],
+  "package_content_review": {
+    "unintended_files": "none. Only USAGE.md, src/decoupler_mcp.py, src/requirements.txt, src/tools/{bulk_enrichment.py,__init__.py} and THIRD_PARTY/decoupler-LICENSE.txt are present. There are no tests, fixtures, notebooks, reports, environments, caches, .git or secrets.",
+    "verified_production_revision": "src/tools/bulk_enrichment.py sha256 9a29baf1f90634a490a818f2e8f835061205fbd42838e3f0d565f1a93833a039 is the independently verified revision. All packaged src/ files are byte-equal to the workspace src/.",
+    "developer_machine_paths": "none in USAGE.md, src/ or THIRD_PARTY/. The only grep hit is the relative '<package>/tmp/outputs/bulk_enrichment/'.",
+    "scientific_code_provenance": "decoupler is not vendored. It is installed from git+https://github.com/scverse/decoupler@27a1be7c75d88306bf3c2e4d0e7fb4b42d48f78a, and its BSD-3 license and provenance are in THIRD_PARTY/."
+  },
+  "extraction": {
+    "extractor": "unzip (Info-ZIP, /usr/bin/unzip)",
+    "location": "/tmp/claude-1000/-home-asu-Science-Paper2Agent/d2536f51-2133-41ea-8332-1193e4e1d01d/scratchpad/delivery test/decoupler",
+    "package_root": "/tmp/claude-1000/-home-asu-Science-Paper2Agent/d2536f51-2133-41ea-8332-1193e4e1d01d/scratchpad/delivery test/decoupler/decoupler-mcp",
+    "path_contains_space": true,
+    "directory_was_new": true,
+    "extracted_hashes_match_archive": true,
+    "extra_files_after_extraction": [],
+    "permissions": "Files 0644 and directories 0755, the same as recorded in the archive. No file needs an executable bit, because the server starts as '.venv/bin/python src/decoupler_mcp.py' per USAGE.md. No permission-restoration step is needed.",
+    "inventory_file": "tmp/delivery/extracted_inventory.json"
+  },
+  "runtime_identity": {
+    "executable": "/tmp/claude-1000/-home-asu-Science-Paper2Agent/d2536f51-2133-41ea-8332-1193e4e1d01d/scratchpad/delivery test/decoupler/decoupler-mcp/.venv/bin/python",
+    "python": "3.13.12",
+    "platform": "Linux-6.18.54.1-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+    "base_prefix": "/home/asu/.local/share/uv/python/cpython-3.13.12-linux-x86_64-gnu",
+    "versions": {
+      "decoupler": "2.3.1",
+      "pydeseq2": "0.5.4",
+      "scanpy": "1.12.4",
+      "anndata": "0.13.4",
+      "fastmcp": "4.0.3",
+      "numpy": "2.5.4",
+      "pandas": "3.1.0",
+      "igraph": "1.0.0",
+      "mcp": "2.3.0"
+    },
+    "module_files": {
+      "decoupler": "/tmp/claude-1000/-home-asu-Science-Paper2Agent/d2536f51-2133-41ea-8332-1193e4e1d01d/scratchpad/delivery test/decoupler/decoupler-mcp/.venv/lib/python3.13/site-packages/decoupler/__init__.py",
+      "pydeseq2": "/tmp/claude-1000/-home-asu-Science-Paper2Agent/d2536f51-2133-41ea-8332-1193e4e1d01d/scratchpad/delivery test/decoupler/decoupler-mcp/.venv/lib/python3.13/site-packages/pydeseq2/__init__.py",
+      "scanpy": "/tmp/claude-1000/-home-asu-Science-Paper2Agent/d2536f51-2133-41ea-8332-1193e4e1d01d/scratchpad/delivery test/decoupler/decoupler-mcp/.venv/lib/python3.13/site-packages/scanpy/__init__.py",
+      "anndata": "/tmp/claude-1000/-home-asu-Science-Paper2Agent/d2536f51-2133-41ea-8332-1193e4e1d01d/scratchpad/delivery test/decoupler/decoupler-mcp/.venv/lib/python3.13/site-packages/anndata/__init__.py",
+      "fastmcp": "/tmp/claude-1000/-home-asu-Science-Paper2Agent/d2536f51-2133-41ea-8332-1193e4e1d01d/scratchpad/delivery test/decoupler/decoupler-mcp/.venv/lib/python3.13/site-packages/fastmcp/__init__.py",
+      "numpy": "/tmp/claude-1000/-home-asu-Science-Paper2Agent/d2536f51-2133-41ea-8332-1193e4e1d01d/scratchpad/delivery test/decoupler/decoupler-mcp/.venv/lib/python3.13/site-packages/numpy/__init__.py",
+      "pandas": "/tmp/claude-1000/-home-asu-Science-Paper2Agent/d2536f51-2133-41ea-8332-1193e4e1d01d/scratchpad/delivery test/decoupler/decoupler-mcp/.venv/lib/python3.13/site-packages/pandas/__init__.py",
+      "igraph": "/tmp/claude-1000/-home-asu-Science-Paper2Agent/d2536f51-2133-41ea-8332-1193e4e1d01d/scratchpad/delivery test/decoupler/decoupler-mcp/.venv/lib/python3.13/site-packages/igraph/__init__.py"
+    },
+    "all_modules_inside_extracted_venv": true,
+    "any_module_from_build_workspace": false,
+    "sys_path_contains_workspace": false,
+    "decoupler_direct_url": {
+      "url": "https://github.com/scverse/decoupler",
+      "vcs_info": {
+        "vcs": "git",
+        "commit_id": "27a1be7c75d88306bf3c2e4d0e7fb4b42d48f78a",
+        "requested_revision": "27a1be7c75d88306bf3c2e4d0e7fb4b42d48f78a"
+      }
+    },
+    "decoupler_commit_matches_pin": true
+  },
+  "installation": {
+    "source": "extracted USAGE.md 'Install' section, followed literally from the extracted decoupler-mcp/ folder with VIRTUAL_ENV, PYTHONPATH and PYTHONHOME unset (none were set in the shell either)",
+    "commands": [
+      {
+        "command": "uv venv .venv --python 3.13",
+        "exit": 0,
+        "note": "Using CPython 3.13.12 (uv-managed)"
+      },
+      {
+        "command": "uv pip install --python .venv/bin/python -r src/requirements.txt",
+        "exit": 0,
+        "note": "Resolved 128, installed 128; decoupler==2.3.1 from git+https://github.com/scverse/decoupler@27a1be7..."
+      },
+      {
+        "command": "uv pip check --python .venv/bin/python",
+        "exit": 0,
+        "note": "All installed packages are compatible"
+      }
+    ],
+    "uv_version": "0.10.11",
+    "note_on_brief": "The coordinator brief paraphrased the commands as 'uv pip install -r src/requirements.txt' and 'uv pip check'. USAGE.md, which I was asked to follow literally, passes --python .venv/bin/python. I ran the USAGE.md form.",
+    "cache": "The install was served from the local uv cache (resolved in 285 ms). I separately ran a cache-free dry-run resolution ('uv pip install --dry-run --no-cache --python <probe venv> -r src/requirements.txt', exit 0): it resolved all 128 pins against live PyPI and a fresh GitHub clone of the pinned commit in 2.86 s. That run did not download wheels. Log: tmp/delivery/nocache_dry_run.log.",
+    "import_origin": "decoupler, pydeseq2, scanpy, anndata, fastmcp, numpy, pandas and igraph all import from the extracted .venv; none comes from the build workspace, and the workspace is not on sys.path.",
+    "decoupler_pinned_commit": "direct_url.json vcs_info.commit_id = 27a1be7c75d88306bf3c2e4d0e7fb4b42d48f78a (matches the pin). The installed package source is byte-identical to repo/decoupler/src/decoupler (diff -rq exit 0, tmp/delivery/decoupler_source_diff.txt).",
+    "log": "tmp/delivery/install.log"
+  },
+  "acceptance_cases": {
+    "source_cases": {
+      "path": "reports/mcp-acceptance-cases.json",
+      "sha256": "113ebc6427bba114a9b032abcebf9481134c49e131246e6627758d8b808d30ee"
+    },
+    "relocated_cases": {
+      "path": "tmp/delivery/mcp-acceptance-cases.relocated.json",
+      "sha256": "16b20e933b670b9201f5bfdce71649b2fa13aaf5545540c4f5bee197f88df81f",
+      "inputs_root": "/tmp/claude-1000/-home-asu-Science-Paper2Agent/d2536f51-2133-41ea-8332-1193e4e1d01d/scratchpad/delivery test/decoupler/inputs/bulk_enrichment",
+      "outputs_root": "/tmp/claude-1000/-home-asu-Science-Paper2Agent/d2536f51-2133-41ea-8332-1193e4e1d01d/scratchpad/delivery test/decoupler/outputs/acceptance",
+      "inputs_copied": 12,
+      "input_hashes_match_fixture_manifest": true,
+      "deliberately_absent_inputs": [
+        "missing.csv",
+        "missing.h5ad",
+        "missing.parquet"
+      ],
+      "workspace_paths_remaining": 0
+    },
+    "command": "cd '<extract>/decoupler-mcp' && env -u VIRTUAL_ENV -u PYTHONPATH -u PYTHONHOME .venv/bin/python -I $SKILL/scripts/verify_mcp_server.py --server '<extract>/decoupler-mcp/src/decoupler_mcp.py' --expected reports/expected-mcp-tools.json --cases tmp/delivery/mcp-acceptance-cases.relocated.json --require-all-tools --cwd '<extract>/decoupler-mcp' --call-timeout 900 --report tmp/delivery/mcp-delivery-acceptance.json",
+    "exit": 0,
+    "helper_success": true,
+    "python": "/tmp/claude-1000/-home-asu-Science-Paper2Agent/d2536f51-2133-41ea-8332-1193e4e1d01d/scratchpad/delivery test/decoupler/decoupler-mcp/.venv/bin/python",
+    "fastmcp": "4.0.3",
+    "expected_tools": [
+      "decoupler_filter_genes_by_expression",
+      "decoupler_inspect_source_targets",
+      "decoupler_rank_pcs_by_metadata",
+      "decoupler_score_activities_ulm",
+      "pydeseq2_test_differential_expression"
+    ],
+    "discovered_tools": [
+      "decoupler_filter_genes_by_expression",
+      "decoupler_inspect_source_targets",
+      "decoupler_rank_pcs_by_metadata",
+      "decoupler_score_activities_ulm",
+      "pydeseq2_test_differential_expression"
+    ],
+    "missing": [],
+    "unexpected": [],
+    "cases_total": 27,
+    "cases_passed": 27,
+    "successful_call_cases": 16,
+    "error_cases": 11,
+    "failed_cases": [],
+    "report": "tmp/delivery/mcp-delivery-acceptance.json",
+    "stderr_note": "stderr (tmp/delivery/acceptance.err) contains FastMCP rich tracebacks for the 11 expected-error cases. Every stdout line was JSON-RPC, since the helper parsed all of them."
+  },
+  "scientific_comparisons": {
+    "method": "Real MCP calls over stdio to the extracted server (its .venv python, cwd = extracted folder), chained filter -> DE -> ulm -> inspect on the relocated inputs, using network_path snapshots. Expected values come from notebooks/bulk_rna/reference (read only, client side). Script: tmp/delivery/science_checks.py.",
+    "tolerance": "0 (bitwise). Same platform as the reference run; the executor replays and the independent verifier suite were bitwise reproducible; float64 CSV values reload exactly with pandas 3.",
+    "checks": {
+      "filter_19510_genes_reference_order": {
+        "ok": true,
+        "n_genes": 19510,
+        "artifact": "/tmp/claude-1000/-home-asu-Science-Paper2Agent/d2536f51-2133-41ea-8332-1193e4e1d01d/scratchpad/delivery test/decoupler/outputs/science/filter_by_expr_20261027-183206_2c2f3b0a/filtered_counts.h5ad"
+      },
+      "deseq2_equals_reference": {
+        "ok": true,
+        "bitwise_equal": true,
+        "ids_and_order_equal": true,
+        "nan_pattern_equal": true,
+        "max_abs_diff": 0.0,
+        "shape": [
+          19510,
+          6
+        ],
+        "n_padj_lt_005": 8517,
+        "tolerance": "0 (bitwise)"
+      },
+      "ulm_collectri_equals_reference": {
+        "ok": true,
+        "scores": {
+          "bitwise_equal": true,
+          "ids_and_order_equal": true,
+          "nan_pattern_equal": true,
+          "max_abs_diff": 0.0,
+          "shape": [
+            1,
+            655
+          ]
+        },
+        "padj": {
+          "bitwise_equal": true,
+          "ids_and_order_equal": true,
+          "nan_pattern_equal": true,
+          "max_abs_diff": 0.0,
+          "shape": [
+            1,
+            655
+          ]
+        },
+        "significant": {
+          "bitwise_equal": true,
+          "ids_and_order_equal": true,
+          "nan_pattern_equal": true,
+          "max_abs_diff": 0.0,
+          "shape": [
+            1,
+            143
+          ]
+        },
+        "n_significant": 143
+      },
+      "ulm_progeny_equals_reference": {
+        "ok": true,
+        "scores": {
+          "bitwise_equal": true,
+          "ids_and_order_equal": true,
+          "nan_pattern_equal": true,
+          "max_abs_diff": 0.0,
+          "shape": [
+            1,
+            14
+          ]
+        },
+        "padj": {
+          "bitwise_equal": true,
+          "ids_and_order_equal": true,
+          "nan_pattern_equal": true,
+          "max_abs_diff": 0.0,
+          "shape": [
+            1,
+            14
+          ]
+        },
+        "significant": {
+          "bitwise_equal": true,
+          "ids_and_order_equal": true,
+          "nan_pattern_equal": true,
+          "max_abs_diff": 0.0,
+          "shape": [
+            1,
+            12
+          ]
+        },
+        "n_significant": 12,
+        "TGFb_score": 59.359794170609085,
+        "TGFb_padj": 0.0
+      },
+      "tgfb_leading_edges_581_292": {
+        "ok": true,
+        "n_positive": 581,
+        "n_negative": 292
+      },
+      "error_missing_group_level": {
+        "ok": true,
+        "error_text": "Error calling tool 'pydeseq2_test_differential_expression': level(s) ['TGFb'] not found in adata.obs['condition']; available levels: ['control', 'treatment']"
+      },
+      "repeated_calls_fresh_dirs": {
+        "ok": true,
+        "dirs": [
+          "/tmp/claude-1000/-home-asu-Science-Paper2Agent/d2536f51-2133-41ea-8332-1193e4e1d01d/scratchpad/delivery test/decoupler/outputs/science/ulm_progeny_20261027-183233_6429aa75",
+          "/tmp/claude-1000/-home-asu-Science-Paper2Agent/d2536f51-2133-41ea-8332-1193e4e1d01d/scratchpad/delivery test/decoupler/outputs/science/ulm_progeny_20261027-183233_ac608ccf"
+        ]
+      },
+      "default_output_base_inside_package": {
+        "ok": true,
+        "expected_base": "/tmp/claude-1000/-home-asu-Science-Paper2Agent/d2536f51-2133-41ea-8332-1193e4e1d01d/scratchpad/delivery test/decoupler/decoupler-mcp/tmp/outputs/bulk_enrichment",
+        "first_artifact": "/tmp/claude-1000/-home-asu-Science-Paper2Agent/d2536f51-2133-41ea-8332-1193e4e1d01d/scratchpad/delivery test/decoupler/decoupler-mcp/tmp/outputs/bulk_enrichment/ulm_hallmark_20261027-183234_0d423954/hallmark_ulm_scores.csv",
+        "n_significant": 30
+      }
+    },
+    "success": true,
+    "exit": 0,
+    "outputs": "/tmp/claude-1000/-home-asu-Science-Paper2Agent/d2536f51-2133-41ea-8332-1193e4e1d01d/scratchpad/delivery test/decoupler/outputs/science",
+    "results_file": "tmp/delivery/science_checks.json"
+  },
+  "default_output_base": {
+    "expected": "/tmp/claude-1000/-home-asu-Science-Paper2Agent/d2536f51-2133-41ea-8332-1193e4e1d01d/scratchpad/delivery test/decoupler/decoupler-mcp/tmp/outputs/bulk_enrichment",
+    "observed": "With output_dir omitted, artifacts were written to <extract>/decoupler-mcp/tmp/outputs/bulk_enrichment/ulm_hallmark_<stamp>_<uuid>/. Nothing new appeared under the build workspace tmp/outputs.",
+    "inside_package": true
+  },
+  "package_defects": [],
+  "observations_not_defects": [
+    "Expected-error calls print full rich tracebacks to the server stderr (FastMCP logging). This is harmless for stdio, but noisy in client logs.",
+    "The coordinator brief's install-command paraphrase omitted the --python .venv/bin/python flag that USAGE.md uses; USAGE.md itself is consistent and worked."
+  ],
+  "remaining_limits": [
+    "Validated only on Linux x86_64 (WSL2, glibc 2.39), on the same machine as the build, with the same uv-managed CPython 3.13.12 base interpreter. Other OSes and architectures were not tested.",
+    "The actual install came from the local uv cache. The cache-free check was a dry-run resolution and did not download wheels.",
+    "Bitwise equality is specific to this platform and BLAS (OpenBLAS); cross-platform numerical variation was not measured.",
+    "Live network downloads (Zenodo, OmniPath) were not used in the delivery checks; all calls used network_path snapshots. The verifier suite's live tests matched the snapshots on 2026-10-28.",
+    "Figures were checked only for existence (min_artifacts / artifact paths); figure content was compared in the development verifier suite, not here.",
+    "The 'fastmcp install claude-code' command in USAGE.md was not executed, and client registration was not tested."
+  ],
+  "logs": "tmp/delivery/ (unzip.log, extracted_inventory.json, install.log, runtime_identity.json, decoupler_source_diff.txt, relocated_inputs.json, mcp-acceptance-cases.relocated.json, mcp-delivery-acceptance.json, acceptance.out/.err/.exit, science_checks.py/.out/.err/.json, nocache_dry_run.log, write_delivery_report.py)"
+}

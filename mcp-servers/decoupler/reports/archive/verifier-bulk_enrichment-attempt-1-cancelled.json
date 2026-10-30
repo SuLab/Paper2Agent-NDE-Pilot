@@ -1,0 +1,42 @@
+{
+  "author": "coordinator",
+  "kind": "cancellation_note",
+  "module": "bulk_enrichment",
+  "agent_id": "a1f437adf1648aa30",
+  "started_at": "2026-10-27T23:34:33.426Z",
+  "stopped_at": "2026-10-27T23:43:26.413Z",
+  "status": "cancelled",
+  "reason": "User asked to pause the analysis until 17:40 PDT; coordinator stopped the verifier agent mid-work with TaskStop. No verification report or acceptance cases had been written; no pytest outcome is claimed for this attempt.",
+  "production_files_at_stop": {
+    "src/tools/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/tools/bulk_enrichment.py": "9a29baf1f90634a490a818f2e8f835061205fbd42838e3f0d565f1a93833a039"
+  },
+  "production_files_unchanged_from_implementer": true,
+  "partial_files_left_on_disk": [
+    "tests/data/bulk_enrichment/build_fixtures.py",
+    "tests/data/bulk_enrichment/derived/deseq2_results_no_stat.csv",
+    "tests/data/bulk_enrichment/derived/deseq2_results_nonfinite_stat.csv",
+    "tests/data/bulk_enrichment/derived/filtered_int64_counts.h5ad",
+    "tests/data/bulk_enrichment/derived/filtered_small_2000genes.h5ad",
+    "tests/data/bulk_enrichment/derived/filtered_with_batch.h5ad",
+    "tests/data/bulk_enrichment/derived/hallmark.tsv",
+    "tests/data/bulk_enrichment/derived/negative_counts.h5ad",
+    "tests/data/bulk_enrichment/derived/network_bad_columns.csv",
+    "tests/data/bulk_enrichment/derived/non_integer_counts.h5ad",
+    "tests/data/bulk_enrichment/derived/numeric_condition.h5ad",
+    "tests/data/bulk_enrichment/derived/relabelled_permuted_filtered.h5ad",
+    "tests/data/bulk_enrichment/derived/relabelled_permuted_raw.h5ad",
+    "tests/data/bulk_enrichment/derived/scores_two_rows.csv",
+    "tests/data/bulk_enrichment/fixtures_manifest.json",
+    "tests/data/bulk_enrichment/inputs/collectri_scores_significant_reference.csv",
+    "tests/data/bulk_enrichment/inputs/deseq2_results_reference.csv",
+    "tests/data/bulk_enrichment/inputs/hsctgfb_filtered_reference.h5ad",
+    "tests/data/bulk_enrichment/inputs/hsctgfb_raw.h5ad",
+    "tests/data/bulk_enrichment/inputs/networks/collectri.parquet",
+    "tests/data/bulk_enrichment/inputs/networks/hallmark.csv",
+    "tests/data/bulk_enrichment/inputs/networks/hallmark.parquet",
+    "tests/data/bulk_enrichment/inputs/networks/progeny.parquet"
+  ],
+  "partial_file_count": 23,
+  "resumption": "Same agent resumed via SendMessage as attempt 2, continuing from its transcript."
+}
