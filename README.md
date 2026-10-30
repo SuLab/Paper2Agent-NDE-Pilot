@@ -28,6 +28,112 @@ The write-up is in [`docs/nde-pilot.md`](docs/nde-pilot.md), a snapshot of the w
 
 The exemplar runs postdate the doc snapshot, which still says none has been run.
 
+## Using one of the MCP servers
+
+You don't need to clone decoupler or CellTypist. Installing a server's requirements fetches the tool itself at the tested commit. You need this repo, [uv](https://docs.astral.sh/uv/), git, and an MCP client such as [Claude Code](https://code.claude.com/docs/en/overview). Linux x86_64 is the only tested platform.
+
+### 1. Clone this repo and pick a server
+
+```bash
+git clone https://github.com/SuLab/Paper2Agent-NDE-Pilot.git
+cd Paper2Agent-NDE-Pilot/mcp-servers/decoupler     # or mcp-servers/celltypist
+```
+
+Run every later command from that folder.
+
+### 2. Create the server's environment
+
+The two servers need different Python versions. If yours is missing, uv downloads it. The first install can take a few minutes; each environment is under 1 GB.
+
+**decoupler** (Python 3.13):
+
+```bash
+uv venv .venv --python 3.13
+uv pip install --python .venv/bin/python -r src/requirements.txt
+uv pip check --python .venv/bin/python
+```
+
+**CellTypist** (Python 3.12):
+
+```bash
+uv venv .venv --python 3.12
+uv pip install --python .venv/bin/python -r src/requirements.txt
+uv pip check --python .venv/bin/python
+```
+
+### 3. Register it with Claude Code
+
+**decoupler:**
+
+```bash
+claude mcp add decoupler --scope user -- "$PWD/.venv/bin/python" "$PWD/src/decoupler_mcp.py"
+```
+
+**CellTypist:**
+
+```bash
+claude mcp add celltypist --scope user -e CELLTYPIST_FOLDER="$PWD/celltypist_home" -- "$PWD/.venv/bin/python" "$PWD/src/celltypist_mcp.py"
+```
+
+- **`--scope user`** makes the server available in every project. Leave it out to register the server for the current directory only.
+- **`CELLTYPIST_FOLDER`** is where CellTypist caches the models it downloads.
+- **Checking it worked:** `claude mcp list` should show the server as connected. Inside Claude Code, `/mcp` shows the same.
+- **Other MCP clients:** each server's `USAGE.md` has a JSON configuration block.
+
+### 4. Put your data in the format the server expects
+
+Both servers read an AnnData `.h5ad` file. Run the conversion with the server's own Python (`.venv/bin/python`), which already has the packages it needs.
+
+**decoupler** expects samples as rows and genes (HGNC symbols) as columns, raw integer counts, and the sample metadata in `.obs`: a condition column, plus donor or batch columns for paired designs. From a counts table and a sample sheet:
+
+```python
+import anndata as ad
+import pandas as pd
+
+counts = pd.read_csv("counts.csv", index_col=0)   # genes x samples, raw integer counts, gene symbols as row names
+meta = pd.read_csv("samples.csv", index_col=0)    # one row per sample: condition, donor, ...
+adata = ad.AnnData(counts.T.loc[meta.index], obs=meta)
+adata.write_h5ad("my_counts.h5ad")
+```
+
+**CellTypist** expects cells as rows, gene symbols as columns, and values log-normalised to 10,000 counts per cell. From 10x Genomics output:
+
+```python
+import scanpy as sc
+
+adata = sc.read_10x_h5("filtered_feature_bc_matrix.h5")   # or sc.read_10x_mtx("filtered_feature_bc_matrix/")
+adata.var_names_make_unique()
+sc.pp.normalize_total(adata, target_sum=1e4)
+sc.pp.log1p(adata)
+adata.write_h5ad("my_cells.h5ad")
+```
+
+For worked examples, see [`runs/new-data/scripts/prep_airway.py`](runs/new-data/scripts/prep_airway.py) (NCBI GEO counts) and [`prep_pbmc3k.py`](runs/new-data/scripts/prep_pbmc3k.py) (10x PBMC 3k). [`min-samples/`](min-samples) gives the smallest designs each tool handles.
+
+### 5. Ask Claude
+
+Name the file, the comparison and an output folder. For example:
+
+> Use the decoupler tools on /data/my_counts.h5ad. Filter lowly expressed genes, test treated vs control in the `condition` column with the design `~donor + condition`, then score transcription-factor activity with CollecTRI and pathway activity with PROGENy. Write all outputs under /data/decoupler_out.
+
+> Use the celltypist tools to annotate /data/my_cells.h5ad with the Immune_All_Low model and majority voting, then compare the predictions with the `cluster` column. Write all outputs under /data/celltypist_out.
+
+**Where outputs go:**
+- Each tool call writes a fresh folder of tables and plots, and returns their paths.
+- Without an output folder, decoupler writes under `mcp-servers/decoupler/tmp/outputs/`, and CellTypist under the system temp folder.
+
+**Downloads during the first calls:** decoupler's regulator networks and CellTypist's models are fetched from the internet on first use.
+
+**Reference:** each server's `USAGE.md` documents every tool's arguments and outputs, and the validation behind it.
+
+**Without Claude:** [`runs/new-data/scripts/mcp_call.py`](runs/new-data/scripts/mcp_call.py) calls a server over stdio from a JSON plan, the way an MCP client would; the plans under `runs/` are examples.
+
+**What was tested:** on 2026-10-29, steps 1, 2 and 4 were run from a fresh clone. Each server then ran a short analysis over stdio:
+- **decoupler on GSE52778:** 4,441 differentially expressed genes, as in `runs/RESULTS.md`.
+- **CellTypist on PBMC 3k:** all 2,638 cells annotated.
+
+The `claude mcp add` commands follow `claude mcp add --help` but were not run.
+
 ## Layout
 
 | Path | Contents |
@@ -63,7 +169,3 @@ The exemplar runs postdate the doc snapshot, which still says none has been run.
   - CellTypist: MIT, © Teichmann Lab.
 - **Records:** those retrieved from NDE and bio.tools remain under those services' terms.
 - **Run outputs:** these derive from public datasets (GEO, 10x Genomics), whose terms apply.
-
-## Running a server
-
-Unzip `mcp-servers/<tool>/dist/<tool>-mcp.zip`. The `USAGE.md` inside covers installation, startup, every tool's inputs and outputs, and the validation limits. [`runs/new-data/scripts/mcp_call.py`](runs/new-data/scripts/mcp_call.py) calls a server over stdio from a JSON plan, the way an MCP client would.

@@ -4,3 +4,5 @@ __pycache__/
 .venv/
 *.h5ad
 download/
+tmp/
+celltypist_home/
