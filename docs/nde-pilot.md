@@ -1,6 +1,6 @@
 # Applying Paper2Agent tools to NIAID Data Ecosystem datasets
 
-*Follow-on to [Exploring Paper2Agent: from papers to working analysis tools](https://docs.google.com/document/d/13MywPte5tHFky83whzLX7COnULGPHVTFhtb36zRfR7I/edit?tab=t.0#heading=h.ssj1d4wdjbj2). October 28, 2026.*
+*Follow-on to "Exploring Paper2Agent: from papers to working analysis tools", a companion Google Doc (not public; its results are summarised in [`runs/RESULTS.md`](../runs/RESULTS.md)). October 28, 2026.*
 
 > This is a Markdown snapshot of the working Google Doc as of 2026-10-28. The exemplar runs in [`runs/exemplars`](../runs/exemplars/STATUS.md) postdate it, so its statements that no exemplar has been run are out of date.
 

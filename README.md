@@ -45,7 +45,7 @@ The exemplar runs postdate the doc snapshot, which still says none has been run.
 ## Not included
 
 - **Python environments:** rebuild each from `mcp-servers/*/src/requirements.txt`; the pinned closures are in `mcp-servers/*/reports/environment-requirements.txt`.
-- **Upstream code:** Paper2MCP cloned [scverse/decoupler](https://github.com/scverse/decoupler) at v2.3.1 (commit 27a1be7) and [Teichlab/celltypist](https://github.com/Teichlab/celltypist) at 1.7.1 (commit fe35756). Each ZIP carries the upstream license under `THIRD_PARTY/`.
+- **Upstream code:** Paper2MCP cloned [scverse/decoupler](https://github.com/scverse/decoupler) at v2.3.1 (commit 27a1be7) and [Teichlab/celltypist](https://github.com/Teichlab/celltypist) at 1.7.1 (commit fe35756). The servers install these as dependencies rather than copying them.
 - **Data:**
   - downloaded datasets, intermediate `.h5ad` files and tutorial data;
   - the copies of the CollecTRI, PROGENy and Hallmark networks saved with each run;
@@ -53,6 +53,16 @@ The exemplar runs postdate the doc snapshot, which still says none has been run.
 
   Data sources are public. Their accessions or URLs are in the plans, `STATUS.md` and the NDE results.
 - **Paths:** reports, plans and logs keep absolute paths from the machine where the work was done. Scripts take their paths as arguments.
+
+## License
+
+[MIT](LICENSE), for the code and documentation written for this pilot. Three exceptions keep their own terms:
+
+- **Tutorial-derived code:** each server's tools adapt that tool's own tutorials, and the executed tutorial notebooks are upstream material. Their notices are in `mcp-servers/<tool>/THIRD_PARTY/` and inside each ZIP:
+  - decoupler: BSD 3-Clause, © scverse;
+  - CellTypist: MIT, © Teichmann Lab.
+- **Records:** those retrieved from NDE and bio.tools remain under those services' terms.
+- **Run outputs:** these derive from public datasets (GEO, 10x Genomics), whose terms apply.
 
 ## Running a server
 
